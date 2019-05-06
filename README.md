@@ -1,14 +1,14 @@
 # Demo: Consolidated Events Hub
 
-##What is the issue?
+## What is the issue?
 
 
-##How do we solve it?
+## How do we solve it?
 
 
-##Systems Overview
+## Systems Overview
 
-##Resources
+## Resources
 For more information try these resources:
 
 Get a better understanding of Solace technology(https://docs.solace.com/All-Docs.htm).
