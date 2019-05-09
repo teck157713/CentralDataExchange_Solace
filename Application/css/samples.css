@@ -63,3 +63,11 @@ label {
     max-height: 450px;
     overflow: auto;
 }
+
+.table-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.table-item {
+}
