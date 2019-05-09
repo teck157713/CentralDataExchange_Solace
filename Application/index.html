@@ -114,7 +114,7 @@
           <button type="button" class="pure-button pure-button-primary" id="publish">Send Message Content</button>
         </p>
         <p>
-          <textarea id="publishlog" rows="20" cols="90" autofocus></textarea>
+          <div class="publishlog" id="publishlog" contentEditable="true"></div>
         </p>
 
         <div id="sample">
@@ -141,16 +141,25 @@
                 <button type="button" class="pure-button pure-button-primary" id="startconsume2">Consume messages </button>
                 <button type="button" class="pure-button button-error" id="stopconsume2">Stop consuming</button>
               </p>
+              
             </div>
+            <div class="grid-item">
+                <p>
+                  <div class="subscribelog" id="subscribelog" contentEditable="true"></div>
+                </p>
+            </div>
+            <div class="grid-item">
+                <p>
+                  <div class="subscribelog" id="subscribelog2" contentEditable="true"></div>
+                </p>
+            </div>
+          </div>
         </div>
-        <p>
-          <textarea id="subscribelog" rows="20" cols="45" autofocus></textarea>
-          <textarea id="subscribelog2" rows="20" cols="45" autofocus></textarea>
+        
         </p>
         
         
       </form>
-      <img id="ItemPreview" src="" />
     </div>
     
   </body>
