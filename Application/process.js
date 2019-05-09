@@ -126,26 +126,36 @@ var QueueProducer = function (queueName) {
     // Sends one image
     producer.sendImage = function (sequenceNr) {
         var file = document.getElementById('fileimg').files[0];
-        var result = "";
         var reader = new FileReader();
-        reader.addEventListener("load", function(){result = reader.result;})
-        reader = reader.readAsDataURL(file);
-        var message = solace.SolclientFactory.createMessage();
-        message.setDestination(solace.SolclientFactory.createTopicDestination("tutorial/queue/image"));
-        message.setBinaryAttachment(result);
-        message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
-        // Define a correlation key object
-        const correlationKey = {
-            name: "MESSAGE_CORRELATIONKEY",
-            id: sequenceNr,
-        };
-        message.setCorrelationKey(correlationKey);
-        try {
-            producer.session.send(message);
-            producer.log('Message #' + sequenceNr + ' sent to queue "' + producer.queueName + '", correlation key = ' + JSON.stringify(correlationKey));
-        } catch (error) {
-            producer.log(error.toString());
+        var fileByteArray = [];
+        reader.readAsArrayBuffer(file);
+        reader.onloadend = function (evt){
+            if (evt.target.readyState == FileReader.DONE){
+                var arrayBuffer = evt.target.result, array = new Uint8Array(arrayBuffer);
+                for (var i = 0; i < array.length; i++){
+                    fileByteArray.push(array[i]);
+                }
+
+                var message = solace.SolclientFactory.createMessage();
+                message.setDestination(solace.SolclientFactory.createTopicDestination("tutorial/queue/image"));
+                message.setBinaryAttachment(fileByteArray.toString());
+                message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
+                // Define a correlation key object
+                const correlationKey = {
+                    name: "MESSAGE_CORRELATIONKEY",
+                    id: sequenceNr,
+                };
+                message.setCorrelationKey(correlationKey);
+                try {
+                    producer.session.send(message);
+                    producer.log('Message #' + sequenceNr + ' sent to queue "' + producer.queueName + '", correlation key = ' + JSON.stringify(correlationKey));
+                } catch (error) {
+                    producer.log(error.toString());
+                }
+
+            }
         }
+        
     };
 
 
@@ -285,6 +295,11 @@ var QueueConsumer = function (queueName, logname) {
                             ' details:\n' + message.dump());
                         // Need to explicitly ack otherwise it will not be deleted from the message router
                         message.acknowledge();
+                        //convert and show image
+                        var imgbyte = message.getBinaryAttachment().split(",");
+                        var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
+                        document.getElementById("ItemPreview").src = "data:image/png;base64," + base64String;
+                        
                     });
                     // Connect the message consumer
                     consumer.messageConsumer.connect();
