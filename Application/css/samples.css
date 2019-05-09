@@ -44,8 +44,22 @@ label {
 
 .grid-container {
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: auto auto;
 }
 
 .grid-item {
+}
+
+.publishlog {
+    width: 750px;
+    height: 350px;
+    max-height: 350px;
+    overflow: auto;
+}
+
+.subscribelog {
+    width: 350px;
+    height: 250px;
+    max-height: 450px;
+    overflow: auto;
 }
