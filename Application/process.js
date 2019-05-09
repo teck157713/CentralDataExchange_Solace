@@ -14,7 +14,7 @@ var QueueProducer = function (queueName) {
         var timestamp = '[' + time.join(':') + '] ';
         console.log(timestamp + line);
         var logTextArea = document.getElementById('publishlog');
-        logTextArea.value += timestamp + line + '\n';
+        logTextArea.innerHTML += timestamp + line + '<br />';
         logTextArea.scrollTop = logTextArea.scrollHeight;
     };
 
@@ -195,7 +195,7 @@ var QueueConsumer = function (queueName, logname) {
         var timestamp = '[' + time.join(':') + '] ';
         console.log(timestamp + line);
         var logTextArea = document.getElementById(logname);
-        logTextArea.value += timestamp + line + '\n';
+        logTextArea.innerHTML += timestamp + line + '<br />';
         logTextArea.scrollTop = logTextArea.scrollHeight;
     };
 
@@ -291,14 +291,20 @@ var QueueConsumer = function (queueName, logname) {
                     });
                     // Define message received event listener
                     consumer.messageConsumer.on(solace.MessageConsumerEventName.MESSAGE, function (message) {
-                        consumer.log('Received message: "' + message.getBinaryAttachment() + '",' +
+                        var result = message.getBinaryAttachment();
+                        // assuming if message is a message if less than 255, else image
+                        if (result.length < 255) {
+                            consumer.log('Received message: "' + result + '",' +
                             ' details:\n' + message.dump());
-                        // Need to explicitly ack otherwise it will not be deleted from the message router
-                        message.acknowledge();
-                        //convert and show image
-                        var imgbyte = message.getBinaryAttachment().split(",");
-                        var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
-                        document.getElementById("ItemPreview").src = "data:image/png;base64," + base64String;
+                            // Need to explicitly ack otherwise it will not be deleted from the message router
+                            message.acknowledge();
+                        } else {
+                            //convert and show image
+                            var imgbyte = result.split(",");
+                            var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
+                            consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
+                            message.acknowledge();
+                        }
                         
                     });
                     // Connect the message consumer
