@@ -198,14 +198,8 @@ var QueueConsumer = function (queueName, logname) {
         logTextArea.innerHTML += timestamp + line + '<br />';
         logTextArea.scrollTop = logTextArea.scrollHeight;
     };
-    consumer.table = function (messagee) {
-        var table = document.getElementById("table1");
-        var row = table.insertRow(-1);
-        var cell1 = row.insertCell(0);
-        cell1.innerHTML = messagee;
-    }
 
-    consumer.table2 = function (messagee) {
+    consumer.table = function (messagee) {
         var table = document.getElementById("table2");
         var row = table.insertRow(-1);
         var cell1 = row.insertCell(0);
@@ -316,7 +310,7 @@ var QueueConsumer = function (queueName, logname) {
                             var imgbyte = result.split(",");
                             var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
                             consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
-                            consumer.table2('<br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />')
+                            consumer.table('<br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />')
                             message.acknowledge();
                         }
                         
@@ -391,6 +385,13 @@ var TopicSubscriber = function (logname) {
         logTextArea.innerHTML += timestamp + line + '<br />';
         logTextArea.scrollTop = logTextArea.scrollHeight;
     };
+    
+    subscriber.table = function (messagee) {
+        var table = document.getElementById("table1");
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        cell1.innerHTML = messagee;
+    }
 
     subscriber.log('\n*** Subscriber to topic "' + subscriber.topicName + '" is ready to connect ***');
 
@@ -454,6 +455,7 @@ var TopicSubscriber = function (logname) {
         subscriber.session.on(solace.SessionEventCode.MESSAGE, function (message) {
             subscriber.log('Received message: "' + message.getBinaryAttachment() + '", details:\n' +
                 message.dump());
+            subscriber.table(message.getBinaryAttachment())
         });
 
 
