@@ -100,6 +100,14 @@
           </div>
 
           <div class="pure-control-group">
+              <label for="selectTopic">What Topic to Publish message to??</label>
+              <input id="selectTopic", type="text" placeholder="Topic" value="tutorial/queue/message">
+          </div>
+          <p>
+              <button type="button" class="pure-button pure-button-primary" id="topic">Set Publish Topic</button>
+          </p>
+
+          <div class="pure-control-group">
             <label for="fileimg">Image Upload <br> (e.g. Picture of accident)</label>
             <input id="fileimg" type="file" onchange="preview()"><br>
             <img src="image/blank.png" height="200" alt="Image Preview" id="imgpreview">
@@ -169,7 +177,26 @@
         
       </form>
     </div>
-    
+    <script>
+      document.getElementById("topic").onclick = function () {
+        // Initialize factory with the most recent API defaults
+        var factoryProps = new solace.SolclientFactoryProperties();
+        factoryProps.profile = solace.SolclientFactoryProfiles.version10;
+        solace.SolclientFactory.init(factoryProps);
+        var topic = document.getElementById("selectTopic").value;
+        // enable logging to JavaScript console at WARN level
+        // NOTICE: works only with "solclientjs-debug.js"
+        solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
+
+        // create the producer, specifying name of the subscription topic
+        producer = new QueueProducer(topic);
+        // assign buttons to the producer functions
+        document.getElementById("pubconnect").addEventListener("click", producer.connect);
+        document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
+        document.getElementById("publish").addEventListener("click", producer.sendMessages);
+        producer.log('\n*** Message is set to be published to "' + topic + '" please connect and send message ***')
+      };
+    </script>
   </body>
   
 </html>

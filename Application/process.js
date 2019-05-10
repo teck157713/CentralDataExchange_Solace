@@ -18,7 +18,7 @@ var QueueProducer = function (queueName) {
         logTextArea.scrollTop = logTextArea.scrollHeight;
     };
 
-    producer.log('\n*** Producer to queue "' + producer.queueName + '" is ready to connect ***');
+    producer.log('\n*** Publisher is ready to connect ***');
 
 
 
@@ -106,7 +106,7 @@ var QueueProducer = function (queueName) {
     producer.sendMessage = function (sequenceNr) {
         var messageText = document.getElementById('content').value;
         var message = solace.SolclientFactory.createMessage();
-        message.setDestination(solace.SolclientFactory.createTopicDestination("tutorial/queue/message"));
+        message.setDestination(solace.SolclientFactory.createTopicDestination(producer.queueName));
         message.setBinaryAttachment(messageText);
         message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
         // Define a correlation key object
