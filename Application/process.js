@@ -18,7 +18,7 @@ var QueueProducer = function (queueName) {
         logTextArea.scrollTop = logTextArea.scrollHeight;
     };
 
-    producer.log('\n*** Producer to queue "' + producer.queueName + '" is ready to connect ***');
+    producer.log('\n*** Publisher is ready to connect ***');
 
 
 
@@ -198,7 +198,19 @@ var QueueConsumer = function (queueName, logname) {
         logTextArea.innerHTML += timestamp + line + '<br />';
         logTextArea.scrollTop = logTextArea.scrollHeight;
     };
+    consumer.table = function (messagee) {
+        var table = document.getElementById("table1");
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        cell1.innerHTML = messagee;
+    }
 
+    consumer.table2 = function (messagee) {
+        var table = document.getElementById("table2");
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        cell1.innerHTML = messagee;
+    }
     consumer.log('\n*** Consumer to queue "' + consumer.queueName + '" is ready to connect ***');
 
     // Establishes connection to Solace message router
@@ -297,12 +309,14 @@ var QueueConsumer = function (queueName, logname) {
                             consumer.log('Received message: "' + result + '",' +
                             ' details:\n' + message.dump());
                             // Need to explicitly ack otherwise it will not be deleted from the message router
+                            consumer.table(message.getBinaryAttachment())
                             message.acknowledge();
                         } else {
                             //convert and show image
                             var imgbyte = result.split(",");
                             var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
                             consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
+                            consumer.table2('<br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />')
                             message.acknowledge();
                         }
                         

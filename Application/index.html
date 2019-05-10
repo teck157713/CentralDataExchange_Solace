@@ -3,7 +3,7 @@
 <html lang="en">
 
   <head>
-    <title>Solace Web Messaging API for JavaScript, Persistence with Queues tutorial - Queue Producer</title>
+    <title>Prototype Demo</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
     <meta charset="utf-8"/>
 
@@ -84,13 +84,13 @@
           <img src="image/solace.png"/>
         </span>
         <div class="banner-heading">
-          Diagram Demo
+          Demo (Iter 1)
         </div>
       </div>
     </div>
 
     <div class="doc-body">
-      <h2>Demonstrates message flow in Smart City</h2>
+      <h2>Message flow in a Smart City using Solace</h2>
       <form class="pure-form pure-form-aligned">
         <fieldset>
 
@@ -105,7 +105,15 @@
           </div>
 
           <div class="pure-control-group">
-            <label for="fileimg">Image Upload</label>
+              <label for="selectTopic">What Topic to Publish Message to?</label>
+              <input id="selectTopic", type="text" placeholder="Topic" value="tutorial/queue/message">
+          </div>
+          <p>
+              <button type="button" class="pure-button pure-button-primary" id="topic">Set Publish Topic</button>
+          </p>
+
+          <div class="pure-control-group">
+            <label for="fileimg">Image Upload <br> (e.g. Picture of accident)</label>
             <input id="fileimg" type="file" onchange="preview()"><br>
             <img src="" height="200" alt="Image Preview" id="imgpreview">
           </div>
@@ -162,15 +170,42 @@
                   <div class="subscribelog" id="subscribelog2" contentEditable="true"></div>
                 </p>
             </div>
-          </div>
         </div>
-        
-        </p>
-        
+        <div class="grid-container">
+              <table border="1", width="400px" id='table2'>
+                  <tr>
+                    <th>Image</th>
+                  </tr>
+              </table>
+              <table border="1", width="400px", id='table1'>
+                  <tr>
+                    <th>Message</th>
+                  </tr>
+              <table>
+        </div>
         
       </form>
     </div>
-    
+    <script>
+      document.getElementById("topic").onclick = function () {
+        // Initialize factory with the most recent API defaults
+        var factoryProps = new solace.SolclientFactoryProperties();
+        factoryProps.profile = solace.SolclientFactoryProfiles.version10;
+        solace.SolclientFactory.init(factoryProps);
+        var topic = document.getElementById("selectTopic").value;
+        // enable logging to JavaScript console at WARN level
+        // NOTICE: works only with "solclientjs-debug.js"
+        solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
+
+        // create the producer, specifying name of the subscription topic
+        producer = new QueueProducer(topic);
+        // assign buttons to the producer functions
+        document.getElementById("pubconnect").addEventListener("click", producer.connect);
+        document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
+        document.getElementById("publish").addEventListener("click", producer.sendMessages);
+        producer.log('\n*** Message is set to be published to "' + topic + '" please connect and send message ***')
+      };
+    </script>
   </body>
   
 </html>
