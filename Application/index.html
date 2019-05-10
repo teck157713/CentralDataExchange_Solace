@@ -49,11 +49,6 @@
         document.getElementById("subscribe").addEventListener("click", subscriber2.subscribe);
         document.getElementById("unsubscribe").addEventListener("click", subscriber2.unsubscribe);
       };
-      function iframeloaded(){
-        if (platform) {
-          platform.connectToSolace();
-        }
-      };
       function preview(){
         var reader = new FileReader();
         var preview = document.getElementById('imgpreview');
@@ -73,8 +68,6 @@
   </head>
 
   <body>
-  <!-- used to prompt selection of client certificate -->
-    <iframe id="iframe" src="" onload="iframeloaded()" hidden></iframe>
 
     <div class="banner">
       <div class="banner-interior">
