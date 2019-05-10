@@ -88,12 +88,12 @@
         </div>
       </div>
     </div>
-
-    <div class="doc-body">
+    <div class="container">
+    <div class="doc-body wrap">
       <h2>Message flow in a Smart City using Solace</h2>
       <form class="pure-form pure-form-aligned">
+        <div class = "input">
         <fieldset>
-
           <div class="pure-control-group">
               <label for="content">Message Content <br>(eg. Fire at Holland)</label>
               <input id="content" type="text" placeholder="Insert Text">
@@ -109,23 +109,21 @@
             <input id="fileimg" type="file" onchange="preview()"><br>
             <img src="image/blank.png" height="200" alt="Image Preview" id="imgpreview">
           </div>
-
+        </div>
         </fieldset>
         <p>
           <button type="button" class="pure-button pure-button-primary" id="pubconnect">Connect</button>
           <button type="button" class="pure-button button-error" id="pubdisconnect">Disconnect</button>
-        </p>
-        <p>
           <button type="button" class="pure-button pure-button-primary" id="publish">Send Message Content</button>
         </p>
-        <p>
+        <div class = "input">
           <div class="publishlog" id="publishlog" contentEditable="true"></div>
-        </p>
-
-        <div id="sample">
-          <div id="myDiagramDiv" style="background-color: whitesmoke; border: solid 1px black; width: 75%; height: 300px"></div>
         </div>
-
+        <br><br>
+        <div id="sample">
+          <div id="myDiagramDiv" style="background-color: whitesmoke; border: solid 1px black; width: 95%; height: 300px"></div>
+        </div>
+        <br>
         <div class="grid-container">
           <div class="grid-item">
               <div class="pure-control-group">
@@ -156,12 +154,12 @@
               </p>
               
             </div>
-            <div class="grid-item">
+            <div class="grid-item input">
                 <p>
                   <div class="subscribelog" id="subscribelog" contentEditable="true"></div>
                 </p>
             </div>
-            <div class="grid-item">
+            <div class="grid-item input">
                 <p>
                   <div class="subscribelog" id="subscribelog2" contentEditable="true"></div>
                 </p>
@@ -182,6 +180,7 @@
         
       </form>
     </div>
+  </div>
   </body>
   
 </html>

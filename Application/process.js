@@ -310,7 +310,7 @@ var QueueConsumer = function (queueName, logname) {
                             var imgbyte = result.split(",");
                             var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
                             consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
-                            consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="80%" height="50%" src=\"data:image/png;base64,' + base64String + '\" />')
+                            consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="400px  " height="50%" src=\"data:image/png;base64,' + base64String + '\" />')
                             message.acknowledge();
                         }
                         
