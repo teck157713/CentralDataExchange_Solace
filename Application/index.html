@@ -92,6 +92,7 @@
       <form class="pure-form pure-form-aligned">
         <div class = "input">
         <fieldset>
+          <br>
           <div class="pure-control-group">
               <label for="content">Message Content <br>(eg. Fire at Holland)</label>
               <input id="content" type="text" placeholder="Insert Text">
@@ -127,11 +128,11 @@
               <div class="pure-control-group">
                 <br><br><br>
                 </div>
-            <p>
+            <p align="center">
               <button type="button" class="pure-button pure-button-primary" id="subconnect">Connect</button>
               <button type="button" class="pure-button button-error" id="subdisconnect">Disconnect</button>
             </p>
-            <p>
+            <p align="center">
               <button type="button" class="pure-button pure-button-primary" id="startconsume">Consume messages </button>
               <button type="button" class="pure-button button-error" id="stopconsume">Stop consuming</button>
             </p>
@@ -142,27 +143,28 @@
                   <label for="topicname">Topic Name: </label>
                   <input id="topicname" type="text" placeholder="Insert Topic" value="tutorial/queue/message">
                 </div>
-              <p>
+              <p align="center">
                 <button type="button" class="pure-button pure-button-primary" id="subconnect2">Connect</button>
                 <button type="button" class="pure-button button-error" id="subdisconnect2">Disconnect</button>
               </p>
-              <p>
+              <p align="center">
                 <button type="button" class="pure-button pure-button-primary" id="subscribe">Subscribe </button>
                 <button type="button" class="pure-button button-error" id="unsubscribe">Unsubscribe</button>
               </p>
               
             </div>
-            <div class="grid-item input">
+            <div class="grid-item input" align="left">
                 <p>
                   <div class="subscribelog" id="subscribelog" contentEditable="true"></div>
                 </p>
             </div>
-            <div class="grid-item input">
+            <div class="grid-item input" align="left">
                 <p>
                   <div class="subscribelog" id="subscribelog2" contentEditable="true"></div>
                 </p>
             </div>
         </div>
+        <br><br>
         <div class="grid-container">
               <table border="1", width="400px" id='table2'>
                   <tr>
