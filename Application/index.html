@@ -41,15 +41,15 @@
         document.getElementById("publish").addEventListener("click", producer.sendMessages);
 
         subscriber = new QueueConsumer('SOLACE_QUEUE', 'subscribelog');
-        subscriber2 = new QueueConsumer('SOLACE_IMG', 'subscribelog2');
+        subscriber2 = new TopicSubscriber('subscribelog2');
         document.getElementById("subconnect").addEventListener("click", subscriber.connect);
         document.getElementById("subdisconnect").addEventListener("click", subscriber.disconnect);
         document.getElementById("startconsume").addEventListener("click", subscriber.startConsume);
         document.getElementById("stopconsume").addEventListener("click", subscriber.stopConsume);
         document.getElementById("subconnect2").addEventListener("click", subscriber2.connect);
         document.getElementById("subdisconnect2").addEventListener("click", subscriber2.disconnect);
-        document.getElementById("startconsume2").addEventListener("click", subscriber2.startConsume);
-        document.getElementById("stopconsume2").addEventListener("click", subscriber2.stopConsume);
+        document.getElementById("subscribe").addEventListener("click", subscriber2.subscribe);
+        document.getElementById("unsubscribe").addEventListener("click", subscriber2.unsubscribe);
       };
       function iframeloaded(){
         if (platform) {
@@ -95,14 +95,19 @@
         <fieldset>
 
           <div class="pure-control-group">
-            <label for="content">Msg Content</label>
-            <input id="content" type="text" placeholder="Insert Text">
+              <label for="content">Message Content <br>(eg. Fire at Holland)</label>
+              <input id="content" type="text" placeholder="Insert Text">
+          </div>
+
+          <div class="pure-control-group">
+            <label for="publishtopic">Publishing Topic for Msg</label>
+            <input id="publishtopic" type="text" placeholder="Insert Topic">
           </div>
 
           <div class="pure-control-group">
             <label for="fileimg">Image Upload</label>
             <input id="fileimg" type="file" onchange="preview()"><br>
-            <img src="image/blank.png" height="200" alt="Image Preview" id="imgpreview">
+            <img src="" height="200" alt="Image Preview" id="imgpreview">
           </div>
 
         </fieldset>
@@ -138,9 +143,13 @@
                 <button type="button" class="pure-button button-error" id="subdisconnect2">Disconnect</button>
               </p>
               <p>
-                <button type="button" class="pure-button pure-button-primary" id="startconsume2">Consume messages </button>
-                <button type="button" class="pure-button button-error" id="stopconsume2">Stop consuming</button>
+                <button type="button" class="pure-button pure-button-primary" id="subscribe">Subscribe </button>
+                <button type="button" class="pure-button button-error" id="unsubscribe">Unsubscribe</button>
               </p>
+              <div class="pure-control-group">
+                <label for="topicname">Topic Name: </label>
+                <input id="topicname" type="text" placeholder="Insert Topic">
+              </div>
               
             </div>
             <div class="grid-item">
