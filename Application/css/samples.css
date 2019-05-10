@@ -52,7 +52,7 @@ label {
 
 .publishlog {
     width: 750px;
-    height: 350px;
+    height: 200px;
     max-height: 350px;
     overflow: auto;
 }
@@ -62,12 +62,4 @@ label {
     height: 250px;
     max-height: 450px;
     overflow: auto;
-}
-
-.table-container {
-    display: grid;
-    grid-template-columns: 50% 50%;
-}
-
-.table-item {
 }
