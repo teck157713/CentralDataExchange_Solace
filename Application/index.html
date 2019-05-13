@@ -41,7 +41,8 @@
         // assign buttons to the producer functions
         document.getElementById("pubconnect").addEventListener("click", producer.connect);
         document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
-        document.getElementById("publish").addEventListener("click", producer.sendMessages);
+        //document.getElementById("publish").addEventListener("click", producer.sendMessages);
+        document.getElementById("publish").addEventListener("click", producer.sendGovText);
 
         subscriber = new QueueConsumer('SOLACE_QUEUE', 'subscribelog');
         subscriber2 = new TopicSubscriber('subscribelog2');
@@ -55,7 +56,7 @@
         document.getElementById("unsubscribe").addEventListener("click", subscriber2.unsubscribe);
         // microsoft api testing
         //document.getElementById("pubconnect").addEventListener("click", processImage);
-        document.getElementById("pubconnect").addEventListener("click", processgov);
+        //document.getElementById("pubconnect").addEventListener("click", processgov);
       };
       function preview(){
         var reader = new FileReader();
