@@ -76,7 +76,7 @@ var QueueProducer = function (queueName) {
             }
         });
 
-        producer.connectToSolace();   
+        producer.connectToSolace();
 
     };
 
@@ -101,6 +101,39 @@ var QueueProducer = function (queueName) {
             producer.log('Cannot send messages because not connected to Solace message router.');
         }
     }
+
+
+    producer.sendGovText = function () {
+        if (producer.session !== null) {
+            processgov(function(resdict){
+              $("#responseTextArea").val(resdict);
+
+            });
+        } else {
+            producer.log('Cannot send messages because not connected to Solace message router.');
+        }
+    }
+
+    // Sends one picture with tags of topics
+    producer.sendviaTopics = function (sequenceNr) {
+        var messageText = document.getElementById('content').value;
+        var message = solace.SolclientFactory.createMessage();
+        message.setDestination(solace.SolclientFactory.createTopicDestination(document.getElementById('publishtopic').value));
+        message.setBinaryAttachment(messageText);
+        message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
+        // Define a correlation key object
+        const correlationKey = {
+            name: "MESSAGE_CORRELATIONKEY",
+            id: sequenceNr,
+        };
+        message.setCorrelationKey(correlationKey);
+        try {
+            producer.session.send(message);
+            producer.log('Message #' + sequenceNr + ' sent to queue "' + producer.queueName + '"' + JSON.stringify(correlationKey));
+        } catch (error) {
+            producer.log(error.toString());
+        }
+    };
 
     // Sends one message
     producer.sendMessage = function (sequenceNr) {
@@ -155,11 +188,11 @@ var QueueProducer = function (queueName) {
 
             }
         }
-        
+
     };
 
 
-    
+
     // Gracefully disconnects from Solace message router
     producer.disconnect = function () {
         producer.log('Disconnecting from Solace message router...');
