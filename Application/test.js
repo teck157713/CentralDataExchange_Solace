@@ -25,17 +25,12 @@ var pPublisher = new pn.Place({
             'fill': '#7a7e9b'
         }
     },
-    tokens: 8
+    tokens: 20
 });
 
 var pQueue1 = pPublisher.clone()
     .attr('.label/text', 'Queue')
     .position(30, 350)
-    .set('tokens', 0);
-
-var pQueue2 = pPublisher.clone()
-    .attr('.label/text', 'Queue')
-    .position(230, 350)
     .set('tokens', 0);
 
 var pConsumer1 = pPublisher.clone()
@@ -74,8 +69,8 @@ var pConsume1 = pProduce.clone()
     .attr('.label/text', 'Consume')
     .position(50, 450);
 
-var pConsume2 = pProduce.clone()
-    .attr('.label/text', 'Consume')
+var pSubscribe = pProduce.clone()
+    .attr('.label/text', 'Subscribe')
     .position(250, 450);
 
 
@@ -95,7 +90,7 @@ function link(a, b) {
     });
 }
 
-graph.addCell([pPublisher, pQueue1, pQueue2, pConsumer1, pConsumer2, pProduce, pPublish1, pPublish2, pConsume1, pConsume2]);
+graph.addCell([pPublisher, pQueue1, pConsumer1, pConsumer2, pProduce, pPublish1, pPublish2, pConsume1, pSubscribe]);
 
 graph.addCell([
     link(pPublisher, pProduce),
@@ -104,9 +99,8 @@ graph.addCell([
     link(pQueue1, pConsume1),
     link(pConsume1, pConsumer1),
     link(pProduce, pPublish2),
-    link(pPublish2, pQueue2),
-    link(pQueue2, pConsume2),
-    link(pConsume2, pConsumer2)
+    link(pPublish2, pSubscribe),
+    link(pSubscribe, pConsumer2)
 ]);
 
 
@@ -166,16 +160,16 @@ function fireTransition(t, sec) {
 
 function simulate() {
 
-    var transitions = [pProduce, pPublish1, pPublish2, pConsume1, pConsume2];
+    var transitions = [pProduce, pPublish1, pPublish2, pConsume1, pSubscribe];
     transitions.forEach(function(t) {
-        if (Math.random() < 0.7) {
+        if (Math.random() < 1) {
             fireTransition(t, 1);
         }
     });
 
     return setInterval(function() {
         transitions.forEach(function(t) {
-            if (Math.random() < 0.7) {
+            if (Math.random() < 1) {
                 fireTransition(t, 1);
             }
         });
