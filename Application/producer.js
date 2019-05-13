@@ -1,4 +1,3 @@
-
 var QueueProducer = function (queueName) {
     var enumvalue = 0;
     'use strict';
@@ -158,8 +157,6 @@ var QueueProducer = function (queueName) {
         
     };
 
-
-    
     // Gracefully disconnects from Solace message router
     producer.disconnect = function () {
         producer.log('Disconnecting from Solace message router...');
