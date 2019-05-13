@@ -5,13 +5,15 @@ function processgov() {
 
   // Request parameters.
   var now = new Date();
-  var month = "0" + (now.getMonth()).toString().slice(-2);
-  var today = now.getFullYear() + '-' + month + '-' + now.getDate() + 'T' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+  var month = ("0" + (now.getMonth() + 1).toString()).slice(-2);
+  var date = ("0" + now.getDate().toString()).slice(-2);
+  var hour = ("0" + now.getHours().toString()).slice(-2);
+  var minute = ("0" + now.getMinutes().toString()).slice(-2);
+  var second = ("0" + now.getSeconds().toString()).slice(-2);
+  var today = now.getFullYear() + '-' + month + '-' + date + 'T' + hour + ':' + minute + ':' + second;
   var params = {
       "date_time": today
   };
-
-  var sourceImageUrl = "https://peopledotcom.files.wordpress.com/2018/12/books-8.jpg?crop=0px%2C13px%2C2700px%2C1419px&resize=1200%2C630";
 
   $.ajax({
       url: uriBase + "?" + $.param(params),
@@ -24,8 +26,17 @@ function processgov() {
   })
 
   .done(function(data) {
+      result = JSON.parse(JSON.stringify(data,null,2));
+      var cameras = result.items[0].cameras;
+      for (var i = 0; i < 5; i++){
+        //sendImage(TOPICNAME);
+        processImage(cameras[i].image, function(resulvar){
+          alert(resulvar);
 
-      alert(JSON.stringify(data,null,2));
+        });
+
+      }
+      //$("#responseTextArea").val(JSON.stringify(data,null,2));
   })
 
   .fail(function(jqXHR, textStatus, errorThrown) {
