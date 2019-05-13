@@ -1,4 +1,4 @@
-function processImage() {
+function processImage(sourceImageUrl, callback) {
   // **********************************************
   // *** Update or verify the following values. ***
   // **********************************************
@@ -27,7 +27,6 @@ function processImage() {
   // Display the image.
   //var sourceImageUrl = document.getElementById("inputImage").value;
   //document.querySelector("#sourceImage").src = sourceImageUrl;
-  var sourceImageUrl = "https://peopledotcom.files.wordpress.com/2018/12/books-8.jpg?crop=0px%2C13px%2C2700px%2C1419px&resize=1200%2C630";
 
   // Make the REST API call.
   $.ajax({
@@ -48,8 +47,10 @@ function processImage() {
 
   .done(function(data) {
       // Show formatted JSON on webpage.
-      // $("#responseTextArea").val(JSON.stringify(data, null, 2));
-      alert(JSON.stringify(data,null,2));
+      result = JSON.parse(JSON.stringify(data, null, 2));
+      //$("#responseTextArea").val(result.description.tags);
+      callback(result.description.tags);
+
   })
 
   .fail(function(jqXHR, textStatus, errorThrown) {
