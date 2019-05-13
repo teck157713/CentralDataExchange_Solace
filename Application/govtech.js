@@ -1,4 +1,4 @@
-function processgov() {
+function processgov(callback) {
   var subscriptionKey = "5eb74f8f5a844acaa8c29118c43c83a6";
   var uriBase =
       "https://api.data.gov.sg/v1/transport/traffic-images";
@@ -28,14 +28,20 @@ function processgov() {
   .done(function(data) {
       result = JSON.parse(JSON.stringify(data,null,2));
       var cameras = result.items[0].cameras;
+      var resdict = [];
       for (var i = 0; i < 5; i++){
         //sendImage(TOPICNAME);
         processImage(cameras[i].image, function(resulvar){
           alert(resulvar);
-
+          alert(cameras[i].image);
+          resdict.push({"image" : cameras[i].image, "tags" : resulvar});
+          if (resdict.length >= 5) {
+            callback(resdict);
+          }
         });
 
       }
+
       //$("#responseTextArea").val(JSON.stringify(data,null,2));
   })
 
