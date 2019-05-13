@@ -10,13 +10,16 @@
     <link rel="stylesheet" type="text/css" href="css/pure.css"></link>
     <link rel="stylesheet" type="text/css" href="css/samples.css"></link>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
-    
+
     <!-- Load Solace Web Messaging API for JavaScript -->
     <script src="lib/solclient-debug.js"></script>
 
     <!-- Load the Confirmed Delivery tutorial -->
     <script src="process.js"></script>
     <script src="config/config.js" type="text/javascript"></script>
+    <!-- script for microsoft api -->
+    <script src="microsoftanalyse.js"></script>
+    <script src="govtech.js"></script>
 
     <!-- Execute the Confirmed Delivery tutorial -->
     <script>
@@ -48,6 +51,9 @@
         document.getElementById("subdisconnect2").addEventListener("click", subscriber2.disconnect);
         document.getElementById("subscribe").addEventListener("click", subscriber2.subscribe);
         document.getElementById("unsubscribe").addEventListener("click", subscriber2.unsubscribe);
+        // microsoft api testing
+        //document.getElementById("pubconnect").addEventListener("click", processImage);
+        document.getElementById("pubconnect").addEventListener("click", processgov);
       };
       function preview(){
         var reader = new FileReader();
@@ -144,7 +150,7 @@
                 <button type="button" class="pure-button pure-button-primary" id="subscribe">Subscribe </button>
                 <button type="button" class="pure-button button-error" id="unsubscribe">Unsubscribe</button>
               </p>
-              
+
             </div>
             <div class="grid-item input" align="left">
                 <p>
@@ -170,7 +176,7 @@
                   </tr>
               <table>
         </div>
-        
+
       </form>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
@@ -179,6 +185,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.js"></script>
     <script type="text/javascript" src="test.js"></script>
   </body>
-  
-</html>
 
+</html>
