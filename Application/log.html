@@ -24,7 +24,7 @@
         // enable logging to JavaScript console at WARN level
         // NOTICE: works only with "solclientjs-debug.js"
         solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
-        subscriber = new QueueConsumer('SOLACE_ALL', 'log');
+        subscriber = new QueueConsumer('SOLACE_OVERALL', 'log');
         subscriber.connect()
         subscriber.startConsume()
     };
