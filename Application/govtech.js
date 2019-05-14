@@ -29,18 +29,17 @@ function processgov(callback) {
       result = JSON.parse(JSON.stringify(data,null,2));
       var cameras = result.items[0].cameras;
       var resdict = [];
-      for (var i = 0; i < 5; i++){
+      for (var i = 0; i < 1; i++){
         //sendImage(TOPICNAME);
-        processImage(cameras[i].image, function(resulvar){
-          alert(resulvar);
-          alert(cameras[i].image);
-          resdict.push({"image" : cameras[i].image, "tags" : resulvar});
-          if (resdict.length >= 5) {
+        processImage(cameras[i].image, function(imgres, resulvar){
+          resdict.push({"image" : imgres, "tags" : resulvar});
+          if (resdict.length >= 1) {
             callback(resdict);
           }
-        });
+        }
+      );
 
-      }
+    }
 
       //$("#responseTextArea").val(JSON.stringify(data,null,2));
   })
