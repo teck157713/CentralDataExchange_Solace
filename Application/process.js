@@ -226,16 +226,17 @@ var QueueConsumer = function (queueName, logname) {
         logTextArea.scrollTop = logTextArea.scrollHeight;
     };
 
-    function logs(topicname,message){
+    consumer.logs = function(message){
         var now = new Date();
+        var time = [('0' + now.getHours()).slice(-2), ('0' + now.getMinutes()).slice(-2),
+            ('0' + now.getSeconds()).slice(-2)];
+        var timestamp = '[' + time.join(':') + '] ';
         var table = document.getElementById("logtable");
         var row = table.insertRow(-1);
         var cell1 = row.insertCell(0);
         var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(1);
-        cell1.innerHTML = topicname;
-        cell2.innerHTML = message;
-        cell3.innerHTML = now;
+        cell1.innerHTML = message;
+        cell2.innerHTML = timestamp;
     }
 
     consumer.table = function (messagee) {
@@ -343,6 +344,7 @@ var QueueConsumer = function (queueName, logname) {
                             ' details:\n' + message.dump());
                             // Need to explicitly ack otherwise it will not be deleted from the message router
                             consumer.table(message.getBinaryAttachment())
+                            consumer.logs(message.getBinaryAttachment())
                             message.acknowledge();
                         } else {
                             //convert and show image
@@ -350,9 +352,9 @@ var QueueConsumer = function (queueName, logname) {
                             var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
                             consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
                             consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="400px  " height="50%" src=\"data:image/png;base64,' + base64String + '\" />')
+                            consumer.logs('<br /><img id=\"ItemView\" style="display:block;" width="400px  " height="50%" src=\"data:image/png;base64,' + base64String + '\" />')
                             message.acknowledge();
                         }
-
                     });
                     // Connect the message consumer
                     consumer.messageConsumer.connect();
