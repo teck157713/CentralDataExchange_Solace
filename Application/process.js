@@ -237,14 +237,15 @@ var QueueConsumer = function (queueName, logname) {
         var cell2 = row.insertCell(1);
         cell1.innerHTML = message;
         cell2.innerHTML = timestamp;
-    }
+    };
 
     consumer.table = function (messagee) {
         var table = document.getElementById("table2");
         var row = table.insertRow(-1);
         var cell1 = row.insertCell(0);
         cell1.innerHTML = messagee;
-    }
+    };
+
     consumer.log('\n*** Consumer to queue "' + consumer.queueName + '" is ready to connect ***');
 
     // Establishes connection to Solace message router
@@ -343,16 +344,16 @@ var QueueConsumer = function (queueName, logname) {
                             consumer.log('Received message: "' + result + '",' +
                             ' details:\n' + message.dump());
                             // Need to explicitly ack otherwise it will not be deleted from the message router
-                            consumer.table(message.getBinaryAttachment())
-                            consumer.logs(message.getBinaryAttachment())
+                            consumer.table(message.getBinaryAttachment());
+                            consumer.logs(message.getBinaryAttachment());
                             message.acknowledge();
                         } else {
                             //convert and show image
                             var imgbyte = result.split(",");
                             var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
                             consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
-                            consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="400px  " height="50%" src=\"data:image/png;base64,' + base64String + '\" />')
-                            consumer.logs('<br /><img id=\"ItemView\" style="display:block;" width="400px  " height="50%" src=\"data:image/png;base64,' + base64String + '\" />')
+                            consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="400px  " height="50%" src=\"data:image/png;base64,' + base64String + '\" />');
+                            consumer.logs('<br /><img id=\"ItemView\" style="display:block;" width="400px  " height="50%" src=\"data:image/png;base64,' + base64String + '\" />');
                             message.acknowledge();
                         }
                     });
