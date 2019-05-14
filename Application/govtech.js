@@ -30,7 +30,6 @@ function processgov(callback) {
       var cameras = result.items[0].cameras;
       var resdict = [];
       for (var i = 0; i < 1; i++){
-        //sendImage(TOPICNAME);
         processImage(cameras[i].image, function(imgres, resulvar){
           resdict.push({"image" : imgres, "tags" : resulvar});
           if (resdict.length >= 1) {
@@ -41,7 +40,6 @@ function processgov(callback) {
 
     }
 
-      //$("#responseTextArea").val(JSON.stringify(data,null,2));
   })
 
   .fail(function(jqXHR, textStatus, errorThrown) {
