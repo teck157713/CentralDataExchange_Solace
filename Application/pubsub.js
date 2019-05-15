@@ -174,7 +174,7 @@ var PubSub = function (queueName, logname, topicName, contentmsg, tableName) {
             message.setCorrelationKey(correlationKey);
             try {
                 pubsub.session.send(message);
-                pubsub.log('Message #' + messageText + ' sent to queue "' + pubsub.queueName + '"' + JSON.stringify(correlationKey));
+                pubsub.log('Message #' + messageText + ' sent to queue "' + pubsub.topicName + '"' + JSON.stringify(correlationKey));
             } catch (error) {
                 pubsub.log(error.toString());
             }
@@ -199,7 +199,7 @@ var PubSub = function (queueName, logname, topicName, contentmsg, tableName) {
         message.setCorrelationKey(correlationKey);
         try {
             pubsub.session.send(message);
-            pubsub.log('Message #' + sequenceNr + ' sent to queue "' + pubsub.queueName + '", correlation key = ' + JSON.stringify(correlationKey));
+            pubsub.log('Message #' + sequenceNr + ' sent to queue "' + pubsub.topicName + '", correlation key = ' + JSON.stringify(correlationKey));
         } catch (error) {
             pubsub.log(error.toString());
         }
@@ -230,7 +230,7 @@ var PubSub = function (queueName, logname, topicName, contentmsg, tableName) {
                 message.setCorrelationKey(correlationKey);
                 try {
                     pubsub.session.send(message);
-                    pubsub.log('Message #' + sequenceNr + ' sent to queue "' + producer.queueName + '", correlation key = ' + JSON.stringify(correlationKey));
+                    pubsub.log('Message #' + sequenceNr + ' sent to queue "' + pubsub.topicName + '", correlation key = ' + JSON.stringify(correlationKey));
                 } catch (error) {
                     pubsub.log(error.toString());
                 }
