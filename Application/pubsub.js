@@ -1,17 +1,17 @@
-var PubSub = function (queueName = "queueName", logname = "logname", topicName = "topicName", contentmsg = "", tableName = "table1") {
-    'use strict';
+var PubSub = function (params) {
+    //'use strict';
     var enumvalue = 0;
     var govdataon = 0;
     var pubsub = {};
     pubsub.session = null;
     pubsub.numOfMessages = 10;
     pubsub.subscribed = false;
-    pubsub.topicName = topicName;
-    pubsub.queueName = queueName;
-    logname = logname; //logger input id
-    topicName = topicName; //plain text
-    contentmsg = contentmsg; //plain text or object file input if sendImage()
-    tableName = tableName; //table input id
+    pubsub.topicName = params.topicName || 'topicName';
+    pubsub.queueName = params.queueName || 'queueName';
+    var logname = params.logname || 'logname'; //logger input id
+    var contentmsg = params.contentmsg || ''; //plain text or object file input if sendImage()
+    var tableName = params.tableName || 'table1'; //table input id
+    alert(pubsub.queueName + ' ' + logname + ' ' + pubsub.topicName + ' ' + contentmsg + ' content ' + tableName);
 
     //Logger
     pubsub.log = function (line) {
@@ -126,7 +126,8 @@ var PubSub = function (queueName = "queueName", logname = "logname", topicName =
             enumvalue += 1;
             pubsub.sendMessage(enumvalue);
             //Or can send some image.
-            //pubsub.sendImage(enumvalue);
+            enumvalue += 1;
+            pubsub.sendImage(enumvalue);
         } else {
             pubsub.log('Cannot send messages because not connected to Solace message router.');
         }
@@ -190,6 +191,8 @@ var PubSub = function (queueName = "queueName", logname = "logname", topicName =
 
     // Sends one message
     pubsub.sendMessage = function (sequenceNr) {
+        contentmsg = document.getElementById("content").value;
+        pubsub.topicName = document.getElementById("publishtopic").value;
         var messageText = contentmsg;
         var message = solace.SolclientFactory.createMessage();
         message.setDestination(solace.SolclientFactory.createTopicDestination(pubsub.topicName));
@@ -211,6 +214,8 @@ var PubSub = function (queueName = "queueName", logname = "logname", topicName =
 
     // Sends one image
     pubsub.sendImage = function (sequenceNr) {
+        pubsub.topicName = "tutorial/queue/image";
+        contentmsg = document.getElementById('fileimg').files[0];
         var file = contentmsg;
         var reader = new FileReader();
         var fileByteArray = [];
@@ -246,6 +251,7 @@ var PubSub = function (queueName = "queueName", logname = "logname", topicName =
 
     // Subscribes to topic on Solace message router
     pubsub.subscribe = function () {
+        pubsub.topicName = document.getElementById('topicname').value;
         if (pubsub.session !== null) {
             if (pubsub.subscribed) {
                 pubsub.log('Already subscribed to "' + pubsub.topicName
