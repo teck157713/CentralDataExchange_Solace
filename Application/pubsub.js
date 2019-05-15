@@ -188,6 +188,17 @@ var PubSub = function (params) {
 
     };
 
+    //Initiate tempData Sending
+    pubsub.pubTemp = function () {
+      TempOn = setInterval(pubsub.sendTempData, 1000);
+      pubsub.log('Publishing, the interval has been started.');
+    }
+
+    pubsub.stoppubTemp = function () {
+      clearInterval(TempOn);
+      pubsub.log('Publishing has been stopped.');
+    }
+
     pubsub.sendTempData = function () {
         if (pubsub.session !== null) {
             processTemp(function(resdict){
@@ -201,7 +212,7 @@ var PubSub = function (params) {
     // Sends one picture with tags of topics
     pubsub.sendTempMsg = function (result) {
         for (var i = 0; i < result.length; i ++){
-          var messageText = result[i].id + ', lat: ' + result[i].location.latitude + ', long: ' + result[i].location.longitude + ', value: ' + result[i].value;
+          var messageText = 'id: ' + result[i].id + ', lat: ' + result[i].location.latitude + ', long: ' + result[i].location.longitude + ', value: ' + result[i].value;
           var message = solace.SolclientFactory.createMessage();
           setTopic(result[i].location.latitude, result[i].location.longitude);
         }
