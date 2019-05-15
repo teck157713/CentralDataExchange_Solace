@@ -30,8 +30,8 @@ function processgov(callback) {
       var cameras = result.items[0].cameras;
       var resdict = [];
       for (var i = 0; i < 1; i++){
-        processImage(cameras[i].image, function(imgres, resulvar){
-          resdict.push({"image" : imgres, "tags" : resulvar});
+        processImage(cameras[i].image, cameras[i].location, function(imgres, loc, resulvar){
+          resdict.push({"image" : imgres, "tags" : resulvar, "location" : loc});
           if (resdict.length >= 1) {
             callback(resdict);
           }
