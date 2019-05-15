@@ -20,6 +20,7 @@
     <!-- script for microsoft api -->
     <script src="microsoftanalyse.js"></script>
     <script src="govtech.js"></script>
+    <script src="tempData.js"></script>
 
     <!-- Execute the Confirmed Delivery tutorial -->
     <script>
@@ -42,6 +43,8 @@
         document.getElementById("publish").addEventListener("click", producer.sendgovdata);
         document.getElementById("stoppublish").addEventListener("click", producer.stopgovdata);
         document.getElementById("sendmsg").addEventListener("click", producer.sendMessages);
+        //test
+        document.getElementById("publishTemp").addEventListener("click", producer.sendTempData);
 
         subscriber = new PubSub({queueName : 'SOLACE_QUEUE', logname : 'subscribelog', tableName : 'table2'});
         subscriber2 = new PubSub({logname : 'subscribelog2', tableName : 'table1'});
@@ -115,6 +118,7 @@
           <button type="button" class="pure-button pure-button-primary" id="sendmsg">Send Message Content</button>
           <button type="button" class="pure-button pure-button-primary" id="publish">Publish</button>
           <button type="button" class="pure-button button-error" id="stoppublish">Stop Publish</button>
+          <button type="button" class="pure-button pure-button-primary" id="publishTemp">Publish Temperature</button>
         </p>
         <div class = "input">
           <div class="publishlog" id="publishlog" contentEditable="true"></div>
