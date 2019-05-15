@@ -11,7 +11,6 @@ var PubSub = function (params) {
     var logname = params.logname || 'logname'; //logger input id
     var contentmsg = params.contentmsg || ''; //plain text or object file input if sendImage()
     var tableName = params.tableName || 'table1'; //table input id
-    alert(pubsub.queueName + ' ' + logname + ' ' + pubsub.topicName + ' ' + contentmsg + ' content ' + tableName);
 
     //Logger
     pubsub.log = function (line) {
