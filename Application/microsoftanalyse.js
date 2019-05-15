@@ -1,4 +1,4 @@
-function processImage(sourceImageUrl, callback) {
+function processImage(sourceImageUrl, location, callback) {
   // **********************************************
   // *** Update or verify the following values. ***
   // **********************************************
@@ -49,7 +49,7 @@ function processImage(sourceImageUrl, callback) {
       // Show formatted JSON on webpage.
       result = JSON.parse(JSON.stringify(data, null, 2));
       //$("#responseTextArea").val(result.description.tags);
-      callback(sourceImageUrl, result.description.tags);
+      callback(sourceImageUrl, location, result.description.tags);
 
   })
 
