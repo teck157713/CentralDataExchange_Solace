@@ -1,4 +1,4 @@
-var PubSub = function (queueName, logname, topicName, contentmsg = "", tableName = "table1") {
+var PubSub = function (queueName = "queueName", logname = "logname", topicName = "topicName", contentmsg = "", tableName = "table1") {
     'use strict';
     var enumvalue = 0;
     var govdataon = 0;
@@ -8,10 +8,10 @@ var PubSub = function (queueName, logname, topicName, contentmsg = "", tableName
     pubsub.subscribed = false;
     pubsub.topicName = topicName;
     pubsub.queueName = queueName;
-    logname = ""; //logger input id
-    topicName = ""; //plain text
-    contentmsg = ""; //plain text or object file input if sendImage()
-    tableName = ""; //table input id
+    logname = logname; //logger input id
+    topicName = topicName; //plain text
+    contentmsg = contentmsg; //plain text or object file input if sendImage()
+    tableName = tableName; //table input id
 
     //Logger
     pubsub.log = function (line) {
