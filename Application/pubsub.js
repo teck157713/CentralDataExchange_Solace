@@ -188,6 +188,43 @@ var PubSub = function (params) {
 
     };
 
+    pubsub.sendTempData = function () {
+        if (pubsub.session !== null) {
+            processTemp(function(resdict){
+              pubsub.sendTempMsg(resdict);
+            });
+        } else {
+            pubsub.log('Cannot send messages because not connected to Solace message router.');
+        }
+    }
+
+    // Sends one picture with tags of topics
+    pubsub.sendTempMsg = function (result) {
+        for (var i = 0; i < result.length; i ++){
+          var messageText = result[i].id + ', lat: ' + result[i].location.latitude + ', long: ' + result[i].location.longitude + ', value: ' + result[i].value;
+          var message = solace.SolclientFactory.createMessage();
+          setTopic(result[i].location.latitude, result[i].location.longitude);
+        }
+
+        function setTopic(x, y){
+          message.setDestination(solace.SolclientFactory.createTopicDestination( pubsub.topicName + '/' + x + '/' + y));
+          message.setBinaryAttachment(messageText);
+          message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
+          const correlationKey = {
+              name: "MESSAGE_CORRELATIONKEY",
+              id: messageText,
+          };
+          message.setCorrelationKey(correlationKey);
+          try {
+              pubsub.session.send(message);
+              pubsub.log('Message #' + messageText + ' sent to queue "' + pubsub.topicName + '"' + JSON.stringify(correlationKey));
+          } catch (error) {
+              pubsub.log(error.toString());
+          }
+        }
+
+    };
+
     // Sends one message
     pubsub.sendMessage = function (sequenceNr) {
         contentmsg = document.getElementById("content").value;
