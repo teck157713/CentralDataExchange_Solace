@@ -1,7 +1,7 @@
-function processgov(callback) {
+function processTemp(callback) {
   var subscriptionKey = "5eb74f8f5a844acaa8c29118c43c83a6";
   var uriBase =
-      "https://api.data.gov.sg/v1/transport/traffic-images";
+      "https://api.data.gov.sg/v1/environment/air-temperature";
 
   // Request parameters.
   var now = new Date();
