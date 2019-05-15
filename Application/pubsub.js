@@ -156,7 +156,7 @@ var PubSub = function (params) {
     // Sends one picture with tags of topics
     pubsub.sendviaTopics = function (result) {
         for (var i = 0; i < result.length; i ++){
-          var messageText = result[i].image;
+          var messageText = result[i].image + ', lat: ' + result[i].location.latitude + ', long: ' + result[i].location.longitude;
           var topicDest = result[i].tags;
           //alert(messageText + ' ' + topicDest);
           var message = solace.SolclientFactory.createMessage();
