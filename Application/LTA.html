@@ -19,7 +19,7 @@
     <script src="subscriber.js"></script> -->
     <script src="pubsubLTA.js"></script>
     <script src="ui.js"></script>
-    <script src="config/configLTA.js" type="text/javascript"></script>
+    <script src="config/config.js" type="text/javascript"></script>
     <!-- script for microsoft api -->
     <script src="microsoftanalyse.js"></script>
     <script src="govtech.js"></script>
@@ -47,7 +47,7 @@
         document.getElementById("stoppublish").addEventListener("click", producer.stopgovdata);
         document.getElementById("sendmsg").addEventListener("click", producer.sendMessages);
 
-        subscriber = new PubSub({queueName : 'SOLACE_OVERALL', logname : 'subscribelog', tableName : 'table2'});
+        subscriber = new PubSub({queueName : 'SOLACE_QUEUE', logname : 'subscribelog', tableName : 'table2'});
         document.getElementById("subconnect").addEventListener("click", subscriber.connect);
         document.getElementById("subdisconnect").addEventListener("click", subscriber.disconnect);
         document.getElementById("startconsume").addEventListener("click", subscriber.startConsume);
@@ -103,7 +103,7 @@
           <br>
           <div class="pure-control-group">
             <label for="publishtopic">What Topic to Publish Message to?</label>
-            <input id="publishtopic" type="text" placeholder="Insert Topic" value="LTA/image/traffic/">
+            <input id="publishtopic" type="text" placeholder="Insert Topic" value="LTA/image/traffic">
           </div>
 
           <div class="pure-control-group">
@@ -114,13 +114,16 @@
           </div>
         </div>
         </fieldset>
+        <div class="w3-bar">
         <p>
-          <button type="button" class="pure-button pure-button-primary" id="pubconnect">Connect</button>
-          <button type="button" class="pure-button button-error" id="pubdisconnect">Disconnect</button>
-          <button type="button" class="pure-button pure-button-primary" id="sendmsg">Send Local Image</button>
-          <button type="button" class="pure-button pure-button-primary" id="publish">Start Publish</button>
-          <button type="button" class="pure-button button-error" id="stoppublish">Stop Publish</button>
+          <button type="button" class="w3-bar-item w3-button w3-teal" id="pubconnect">Connect</button>
+          <button type="button" class="w3-bar-item w3-button w3-red" id="pubdisconnect">Disconnect</button>
+          <button type="button" class="w3-bar-item w3-button w3-teal" id="sendmsg">Send Local Image</button>
+          <button type="button" class="w3-bar-item w3-button w3-teal" id="publish">Start Publish</button>
+          <button type="button" class="w3-bar-item w3-button w3-red" id="stoppublish">Stop Publish</button>
         </p>
+        </div>
+        <br>
         <div class = "input">
           <div class="publishlog" id="publishlog" contentEditable="true"></div>
         </div>
@@ -171,12 +174,12 @@
       </form>
         <br><br>
         <div class="grid-container">
-              <table border="1", width="400px" id='table2'>
+              <table class="w3-table-all w3-hoverable w3-card-4", id='table2'>
                   <tr>
                     <th>Image</th>
                   </tr>
               </table>
-              <table border="1", width="400px", id='table1'>
+              <table class="w3-table-all w3-hoverable w3-card-4" , id='table1'>
                   <tr>
                     <th>Message</th>
                   </tr>
@@ -184,5 +187,5 @@
         </div>
         </div>
   </body>
-
+  <!-- border="1", width="400px" -->
 </html>
