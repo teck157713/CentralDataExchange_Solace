@@ -41,7 +41,7 @@
       solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
       // create the producer, specifying name of the subscription topic
-      producer = new PubSub({ logname: "publishlog", topicName: "tutorial/queue" });
+      producer = new PubSub({logname : "publishlog", topicName : "tutorial/queue", topicID : "publishtopic", contentmsg : "content", contentfile : "fileimg"});
       // assign buttons to the producer functions
       document.getElementById("pubconnect").addEventListener("click", producer.connect);
       document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
@@ -49,13 +49,13 @@
       document.getElementById("stoppublish").addEventListener("click", producer.stopgovdata);
       document.getElementById("sendmsg").addEventListener("click", producer.sendMessages);
 
-      subscriber = new PubSub({ queueName: 'SOLACE_QUEUE', logname: 'subscribelog', tableName: 'table2' });
+      subscriber = new PubSub({queueName : 'SOLACE_QUEUE', logname : 'subscribelog', tableName : 'table2'});
       document.getElementById("subconnect").addEventListener("click", subscriber.connect);
       document.getElementById("subdisconnect").addEventListener("click", subscriber.disconnect);
       document.getElementById("startconsume").addEventListener("click", subscriber.startConsume);
       document.getElementById("stopconsume").addEventListener("click", subscriber.stopConsume);
 
-      subscriber2 = new PubSub({ logname: 'subscribelog2', tableName: 'table1' });
+      subscriber2 = new PubSub({logname : 'subscribelog2', tableName : 'table1', topicID : 'topicname'});
       document.getElementById("subconnect2").addEventListener("click", subscriber2.connect);
       document.getElementById("subdisconnect2").addEventListener("click", subscriber2.disconnect);
       document.getElementById("subscribe").addEventListener("click", subscriber2.subscribe);
@@ -149,7 +149,7 @@
     </div>
       <div class="input">
         <p>
-          <div class="subscribelog" id="subscribelog" contentEditable="true"></div>
+          <div class="publishlog" id="subscribelog" contentEditable="true"></div>
         </p>
       </div>
     </form>
@@ -178,7 +178,7 @@
     </div>
       <div class="input">
         <p>
-          <div class="subscribelog" id="subscribelog2" contentEditable="true"></div>
+          <div class="publishlog" id="subscribelog2" contentEditable="true"></div>
         </p>
       </div>
     </form>
