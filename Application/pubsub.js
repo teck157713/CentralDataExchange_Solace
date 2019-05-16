@@ -4,6 +4,7 @@ var PubSub = function (params) {
     var enumvalue = 0;
     var govdataon = 0;
     var pubsub = {};
+    pubsub.temp = {};
     pubsub.session = null;
     pubsub.numOfMessages = 10;
     pubsub.subscribed = false;
@@ -118,14 +119,17 @@ var PubSub = function (params) {
             if (validURL(result.split(',')[0])) {
               pubsub.log('Received Image: <br /><img id=\"ItemView\" src=\"' + result.split(',')[0] + '\" />' + ', message: ' + result + ', details:\n' + message.dump());
               pubsub.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"' + result.split(',')[0] + '\" />' + result);
+              pubsub.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"' + result.split(',')[0] + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
             } else if (result.length < 255){
               pubsub.log('Received message: "' + result + '", details:\n' + message.dump());
               pubsub.table(result);
+              pubsub.temp = {'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
             } else {
               var imgbyte = result.split(",");
               var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
               pubsub.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />' + ', details:\n' + message.dump());
               pubsub.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />');
+              pubsub.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
             }
 
 
@@ -202,7 +206,6 @@ var PubSub = function (params) {
         for (var i = 0; i < result.length; i ++){
           var messageText = result[i].image + ', lat: ' + result[i].location.latitude + ', long: ' + result[i].location.longitude;
           var topicDest = result[i].tags;
-          //alert(messageText + ' ' + topicDest);
           var message = solace.SolclientFactory.createMessage();
           setTopic(topicDest);
         }
@@ -449,6 +452,8 @@ var PubSub = function (params) {
                             // Need to explicitly ack otherwise it will not be deleted from the message router
                             pubsub.table(message.getBinaryAttachment())
                             message.acknowledge();
+                            pubsub.temp = {'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
+
                         } else {
                             //convert and show image
                             var imgbyte = result.split(",");
@@ -456,6 +461,7 @@ var PubSub = function (params) {
                             pubsub.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
                             pubsub.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />')
                             message.acknowledge();
+                            pubsub.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
                         }
 
                     });
