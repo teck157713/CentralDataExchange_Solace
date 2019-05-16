@@ -17,6 +17,7 @@ var PubSub = function (params) {
 
     //Logger
     pubsub.log = function (line) {
+      try {
         var now = new Date();
         var time = [('0' + now.getHours()).slice(-2), ('0' + now.getMinutes()).slice(-2), ('0' + now.getSeconds()).slice(-2)];
         var timestamp = '[' + time.join(':') + '] ';
@@ -24,16 +25,23 @@ var PubSub = function (params) {
         var logTextArea = document.getElementById(logname);
         logTextArea.innerHTML += timestamp + line + '<br />';
         logTextArea.scrollTop = logTextArea.scrollHeight;
+      } catch (error) {
+        alert(error.toString());
+      }
     };
 
     pubsub.log('\n*** Broker is ready to connect ***');
 
     //table Log
     pubsub.table = function (messagee) {
+      try {
         var table = document.getElementById(tableName);
         var row = table.insertRow(-1);
         var cell1 = row.insertCell(0);
         cell1.innerHTML = messagee;
+      } catch (error) {
+          producer.log(error.toString());
+      }
     }
 
     // Establishes connection to Solace message router
@@ -149,12 +157,20 @@ var PubSub = function (params) {
     //***have to be revisited
     pubsub.sendMessages = function () {
         if (pubsub.session !== null) {
+          try {
             if (document.getElementById(contentmsg).value != ''){
               pubsub.sendMessage();
             }
+          } catch (error) {
+              producer.log(error.toString());
+          }
+          try {
             if (document.getElementById(contentfile).value != ''){
               pubsub.sendImage();
             }
+          } catch (error) {
+              producer.log(error.toString());
+          }
         } else {
             pubsub.log('Cannot send messages because not connected to Solace message router.');
         }
@@ -266,6 +282,7 @@ var PubSub = function (params) {
 
     // Sends one message
     pubsub.sendMessage = function () {
+      try {
         enumvalue += 1;
         sequenceNr = enumvalue;
         var statictopicName = document.getElementById(topicID).value;
@@ -286,10 +303,14 @@ var PubSub = function (params) {
         } catch (error) {
             pubsub.log(error.toString());
         }
+      } catch (error) {
+          producer.log(error.toString());
+      }
     };
 
     // Sends one image
     pubsub.sendImage = function () {
+      try {
         enumvalue += 1;
         sequenceNr = enumvalue;
         var statictopicName = document.getElementById(topicID).value;
@@ -323,11 +344,14 @@ var PubSub = function (params) {
 
             }
         }
-
+      } catch (error) {
+          producer.log(error.toString());
+      }
     };
 
     // Subscribes to topic on Solace message router
     pubsub.subscribe = function () {
+      try {
         placeholder = document.getElementById(topicID).value;
         if (pubsub.session !== null) {
             if (pubsub.subscribed) {
@@ -349,10 +373,14 @@ var PubSub = function (params) {
         } else {
             pubsub.log('Cannot subscribe because not connected to Solace message router.');
         }
+      } catch (error) {
+          producer.log(error.toString());
+      }
     };
 
     // Unsubscribes from topic on Solace message router
     pubsub.unsubscribe = function () {
+      try {
         if (pubsub.session !== null) {
             if (pubsub.subscribed) {
                 pubsub.log('Unsubscribing from topic: ' + placeholder);
@@ -374,6 +402,9 @@ var PubSub = function (params) {
         } else {
             pubsub.log('Cannot unsubscribe because not connected to Solace message router.');
         }
+      } catch (error) {
+          producer.log(error.toString());
+      }
     };
 
     // Starts consuming from a queue on Solace message router
