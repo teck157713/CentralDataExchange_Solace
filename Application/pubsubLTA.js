@@ -10,7 +10,7 @@ var PubSub = function (params) {
     pubsub.queueName = params.queueName || 'queueName';
     var logname = params.logname || 'logname'; //logger input id
     var tableName = params.tableName || 'table1'; //table input id
-
+    
     //Logger
     pubsub.log = function (line) {
         var now = new Date();
