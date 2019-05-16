@@ -2,103 +2,106 @@
 
 <html lang="en">
 
-  <head>
-    <title>Prototype Demo</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
-    <meta charset="utf-8"/>
+<head>
+  <title>Prototype Demo</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
+  <meta charset="utf-8" />
 
-    <link rel="stylesheet" type="text/css" href="css/pure.css"></link>
-    <link rel="stylesheet" type="text/css" href="css/samples.css"></link>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
+  <link rel="stylesheet" type="text/css" href="css/pure.css">
+  </link>
+  <link rel="stylesheet" type="text/css" href="css/samples.css">
+  </link>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
 
-    <!-- Load Solace Web Messaging API for JavaScript -->
-    <script src="lib/solclient-debug.js"></script>
+  <!-- Load Solace Web Messaging API for JavaScript -->
+  <script src="lib/solclient-debug.js"></script>
 
-    <!-- Load the Confirmed Delivery tutorial -->
-    <!-- <script src="producer.js"></script>
+  <!-- Load the Confirmed Delivery tutorial -->
+  <!-- <script src="producer.js"></script>
     <script src="subscriber.js"></script> -->
-    <script src="pubsubLTA.js"></script>
-    <script src="ui.js"></script>
-    <script src="config/config.js" type="text/javascript"></script>
-    <!-- script for microsoft api -->
-    <script src="microsoftanalyse.js"></script>
-    <script src="govtech.js"></script>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src="pubsubLTA.js"></script>
+  <script src="ui.js"></script>
+  <script src="config/config.js" type="text/javascript"></script>
+  <!-- script for microsoft api -->
+  <script src="microsoftanalyse.js"></script>
+  <script src="govtech.js"></script>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
-    <!-- Execute the Confirmed Delivery tutorial -->
-    <script>
-      var producer = null;
-      window.onload = function () {
-        // Initialize factory with the most recent API defaults
-        var factoryProps = new solace.SolclientFactoryProperties();
-        factoryProps.profile = solace.SolclientFactoryProfiles.version10;
-        solace.SolclientFactory.init(factoryProps);
+  <!-- Execute the Confirmed Delivery tutorial -->
+  <script>
+    var producer = null;
+    window.onload = function () {
+      // Initialize factory with the most recent API defaults
+      var factoryProps = new solace.SolclientFactoryProperties();
+      factoryProps.profile = solace.SolclientFactoryProfiles.version10;
+      solace.SolclientFactory.init(factoryProps);
 
-        // enable logging to JavaScript console at WARN level
-        // NOTICE: works only with "solclientjs-debug.js"
-        solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
+      // enable logging to JavaScript console at WARN level
+      // NOTICE: works only with "solclientjs-debug.js"
+      solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
-        // create the producer, specifying name of the subscription topic
-        producer = new PubSub({logname : "publishlog", topicName : "tutorial/queue"});
-        // assign buttons to the producer functions
-        document.getElementById("pubconnect").addEventListener("click", producer.connect);
-        document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
-        document.getElementById("publish").addEventListener("click", producer.sendgovdata);
-        document.getElementById("stoppublish").addEventListener("click", producer.stopgovdata);
-        document.getElementById("sendmsg").addEventListener("click", producer.sendMessages);
+      // create the producer, specifying name of the subscription topic
+      producer = new PubSub({ logname: "publishlog", topicName: "tutorial/queue" });
+      // assign buttons to the producer functions
+      document.getElementById("pubconnect").addEventListener("click", producer.connect);
+      document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
+      document.getElementById("publish").addEventListener("click", producer.sendgovdata);
+      document.getElementById("stoppublish").addEventListener("click", producer.stopgovdata);
+      document.getElementById("sendmsg").addEventListener("click", producer.sendMessages);
 
-        subscriber = new PubSub({queueName : 'SOLACE_QUEUE', logname : 'subscribelog', tableName : 'table2'});
-        document.getElementById("subconnect").addEventListener("click", subscriber.connect);
-        document.getElementById("subdisconnect").addEventListener("click", subscriber.disconnect);
-        document.getElementById("startconsume").addEventListener("click", subscriber.startConsume);
-        document.getElementById("stopconsume").addEventListener("click", subscriber.stopConsume);
+      subscriber = new PubSub({ queueName: 'SOLACE_QUEUE', logname: 'subscribelog', tableName: 'table2' });
+      document.getElementById("subconnect").addEventListener("click", subscriber.connect);
+      document.getElementById("subdisconnect").addEventListener("click", subscriber.disconnect);
+      document.getElementById("startconsume").addEventListener("click", subscriber.startConsume);
+      document.getElementById("stopconsume").addEventListener("click", subscriber.stopConsume);
 
-        subscriber2 = new PubSub({logname : 'subscribelog2', tableName : 'table1'});
-        document.getElementById("subconnect2").addEventListener("click", subscriber2.connect);
-        document.getElementById("subdisconnect2").addEventListener("click", subscriber2.disconnect);
-        document.getElementById("subscribe").addEventListener("click", subscriber2.subscribe);
-        document.getElementById("unsubscribe").addEventListener("click", subscriber2.unsubscribe);
+      subscriber2 = new PubSub({ logname: 'subscribelog2', tableName: 'table1' });
+      document.getElementById("subconnect2").addEventListener("click", subscriber2.connect);
+      document.getElementById("subdisconnect2").addEventListener("click", subscriber2.disconnect);
+      document.getElementById("subscribe").addEventListener("click", subscriber2.subscribe);
+      document.getElementById("unsubscribe").addEventListener("click", subscriber2.unsubscribe);
 
-      };
-      function preview(){
-        var reader = new FileReader();
-        var preview = document.getElementById('imgpreview');
-        var file = document.getElementById('fileimg').files[0];
-        reader.onloadend = function(){
-          preview.src = reader.result;
-        }
-        if (file){
-          reader.readAsDataURL(file);
-
-        }else{
-          preview.src="";
-        }
+    };
+    function preview() {
+      var reader = new FileReader();
+      var preview = document.getElementById('imgpreview');
+      var file = document.getElementById('fileimg').files[0];
+      reader.onloadend = function () {
+        preview.src = reader.result;
       }
-      preview();
+      if (file) {
+        reader.readAsDataURL(file);
 
-    </script>
-  </head>
+      } else {
+        preview.src = "";
+      }
+    }
+    preview();
 
-  <body>
+  </script>
+</head>
 
-    <div class="banner">
-      <div class="banner-interior">
-        <span class="logo">
-          <img src="image/solace.png"/>
-        </span>
-        <div class="banner-heading">
-          Demo (Iter 1)
-        </div>
+<body>
+
+  <div class="banner">
+    <div class="banner-interior">
+      <span class="logo">
+        <img src="image/solace.png" />
+      </span>
+      <div class="banner-heading">
+        Demo (Iter 1)
       </div>
     </div>
-    <div class="w3-bar w3-black">
-        <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'Publish')">Publish</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'Subscribe')">Subscribe</button>
-      </div>
-    <div id="Publish" class="w3-container w3-border pubsub">
-      <h2>LTA MESSAGE BROKER - Publish</h2>
-      <form class="pure-form pure-form-aligned">
-        <div class = "input">
+  </div>
+  <div class="w3-bar w3-black">
+    <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'Publish')">Publish</button>
+    <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'Subscribe')">Subscribe</button>
+    <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'Queue')">Queue</button>
+  </div>
+  <div id="Publish" class="w3-container w3-border pubsub">
+    <h2>LTA MESSAGE BROKER - Publish</h2>
+    <form class="pure-form pure-form-aligned">
+      <div class="input">
         <fieldset>
           <br>
           <div class="pure-control-group">
@@ -112,9 +115,9 @@
             <img src="image/blank.png" height="150" alt="Image Preview" id="imgpreview">
             <textarea id="responseTextArea"></textarea>
           </div>
-        </div>
-        </fieldset>
-        <div class="w3-bar">
+      </div>
+      </fieldset>
+      <div class="w3-bar">
         <p>
           <button type="button" class="w3-bar-item w3-button w3-teal" id="pubconnect">Connect</button>
           <button type="button" class="w3-bar-item w3-button w3-red" id="pubdisconnect">Disconnect</button>
@@ -122,70 +125,71 @@
           <button type="button" class="w3-bar-item w3-button w3-teal" id="publish">Start Publish</button>
           <button type="button" class="w3-bar-item w3-button w3-red" id="stoppublish">Stop Publish</button>
         </p>
-        </div>
-        <br>
-        <div class = "input">
-          <div class="publishlog" id="publishlog" contentEditable="true"></div>
-        </div>
+      </div>
+      <br>
+      <div class="input">
+        <div class="publishlog" id="publishlog" contentEditable="true"></div>
+      </div>
+    </form>
   </div>
-      <div id="Subscribe" class="w3-container w3-border pubsub" style="display:none">
-        <h2>LTA MESSAGE BROKER - Subscribe</h2>
-        <div class="grid-container">
-          <div class="grid-item">
-              <div class="pure-control-group">
-                <br><br><br>
-                </div>
-            <p align="center">
-              <button type="button" class="pure-button pure-button-primary" id="subconnect">Connect</button>
-              <button type="button" class="pure-button button-error" id="subdisconnect">Disconnect</button>
-            </p>
-            <p align="center">
-              <button type="button" class="pure-button pure-button-primary" id="startconsume">Consume messages </button>
-              <button type="button" class="pure-button button-error" id="stopconsume">Stop consuming</button>
-            </p>
-          </div>
-          <div class="grid-item">
-            <br>
-              <div class="pure-input-1">
-                  <label for="topicname">Topic Name: </label>
-                  <input id="topicname" type="text" placeholder="Insert Topic" value="tutorial/queue/message">
-                </div>
-              <p align="center">
-                <button type="button" class="pure-button pure-button-primary" id="subconnect2">Connect</button>
-                <button type="button" class="pure-button button-error" id="subdisconnect2">Disconnect</button>
-              </p>
-              <p align="center">
-                <button type="button" class="pure-button pure-button-primary" id="subscribe">Subscribe </button>
-                <button type="button" class="pure-button button-error" id="unsubscribe">Unsubscribe</button>
-              </p>
+  <div id="Queue" class="w3-container w3-border pubsub" style="display:none">
+    <h2>LTA MESSAGE BROKER - Queue</h2>
+    <form class="pure-form pure-form-aligned">
+      <div class="pure-input-1">
+        <label for="queuename">Topic Name: </label>
+        <input id="queuename" type="text" placeholder="Insert Topic" value="tutorial/queue/message">
+      </div>
+      <div class="w3-bar">
+      <p >
+        <button type="button" class="pure-button pure-button-primary" id="subconnect">Connect</button>
+        <button type="button" class="pure-button button-error" id="subdisconnect">Disconnect</button>
+        <button type="button" class="pure-button pure-button-primary" id="startconsume">Consume messages </button>
+        <button type="button" class="pure-button button-error" id="stopconsume">Stop consuming</button>
+      </p>
+    </div>
+      <div class="input">
+        <p>
+          <div class="subscribelog" id="subscribelog" contentEditable="true"></div>
+        </p>
+      </div>
+    </form>
+    <br><br>
+    <table class="w3-table-all w3-hoverable w3-card-4" , id='table2'>
+      <tr>
+        <th>Image</th>
+      </tr>
+    </table>
+  </div>
 
-            </div>
-            <div class="grid-item input" align="left">
-                <p>
-                  <div class="subscribelog" id="subscribelog" contentEditable="true"></div>
-                </p>
-            </div>
-            <div class="grid-item input" align="left">
-                <p>
-                  <div class="subscribelog" id="subscribelog2" contentEditable="true"></div>
-                </p>
-            </div>
-        </div>
-      </form>
-        <br><br>
-        <div class="grid-container">
-              <table class="w3-table-all w3-hoverable w3-card-4", id='table2'>
-                  <tr>
-                    <th>Image</th>
-                  </tr>
-              </table>
-              <table class="w3-table-all w3-hoverable w3-card-4" , id='table1'>
-                  <tr>
-                    <th>Message</th>
-                  </tr>
-              <table>
-        </div>
-        </div>
-  </body>
-  <!-- border="1", width="400px" -->
+  <div id="Subscribe" class="w3-container w3-border pubsub" style="display:none">
+    <h2>LTA MESSAGE BROKER - Subscribe</h2>
+    <form class="pure-form pure-form-aligned">
+      <div class="pure-input-1">
+        <label for="topicname">Topic Name: </label>
+        <input id="topicname" type="text" placeholder="Insert Topic" value="tutorial/queue/message">
+      </div>
+      <div class="w3-bar">
+      <p>
+        <button type="button" class="pure-button pure-button-primary" id="subconnect2">Connect</button>
+        <button type="button" class="pure-button button-error" id="subdisconnect2">Disconnect</button>
+        <button type="button" class="pure-button pure-button-primary" id="subscribe">Subscribe </button>
+        <button type="button" class="pure-button button-error" id="unsubscribe">Unsubscribe</button>
+      </p>
+    </div>
+      <div class="input">
+        <p>
+          <div class="subscribelog" id="subscribelog2" contentEditable="true"></div>
+        </p>
+      </div>
+    </form>
+    <br><br>
+    <table class="w3-table-all w3-hoverable w3-card-4" , id='table1'>
+      <tr>
+        <th>Message</th>
+      </tr>
+      <table>
+  </div>
+
+</body>
+
 </html>
