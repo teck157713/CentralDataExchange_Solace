@@ -1,16 +1,19 @@
 var PubSub = function (params) {
     //'use strict';
+    var placeholder = "";
     var enumvalue = 0;
     var govdataon = 0;
     var pubsub = {};
     pubsub.session = null;
     pubsub.numOfMessages = 10;
     pubsub.subscribed = false;
-    pubsub.topicName = params.topicName || 'topicName';
-    pubsub.queueName = params.queueName || 'queueName';
-    var logname = params.logname || 'logname'; //logger input id
-    var contentmsg = params.contentmsg || ''; //plain text or object file input if sendImage()
-    var tableName = params.tableName || 'table1'; //table input id
+    pubsub.topicName = params.topicName || 'topicName'; //topicname content (for simulation data only)
+    pubsub.queueName = params.queueName || 'queueName'; //queueName content (for consume only)
+    var topicID = params.topicID || 'topicID'; //topicname input id (for sendImage & sendMessage)
+    var logname = params.logname || 'logname'; //logger input id (NOT NULL)
+    var contentmsg = params.contentmsg || 'content'; //message input id (SEND MESSAGE)
+    var contentfile = params.contentfile || 'file';//object file input id if sendImage()
+    var tableName = params.tableName || 'table1'; //table input id (NOT NULL)
 
     //Logger
     pubsub.log = function (line) {
@@ -102,10 +105,33 @@ var PubSub = function (params) {
         });
         // define message event listener
         pubsub.session.on(solace.SessionEventCode.MESSAGE, function (message) {
-            pubsub.log('Received message: "' + message.getBinaryAttachment() + '", details:\n' +
-                message.dump());
-            pubsub.table(message.getBinaryAttachment());
+            var result = message.getBinaryAttachment();
+            // assuming message is not an image if less than 255 character, instead it's a msg
+            if (validURL(result.split(',')[0])) {
+              pubsub.log('Received Image: <br /><img id=\"ItemView\" src=\"' + result.split(',')[0] + '\" />' + ', message: ' + result + ', details:\n' + message.dump());
+              pubsub.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"' + result.split(',')[0] + '\" />' + result);
+            } else if (result.length < 255){
+              pubsub.log('Received message: "' + result + '", details:\n' + message.dump());
+              pubsub.table(result);
+            } else {
+              var imgbyte = result.split(",");
+              var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
+              pubsub.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />' + ', details:\n' + message.dump());
+              pubsub.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />');
+            }
+
+
         });
+
+        function validURL(str) {
+          var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+            '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+            '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+            '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+          return !!pattern.test(str);
+        }
 
         pubsub.connectToSolace();
 
@@ -120,13 +146,15 @@ var PubSub = function (params) {
         }
     };
 
+    //***have to be revisited
     pubsub.sendMessages = function () {
         if (pubsub.session !== null) {
-            enumvalue += 1;
-            pubsub.sendMessage(enumvalue);
-            //Or can send some image.
-            enumvalue += 1;
-            pubsub.sendImage(enumvalue);
+            if (document.getElementById(contentmsg).value != ''){
+              pubsub.sendMessage();
+            }
+            if (document.getElementById(contentfile).value != ''){
+              pubsub.sendImage();
+            }
         } else {
             pubsub.log('Cannot send messages because not connected to Solace message router.');
         }
@@ -237,12 +265,13 @@ var PubSub = function (params) {
     };
 
     // Sends one message
-    pubsub.sendMessage = function (sequenceNr) {
-        contentmsg = document.getElementById("content").value;
-        pubsub.topicName = document.getElementById("publishtopic").value;
-        var messageText = contentmsg;
+    pubsub.sendMessage = function () {
+        enumvalue += 1;
+        sequenceNr = enumvalue;
+        var statictopicName = document.getElementById(topicID).value;
+        var messageText = document.getElementById(contentmsg).value;
         var message = solace.SolclientFactory.createMessage();
-        message.setDestination(solace.SolclientFactory.createTopicDestination(pubsub.topicName));
+        message.setDestination(solace.SolclientFactory.createTopicDestination(statictopicName));
         message.setBinaryAttachment(messageText);
         message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
         // Define a correlation key object
@@ -253,17 +282,18 @@ var PubSub = function (params) {
         message.setCorrelationKey(correlationKey);
         try {
             pubsub.session.send(message);
-            pubsub.log('Message #' + sequenceNr + ' sent to queue "' + pubsub.topicName + '", correlation key = ' + JSON.stringify(correlationKey));
+            pubsub.log('Message #' + sequenceNr + ' sent to queue "' + statictopicName + '", correlation key = ' + JSON.stringify(correlationKey));
         } catch (error) {
             pubsub.log(error.toString());
         }
     };
 
     // Sends one image
-    pubsub.sendImage = function (sequenceNr) {
-        pubsub.topicName = "tutorial/queue/image";
-        contentmsg = document.getElementById('fileimg').files[0];
-        var file = contentmsg;
+    pubsub.sendImage = function () {
+        enumvalue += 1;
+        sequenceNr = enumvalue;
+        var statictopicName = document.getElementById(topicID).value;
+        var file = document.getElementById(contentfile).files[0];
         var reader = new FileReader();
         var fileByteArray = [];
         reader.readAsArrayBuffer(file);
@@ -275,7 +305,7 @@ var PubSub = function (params) {
                 }
 
                 var message = solace.SolclientFactory.createMessage();
-                message.setDestination(solace.SolclientFactory.createTopicDestination(pubsub.topicName));
+                message.setDestination(solace.SolclientFactory.createTopicDestination(statictopicName));
                 message.setBinaryAttachment(fileByteArray.toString());
                 message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
                 // Define a correlation key object
@@ -286,7 +316,7 @@ var PubSub = function (params) {
                 message.setCorrelationKey(correlationKey);
                 try {
                     pubsub.session.send(message);
-                    pubsub.log('Message #' + sequenceNr + ' sent to queue "' + pubsub.topicName + '", correlation key = ' + JSON.stringify(correlationKey));
+                    pubsub.log('Message #' + sequenceNr + ' sent to queue "' + statictopicName + '", correlation key = ' + JSON.stringify(correlationKey));
                 } catch (error) {
                     pubsub.log(error.toString());
                 }
@@ -298,18 +328,18 @@ var PubSub = function (params) {
 
     // Subscribes to topic on Solace message router
     pubsub.subscribe = function () {
-        pubsub.topicName = document.getElementById('topicname').value;
+        placeholder = document.getElementById(topicID).value;
         if (pubsub.session !== null) {
             if (pubsub.subscribed) {
-                pubsub.log('Already subscribed to "' + pubsub.topicName
+                pubsub.log('Already subscribed to "' + placeholder
                     + '" and ready to receive messages.');
             } else {
-                pubsub.log('Subscribing to topic: ' + pubsub.topicName);
+                pubsub.log('Subscribing to topic: ' + placeholder);
                 try {
                     pubsub.session.subscribe(
-                        solace.SolclientFactory.createTopicDestination(pubsub.topicName),
+                        solace.SolclientFactory.createTopicDestination(placeholder),
                         true, // generate confirmation when subscription is added successfully
-                        pubsub.topicName, // use topic name as correlation key
+                        placeholder, // use topic name as correlation key
                         10000 // 10 seconds timeout for this operation
                     );
                 } catch (error) {
@@ -325,20 +355,21 @@ var PubSub = function (params) {
     pubsub.unsubscribe = function () {
         if (pubsub.session !== null) {
             if (pubsub.subscribed) {
-                pubsub.log('Unsubscribing from topic: ' + pubsub.topicName);
+                pubsub.log('Unsubscribing from topic: ' + placeholder);
                 try {
                     pubsub.session.unsubscribe(
-                        solace.SolclientFactory.createTopicDestination(pubsub.topicName),
+                        solace.SolclientFactory.createTopicDestination(placeholder),
                         true, // generate confirmation when subscription is removed successfully
-                        pubsub.topicName, // use topic name as correlation key
+                        placeholder, // use topic name as correlation key
                         10000 // 10 seconds timeout for this operation
                     );
+                    placeholder = "";
                 } catch (error) {
                     pubsub.log(error.toString());
                 }
             } else {
                 pubsub.log('Cannot unsubscribe because not subscribed to the topic "'
-                    + pubsub.topicName + '"');
+                    + placeholder + '"');
             }
         } else {
             pubsub.log('Cannot unsubscribe because not connected to Solace message router.');
@@ -392,7 +423,7 @@ var PubSub = function (params) {
                             var imgbyte = result.split(",");
                             var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
                             pubsub.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
-                            pubsub.table('<br /><img id=\"ItemView\" style="display:block;" width="400px  " height="50%" src=\"data:image/png;base64,' + base64String + '\" />')
+                            pubsub.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />')
                             message.acknowledge();
                         }
 
