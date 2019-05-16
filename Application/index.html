@@ -36,7 +36,7 @@
         solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
         // create the producer, specifying name of the subscription topic
-        producer = new PubSub({logname : "publishlog", topicName : "tutorial/queue"});
+        producer = new PubSub({logname : "publishlog", topicName : "tutorial/queue", topicID : "publishtopic", contentmsg : "content", contentfile : "fileimg"});
         // assign buttons to the producer functions
         document.getElementById("pubconnect").addEventListener("click", producer.connect);
         document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
@@ -48,7 +48,7 @@
         document.getElementById("stoppubTemp").addEventListener("click", producer.stoppubTemp);
 
         subscriber = new PubSub({queueName : 'SOLACE_QUEUE', logname : 'subscribelog', tableName : 'table2'});
-        subscriber2 = new PubSub({logname : 'subscribelog2', tableName : 'table1'});
+        subscriber2 = new PubSub({logname : 'subscribelog2', tableName : 'table1', topicID : 'topicname'});
         document.getElementById("subconnect").addEventListener("click", subscriber.connect);
         document.getElementById("subdisconnect").addEventListener("click", subscriber.disconnect);
         document.getElementById("startconsume").addEventListener("click", subscriber.startConsume);
@@ -109,7 +109,6 @@
             <label for="fileimg">Image Upload <br> (e.g. Picture of accident)</label>
             <input id="fileimg" type="file" onchange="preview()"><br>
             <img src="image/blank.png" height="150" alt="Image Preview" id="imgpreview">
-            <textarea id="responseTextArea"></textarea>
           </div>
         </div>
         </fieldset>
