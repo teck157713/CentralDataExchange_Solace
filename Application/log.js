@@ -24,14 +24,14 @@ var QueueConsumer = function (queueName) {
 
     consumer.log('\n*** Consumer to queue "' + consumer.queueName + '" is ready to connect ***');
 
-    consumer.table = function (messagee,dump) {
+    consumer.table = function (messagee,topic) {
         try {
           var table = document.getElementById('log');
           var row = table.insertRow(-1);
           var cell1 = row.insertCell(0);
           var cell2 = row.insertCell(1);    
           cell1.innerHTML = messagee;
-          cell2.innerHTML = dump;
+          cell2.innerHTML = topic;
         } catch (error) {
             producer.log(error.toString());
         }
@@ -130,18 +130,18 @@ var QueueConsumer = function (queueName) {
                         // assuming if message is a message if less than 255, else image
                         if (result.length < 255) {
                             consumer.log('Received message: "' + result + '",' +
-                            ' details:\n' + message.dump());
+                            ' details:\n' + message.getBinaryAttachment());
                             // Need to explicitly ack otherwise it will not be deleted from the message router
-                            consumer.table(message.getBinaryAttachment(),message.dump())
+                            consumer.table(message.getBinaryAttachment());
                             message.acknowledge();
                             consumer.temp = {'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
-
+                            
                         } else {
                             //convert and show image
                             var imgbyte = result.split(",");
                             var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
                             consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
-                            consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />',message.dump())
+                            consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />');
                             message.acknowledge();
                             consumer.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
                         }
