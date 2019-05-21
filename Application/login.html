@@ -6,6 +6,7 @@
     <title>Prototype Demo - Log</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="lib/solclient-debug.js"></script>
     <script src="pubsub.js"></script>
     <script src="config/config.js" type="text/javascript"></script>
@@ -15,6 +16,7 @@
     </link>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
@@ -26,25 +28,28 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    
 </head>
 
 
 <body>
-    <div class="w3-display-topmiddle w3-margin w3-col m6 w3-card-4 w3-padding-large" >
+    <div class="w3-display-topmiddle w3-margin w3-col m6 w3-card-4 w3-padding-large " >
         <span class="logo">
                 <img src="image/solace.png" />
         </span>
     </div>
+    
     <div class="w3-display-middle w3-margin w3-col m6 w3-card-4 w3-padding-large" >
         <form  class="w3-panel was-validated">
                 <div class="form-group ">
-                  <label class="w3-text-teal" for="uname">Username:</label>
+                  <label class="w3-text-teal" for="uname"><i class="fa fa-male"></i> Username:</label>
                   <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="uname" placeholder="Enter Solace Cloud Username" name="uname" required>
                   <div class="valid-feedback">Valid.</div>
                   <div class="invalid-feedback">Please fill out this field.</div>
                 </div>
                 <div class="form-group">
-                  <label class="w3-text-teal" for="pwd">Password:</label>
+                  <label class="w3-text-teal" for="pwd"><i class="fa fa-lock"></i> Password:</label>
                   <input type="password" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="pwd" placeholder="Enter Solace Cloud Password" name="pswd" required>
                   <div class="valid-feedback">Valid.</div>
                   <div class="invalid-feedback">Please fill out this field.</div>
