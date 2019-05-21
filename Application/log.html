@@ -26,11 +26,7 @@
             // enable logging to JavaScript console at WARN level
             // NOTICE: works only with "solclientjs-debug.js"
             solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
-            subscriber = new PubSub({queueName : 'SOLACE_ALL', logname : 'log', tableName : 'logtable'});
-            document.getElementById("connect").addEventListener("click", subscriber.connect);
-            document.getElementById("disconnect").addEventListener("click", subscriber.disconnect);
-            document.getElementById("startconsume").addEventListener("click", subscriber.startConsume);
-            document.getElementById("stopconsume").addEventListener("click", subscriber.stopConsume);
+
         };
     </script>
 
