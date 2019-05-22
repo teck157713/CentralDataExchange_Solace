@@ -84,7 +84,6 @@ var QueueConsumer = function (queueName) {
 
     };
 
-    // Actually connects the session triggered when the iframe has been loaded - see in html code
     consumer.connectToSolace = function () {
         try {
             consumer.session.connect();
