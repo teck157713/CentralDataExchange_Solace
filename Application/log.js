@@ -26,7 +26,7 @@ var QueueConsumer = function (queueName) {
 
     consumer.table = function (messagee,topic) {
         try {
-          var table = document.getElementById('log');
+          var table = document.getElementById('logtable');
           var row = table.insertRow(-1);
           var cell1 = row.insertCell(0);
           var cell2 = row.insertCell(1);    
