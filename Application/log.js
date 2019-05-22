@@ -95,7 +95,7 @@ var QueueConsumer = function (queueName) {
     // Starts consuming from a queue on Solace message router
     consumer.startConsume = function () {
         if (consumer.session !== null) {
-            if (consumer.consuming) 
+            if (consumer.consuming) {
                 consumer.log('Already started consumer for queue "' + consumer.queueName + '" and ready to receive messages.');
             } else {
                 consumer.log('Starting consumer for queue: ' + consumer.queueName);
@@ -131,7 +131,8 @@ var QueueConsumer = function (queueName) {
                             consumer.log('Received message: "' + result + '",' +
                             ' details:\n' + message.getBinaryAttachment());
                             // Need to explicitly ack otherwise it will not be deleted from the message router
-                            consumer.table(message.getBinaryAttachment());
+                            var topic = String(message.getDestination())
+                            consumer.table(message.getBinaryAttachment(), topic);
                             message.acknowledge();
                             consumer.temp = {'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
                             
@@ -140,7 +141,8 @@ var QueueConsumer = function (queueName) {
                             var imgbyte = result.split(",");
                             var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
                             consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
-                            consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />');
+                            var topic = String(message.getDestination())
+                            consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />', topic);
                             message.acknowledge();
                             consumer.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
                         }
@@ -155,7 +157,8 @@ var QueueConsumer = function (queueName) {
         } else {
             consumer.log('Cannot start the queue consumer because not connected to Solace message router.');
         }
-    };
+
+    }
 
     // Disconnects the consumer from queue on Solace message router
     consumer.stopConsume = function () {
