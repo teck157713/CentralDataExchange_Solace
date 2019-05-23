@@ -30,8 +30,8 @@ var QueueConsumer = function (queueName) {
           var row = table.insertRow(-1);
           var cell1 = row.insertCell(0);
           var cell2 = row.insertCell(1);    
-          cell1.innerHTML = messagee;
-          cell2.innerHTML = topic;
+          cell1.innerHTML = topic;
+          cell2.innerHTML = messagee;
         } catch (error) {
             producer.log(error.toString());
         }
