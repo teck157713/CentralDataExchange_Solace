@@ -1,4 +1,4 @@
-var QueueConsumer = function (queueName) {
+var QueueConsumer = function (queueName,table) {
     'use strict';
     var consumer = {};
     consumer.session = null;
@@ -6,7 +6,7 @@ var QueueConsumer = function (queueName) {
     consumer.queueName = queueName;
     consumer.queueDestination = new solace.Destination(consumer.queueName, solace.DestinationType.QUEUE);
     consumer.consuming = false;
-
+    consumer.tableName = table;
     // Logger
     consumer.log = function (line) {
         try {
@@ -24,17 +24,36 @@ var QueueConsumer = function (queueName) {
 
     consumer.log('\n*** Consumer to queue "' + consumer.queueName + '" is ready to connect ***');
 
-    consumer.table = function (messagee,topic) {
-        try {
-          var table = document.getElementById('logtable');
-          var row = table.insertRow(-1);
-          var cell1 = row.insertCell(0);
-          var cell2 = row.insertCell(1);    
-          cell1.innerHTML = topic;
-          cell2.innerHTML = messagee;
-        } catch (error) {
-            producer.log(error.toString());
+    consumer.table = function (messagee,topic,table) {
+        if(table === 'logtable'){
+            try {
+                var table = document.getElementById('logtable');
+                var row = table.insertRow(-1);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);    
+                cell1.innerHTML = topic;
+                cell2.innerHTML = messagee;
+              } catch (error) {
+                  producer.log(error.toString());
+              }
+        } else {
+            try {
+                var text = String(messagee)
+                var arr = text.split(" ")
+                alert(arr)
+                var table = document.getElementById('regtable');
+                var row = table.insertRow(-1);
+                var cell1 = row.insertCell(0); 
+                var cell2 = row.insertCell(1); 
+                var cell3 = row.insertCell(2); 
+                cell1.innerHTML = arr[0];
+                cell2.innerHTML = arr[1];
+                cell3.innerHTML = arr[2];
+              } catch (error) {
+                  producer.log(error.toString());
+              }
         }
+        
       }
 
     // Establishes connection to Solace message router
@@ -132,17 +151,16 @@ var QueueConsumer = function (queueName) {
                             ' details:\n' + message.getBinaryAttachment());
                             // Need to explicitly ack otherwise it will not be deleted from the message router
                             var topic = String(message.getDestination())
-                            consumer.table(message.getBinaryAttachment(), topic);
+                            consumer.table(message.getBinaryAttachment(), topic,consumer.tableName);
                             message.acknowledge();
                             consumer.temp = {'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
-                            
                         } else {
                             //convert and show image
                             var imgbyte = result.split(",");
                             var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
                             consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
                             var topic = String(message.getDestination())
-                            consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />', topic);
+                            consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />', topic,consumer.tableName);
                             message.acknowledge();
                             consumer.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
                         }

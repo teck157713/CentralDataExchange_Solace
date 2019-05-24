@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Prototype Demo - Log</title>
+    <title>Prototype Demo - Register Agency</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
     <meta charset="utf-8" />
     <script src="lib/solclient-debug.js"></script>
@@ -26,7 +26,7 @@
             // enable logging to JavaScript console at WARN level
             // NOTICE: works only with "solclientjs-debug.js"
             solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
-            consumer = new QueueConsumer('SOLACE_ALL','logtable');
+            consumer = new QueueConsumer('SOLACE_REGISTER','regtable');
             document.getElementById("connect").addEventListener("click", consumer.connect);
             document.getElementById("disconnect").addEventListener("click", consumer.disconnect);
             document.getElementById("startconsume").addEventListener("click", consumer.startConsume);
@@ -59,10 +59,11 @@
                 <div class="publishlog" id="log" contentEditable="true"></div>
             </div>
         </p>
-        <table class="w3-table-all w3-hoverable w3-centered" , id="logtable">
+        <table class="w3-table-all w3-hoverable w3-centered" , id="regtable">
             <tr>
-                <th>Topic Destination</th>
-                <th>Message</th>
+                <th>Agency Name</th>
+                <th>Username</th>
+                <th>Password</th>
             </tr>
         </table>
         

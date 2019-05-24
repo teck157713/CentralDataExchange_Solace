@@ -117,10 +117,10 @@ var RegPublisher = function (queueName) {
      // Publishes one message
      publisher.publish = function () {
         if (publisher.session !== null) {
-            var name = document.getElementById('aname').value;
-            var email = document.getElementById('uname').value;
-            var messaget = document.getElementById('pwd').value;
-            var messageText = aname+","+uname+","+pwd;
+            var aname = document.getElementById('aname').value;
+            var uname = document.getElementById('uname').value;
+            var pwd = document.getElementById('pwd').value;
+            var messageText = aname+" "+uname+" "+pwd;
             var message = solace.SolclientFactory.createMessage();
             publisher.log('Sending message "' + messageText + '" to queue "' + publisher.queueName + '"...');
             message.setDestination(solace.SolclientFactory.createDurableQueueDestination(publisher.queueName));
