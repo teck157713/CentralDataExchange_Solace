@@ -43,9 +43,9 @@ var QueueConsumer = function (queueName,table) {
                 // alert(arr)
                 var table = document.getElementById('regtable');
                 var row = table.insertRow(-1);
-                var cell1 = row.insertCell(0); 
-                var cell2 = row.insertCell(1); 
-                var cell3 = row.insertCell(2); 
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
                 cell1.innerHTML = arr[0];
                 cell2.innerHTML = arr[1];
                 cell3.innerHTML = arr[2];
@@ -98,7 +98,7 @@ var QueueConsumer = function (queueName,table) {
             }
         });
 
-        consumer.connectToSolace();   
+        consumer.connectToSolace();
 
     };
 
