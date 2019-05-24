@@ -368,6 +368,34 @@ var PubSub = function (params) {
       }
     };
 
+    // Event-Driven Re-publish Topic
+    pubsub.EventMsg = function (result) {
+        try {
+          enumvalue += 1;
+          sequenceNr = enumvalue;
+          var statictopicName = document.getElementById('nene').value;
+          var messageText = result;
+          var message = solace.SolclientFactory.createMessage();
+          message.setDestination(solace.SolclientFactory.createTopicDestination(statictopicName));
+          message.setBinaryAttachment(messageText);
+          message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
+          // Define a correlation key object
+          const correlationKey = {
+              name: "MESSAGE_CORRELATIONKEY",
+              id: sequenceNr,
+          };
+          message.setCorrelationKey(correlationKey);
+          try {
+              pubsub.session.send(message);
+              pubsub.log('Message #' + sequenceNr + ' sent to queue "' + statictopicName + '", correlation key = ' + JSON.stringify(correlationKey));
+          } catch (error) {
+              pubsub.log(error.toString());
+          }
+        } catch (error) {
+            producer.log(error.toString());
+        }
+      };
+
     // Subscribes to topic on Solace message router
     pubsub.subscribe = function () {
       try {
@@ -463,13 +491,36 @@ var PubSub = function (params) {
                       var result = message.getBinaryAttachment();
                       if (String(message.getDestination()).indexOf('LTA/temp') >= 0){
                         var dict = JSON.parse("{" + result + "}");
-                        pubsub.table(result);
-                        
+                        //pubsub.table(result);
+                        if (dict['id'] in pubsub.temp){
+                            if (pubsub.temp[dict['id']].value.length <= 11){
+                                pubsub.temp[dict['id']].value.unshift(dict['value']);
+                            } else {
+                                var date1 = new Date(dict['timestamp']);
+                                var date2 = new Date(pubsub.temp[dict['id']].timestamp);
+                                if (date1.getTime() - date2.getTime() >= 300000){
+                                    if ((Math.abs(dict['value'] - Math.max.apply(null, pubsub.temp[dict['id']].value)) >= 0.5) || (Math.abs(dict['value'] - Math.min.apply(null, pubsub.temp[dict['id']].value)) >= 0.5)){
+                                        pubsub.log("SEND SUCCESSFUL");
+                                        pubsub.EventMsg(result);
+                                        pubsub.temp[dict['id']].value = [dict['value']];
+                                        
+                                    }
+                                    pubsub.temp[dict['id']].value.unshift(dict['value']);
+                                    pubsub.temp[dict['id']].value.pop();
+                                    pubsub.temp[dict['id']].timestamp = dict['timestamp'];
+                                    pubsub.log(JSON.stringify(pubsub.temp));
+                                }
+                                
+                            }
+                            
+                        } else {
+                            pubsub.temp[dict['id']] = { 'value' : [dict['value']], 'timestamp' : dict['timestamp'], 'lat' : dict['lat'], 'long' : dict['long']};
+                        }
 
                         message.acknowledge();
                       } else {
                         // assuming if message is a message if less than 255, else image
-                        if (result.length < 255) {
+                        if (result.length < 555) {
                             pubsub.log('Received message: "' + result + '",' +
                             ' details:\n' + message.dump());
                             // Need to explicitly ack otherwise it will not be deleted from the message router
