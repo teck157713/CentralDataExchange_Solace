@@ -44,6 +44,22 @@ var PubSub = function (params) {
           producer.log(error.toString());
       }
     }
+    pubsub.table2 = function (messagee) {
+      try {
+        var table = document.getElementById('table1');
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        cell1.innerHTML = messagee;
+      } catch (error) {
+          producer.log(error.toString());
+      }
+    }
+    pubsub.table3 = function (messagee) {
+        var table = document.getElementById('table3');
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        cell1.innerHTML = messagee;
+    }
 
     // Establishes connection to Solace message router
     pubsub.connect = function () {
@@ -204,7 +220,7 @@ var PubSub = function (params) {
     // Sends one picture with tags of topics
     pubsub.sendviaTopics = function (result) {
         for (var i = 0; i < result.length; i ++){
-          var messageText = '\"imageurl\": \"' + result[i].image + '\", \"lat\": \"' + result[i].location.latitude + '\", \"long\": \"' + result[i].location.longitude + '\"';
+          var messageText = result[i].image + ', lat: ' + result[i].location.latitude + ', long: ' + result[i].location.longitude;
           var topicDest = result[i].tags;
           var message = solace.SolclientFactory.createMessage();
           setTopic(topicDest);
@@ -225,7 +241,7 @@ var PubSub = function (params) {
             message.setCorrelationKey(correlationKey);
             try {
                 pubsub.session.send(message);
-                pubsub.log('Message #' + messageText + ' sent to topic "' + pubsub.topicName + '"' + JSON.stringify(correlationKey));
+                pubsub.log('Message #' + messageText + ' sent to queue "' + pubsub.topicName + '"' + JSON.stringify(correlationKey));
             } catch (error) {
                 pubsub.log(error.toString());
             }
@@ -259,7 +275,7 @@ var PubSub = function (params) {
     // Sends one picture with tags of topics
     pubsub.sendTempMsg = function (result) {
         for (var i = 0; i < result.length; i ++){
-          var messageText = '\"id\": \"' + result[i].id + '\", \"lat\": \"' + result[i].location.latitude + '\", \"long\": \"' + result[i].location.longitude + '\", \"value\": \"' + result[i].value + '\", \"timestamp\": \"' + result[i].timestamp + '\"';
+          var messageText = 'id: ' + result[i].id + ', lat: ' + result[i].location.latitude + ', long: ' + result[i].location.longitude + ', value: ' + result[i].value;
           var message = solace.SolclientFactory.createMessage();
           setTopic(result[i].location.latitude, result[i].location.longitude);
         }
@@ -444,33 +460,39 @@ var PubSub = function (params) {
                     });
                     // Define message received event listener
                     pubsub.messageConsumer.on(solace.MessageConsumerEventName.MESSAGE, function (message) {
-                        var result = message.getBinaryAttachment();
-                        if (String(message.getDestination()).indexOf('LTA/temp') >= 0){
-                          var dict = JSON.parse("{" + result + "}");
-                          pubsub.table(dict);
-                          message.acknowledge();
+                      var result = message.getBinaryAttachment();
+                      if (String(message.getDestination()).indexOf('LTA/temp') >= 0){
+                        var dict = JSON.parse("{" + result + "}");
+                        pubsub.table(result);
+                        
+
+                        message.acknowledge();
+                      } else {
+                        // assuming if message is a message if less than 255, else image
+                        if (result.length < 255) {
+                            pubsub.log('Received message: "' + result + '",' +
+                            ' details:\n' + message.dump());
+                            // Need to explicitly ack otherwise it will not be deleted from the message router
+                            pubsub.table(message.getBinaryAttachment());
+                            message.acknowledge();
+                            pubsub.temp = {'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
+
                         } else {
-                          // assuming if message is a message if less than 255, else image
-                          if (result.length < 255) {
-                              pubsub.log('Received message: "' + result + '",' +
-                              ' details:\n' + message.dump());
-                              // Need to explicitly ack otherwise it will not be deleted from the message router
-                              pubsub.table(message.getBinaryAttachment());
-                              message.acknowledge();
-                              pubsub.temp = {'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
-
-                          } else {
-                              //convert and show image
-                              var imgbyte = result.split(",");
-                              var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
-                              pubsub.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
-                              pubsub.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />')
-                              message.acknowledge();
-                              pubsub.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
-                          }
-
+                            //convert and show image
+                            var imgbyte = result.split(",");
+                            var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
+                            pubsub.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
+                            pubsub.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />')
+                            message.acknowledge();
+                            pubsub.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
                         }
 
+                      }
+                      if(document.getElementById('table1').innerHTML.indexOf(message.getDestination()) !== -1) {
+
+                      } else {
+                        pubsub.table2(message.getDestination());
+                      }
                     });
                     // Connect the message consumer
                     pubsub.messageConsumer.connect();

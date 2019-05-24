@@ -30,7 +30,7 @@ function processTemp(callback) {
       var sensor = result.metadata.stations;
       var resdict = [];
       for (var i = 0; i < sensor.length; i++){
-        resdict.push({"id" : sensor[i].id, "name" : sensor[i].name, "location" : sensor[i].location, "value" : result.items[0].readings[i].value});
+        resdict.push({"id" : sensor[i].id, "name" : sensor[i].name, "location" : sensor[i].location, "value" : result.items[0].readings[i].value, "timestamp" : result.items[0].timestamp});
         if (resdict.length >= sensor.length) {
           callback(resdict);
         }
