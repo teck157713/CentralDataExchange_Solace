@@ -116,10 +116,10 @@ var PubSub = function (params) {
         pubsub.session.on(solace.SessionEventCode.MESSAGE, function (message) {
             var result = message.getBinaryAttachment();
             // assuming message is not an image if less than 255 character, instead it's a msg
-            if (validURL(result.split(',')[0])) {
-              pubsub.log('Received Image: <br /><img id=\"ItemView\" src=\"' + result.split(',')[0] + '\" />' + ', message: ' + result + ', details:\n' + message.dump());
-              pubsub.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"' + result.split(',')[0] + '\" />' + result);
-              pubsub.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"' + result.split(',')[0] + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
+            if (validURL(JSON.parse("{" + result + "}").imageurl)){
+              pubsub.log('Received Image: <br /><img id=\"ItemView\" src=\"' + JSON.parse("{" + result + "}").imageurl + '\" />' + ', message: ' + result + ', details:\n' + message.dump());
+              pubsub.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"' + JSON.parse("{" + result + "}").imageurl + '\" />' + result);
+              pubsub.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"' + JSON.parse("{" + result + "}").imageurl + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
             } else if (result.length < 255){
               pubsub.log('Received message: "' + result + '", details:\n' + message.dump());
               pubsub.table(result);
@@ -129,7 +129,7 @@ var PubSub = function (params) {
               var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
               pubsub.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />' + ', details:\n' + message.dump());
               pubsub.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />');
-              pubsub.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
+              pubsub.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(",") + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
             }
 
 
@@ -204,7 +204,7 @@ var PubSub = function (params) {
     // Sends one picture with tags of topics
     pubsub.sendviaTopics = function (result) {
         for (var i = 0; i < result.length; i ++){
-          var messageText = result[i].image + ', lat: ' + result[i].location.latitude + ', long: ' + result[i].location.longitude;
+          var messageText = '\"imageurl\": \"' + result[i].image + '\", \"lat\": \"' + result[i].location.latitude + '\", \"long\": \"' + result[i].location.longitude + '\"';
           var topicDest = result[i].tags;
           var message = solace.SolclientFactory.createMessage();
           setTopic(topicDest);
@@ -259,7 +259,7 @@ var PubSub = function (params) {
     // Sends one picture with tags of topics
     pubsub.sendTempMsg = function (result) {
         for (var i = 0; i < result.length; i ++){
-          var messageText = 'id: ' + result[i].id + ', lat: ' + result[i].location.latitude + ', long: ' + result[i].location.longitude + ', value: ' + result[i].value;
+          var messageText = '\"id\": \"' + result[i].id + '\", \"lat\": \"' + result[i].location.latitude + '\", \"long\": \"' + result[i].location.longitude + '\", \"value\": \"' + result[i].value + '\", \"timestamp\": \"' + result[i].timestamp + '\"';
           var message = solace.SolclientFactory.createMessage();
           setTopic(result[i].location.latitude, result[i].location.longitude);
         }
@@ -445,23 +445,30 @@ var PubSub = function (params) {
                     // Define message received event listener
                     pubsub.messageConsumer.on(solace.MessageConsumerEventName.MESSAGE, function (message) {
                         var result = message.getBinaryAttachment();
-                        // assuming if message is a message if less than 255, else image
-                        if (result.length < 255) {
-                            pubsub.log('Received message: "' + result + '",' +
-                            ' details:\n' + message.dump());
-                            // Need to explicitly ack otherwise it will not be deleted from the message router
-                            pubsub.table(message.getBinaryAttachment())
-                            message.acknowledge();
-                            pubsub.temp = {'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
-
+                        if (String(message.getDestination()).indexOf('LTA/temp') >= 0){
+                          var dict = JSON.parse("{" + result + "}");
+                          pubsub.table(dict);
+                          message.acknowledge();
                         } else {
-                            //convert and show image
-                            var imgbyte = result.split(",");
-                            var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
-                            pubsub.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
-                            pubsub.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />')
-                            message.acknowledge();
-                            pubsub.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
+                          // assuming if message is a message if less than 255, else image
+                          if (result.length < 255) {
+                              pubsub.log('Received message: "' + result + '",' +
+                              ' details:\n' + message.dump());
+                              // Need to explicitly ack otherwise it will not be deleted from the message router
+                              pubsub.table(message.getBinaryAttachment());
+                              message.acknowledge();
+                              pubsub.temp = {'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
+
+                          } else {
+                              //convert and show image
+                              var imgbyte = result.split(",");
+                              var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
+                              pubsub.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
+                              pubsub.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />')
+                              message.acknowledge();
+                              pubsub.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
+                          }
+
                         }
 
                     });
