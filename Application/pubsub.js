@@ -237,7 +237,7 @@ var PubSub = function (params) {
 
     //Initiate tempData Sending
     pubsub.pubTemp = function () {
-      TempOn = setInterval(pubsub.sendTempData, 1000);
+      TempOn = setInterval(pubsub.sendTempData, 5000);
       pubsub.log('Publishing, the interval has been started.');
     }
 
