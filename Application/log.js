@@ -53,8 +53,7 @@ var QueueConsumer = function (queueName,table) {
                   producer.log(error.toString());
               }
         }
-        
-      }
+      };
 
     // Establishes connection to Solace message router
     consumer.connect = function () {
