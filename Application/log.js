@@ -39,8 +39,8 @@ var QueueConsumer = function (queueName,table) {
         } else {
             try {
                 var text = String(messagee)
-                var arr = text.split(" ")
-                alert(arr)
+                var arr = text.split(",")
+                // alert(arr)
                 var table = document.getElementById('regtable');
                 var row = table.insertRow(-1);
                 var cell1 = row.insertCell(0); 
