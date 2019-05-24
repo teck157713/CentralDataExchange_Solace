@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-  <title>Prototype Demo</title>
+  <title>Prototype Demo (LTA)</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
   <meta charset="utf-8" />
 
@@ -19,7 +19,7 @@
   <!-- Load the Confirmed Delivery tutorial -->
   <!-- <script src="producer.js"></script>
     <script src="subscriber.js"></script> -->
-  <script src="pubsubLTA.js"></script>
+  <script src="pubsub.js"></script>
   <script src="ui.js"></script>
   <script src="config/config.js" type="text/javascript"></script>
   <!-- script for microsoft api -->
@@ -41,7 +41,7 @@
       solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
       // create the producer, specifying name of the subscription topic
-      producer = new PubSub({logname : "publishlog", topicName : "tutorial/queue", topicID : "publishtopic", contentmsg : "content", contentfile : "fileimg"});
+      producer = new PubSub({logname : "publishlog", topicName : "LTA/image/traffic", topicID : "publishtopic", contentmsg : "content", contentfile : "fileimg"});
       // assign buttons to the producer functions
       document.getElementById("pubconnect").addEventListener("click", producer.connect);
       document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
@@ -77,7 +77,6 @@
       }
     }
     preview();
-
   </script>
 </head>
 
@@ -89,7 +88,7 @@
         <img src="image/solace.png" />
       </span>
       <div class="banner-heading">
-        Demo (Iter 1)
+        Demo (Iter 1) <h6 id='connect'></h6>
       </div>
     </div>
   </div>
@@ -113,7 +112,6 @@
             <label for="fileimg">Image Upload <br> (e.g. Picture of accident)</label>
             <input id="fileimg" type="file" onchange="preview()"><br>
             <img src="image/blank.png" height="150" alt="Image Preview" id="imgpreview">
-            <textarea id="responseTextArea"></textarea>
           </div>
       </div>
       </fieldset>
@@ -135,10 +133,10 @@
   <div id="Queue" class="w3-container w3-border pubsub" style="display:none">
     <h2>LTA MESSAGE BROKER - Queue</h2>
     <form class="pure-form pure-form-aligned">
-      <div class="pure-input-1">
+      <!-- <div class="pure-input-1">
         <label for="queuename">Topic Name: </label>
         <input id="queuename" type="text" placeholder="Insert Topic" value="tutorial/queue/message">
-      </div>
+      </div> -->
       <div class="w3-bar">
       <p >
         <button type="button" class="pure-button pure-button-primary" id="subconnect">Connect</button>
@@ -166,7 +164,7 @@
     <form class="pure-form pure-form-aligned">
       <div class="pure-input-1">
         <label for="topicname">Topic Name: </label>
-        <input id="topicname" type="text" placeholder="Insert Topic" value="tutorial/queue/message">
+        <input id="topicname" type="text" placeholder="Insert Topic" value="LTA/image/traffic">
       </div>
       <div class="w3-bar">
       <p>
@@ -189,7 +187,10 @@
       </tr>
       <table>
   </div>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.js"></script>
 </body>
 
 </html>

@@ -225,7 +225,7 @@ var PubSub = function (params) {
             message.setCorrelationKey(correlationKey);
             try {
                 pubsub.session.send(message);
-                pubsub.log('Message #' + messageText + ' sent to queue "' + pubsub.topicName + '"' + JSON.stringify(correlationKey));
+                pubsub.log('Message #' + messageText + ' sent to topic "' + pubsub.topicName + '"' + JSON.stringify(correlationKey));
             } catch (error) {
                 pubsub.log(error.toString());
             }
