@@ -50,7 +50,6 @@ var RegPublisher = function (queueName) {
             publisher.log('Already connected and ready to publish messages.');
             return;
         }
-        
         var hosturl = account.HOSTURL;
         var username = account.USERNAME;
         var pass = account.PASS;
@@ -67,7 +66,6 @@ var RegPublisher = function (queueName) {
                 vpnName:  vpn,
                 userName: username,
                 password: pass,
-                   
             });
         } catch (error) {
             publisher.log(error.toString());
@@ -88,7 +86,7 @@ var RegPublisher = function (queueName) {
                 publisher.session = null;
             }
         });
-        publisher.connectToSolace(); 
+        publisher.connectToSolace();
     };
 
     // Actually connects the session triggered when the iframe has been loaded - see in html code
@@ -139,6 +137,5 @@ var RegPublisher = function (queueName) {
         }
     };
     publisher.connect()
-    
     return publisher;
 };
