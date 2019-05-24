@@ -36,7 +36,7 @@
         solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
         // create the producer, specifying name of the subscription topic
-        producer = new PubSub({logname : "publishlog", topicName : "tutorial/queue", topicID : "publishtopic", contentmsg : "content", contentfile : "fileimg"});
+        producer = new PubSub({logname : "publishlog", topicName : "LTA/temp", topicID : "publishtopic", contentmsg : "content", contentfile : "fileimg"});
         // assign buttons to the producer functions
         document.getElementById("pubconnect").addEventListener("click", producer.connect);
         document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
