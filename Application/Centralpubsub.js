@@ -374,9 +374,9 @@ var PubSub = function (params) {
           enumvalue += 1;
           sequenceNr = enumvalue;
           var statictopicName = document.getElementById('nene').value;
-          var messageText = result;
+          var messageText = JSON.stringify(result);
           var message = solace.SolclientFactory.createMessage();
-          message.setDestination(solace.SolclientFactory.createTopicDestination(statictopicName));
+          message.setDestination(solace.SolclientFactory.createTopicDestination(statictopicName + '/' + result['lat'] + '/' + result['long']));
           message.setBinaryAttachment(messageText);
           message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
           // Define a correlation key object
@@ -489,7 +489,7 @@ var PubSub = function (params) {
                     // Define message received event listener
                     pubsub.messageConsumer.on(solace.MessageConsumerEventName.MESSAGE, function (message) {
                       var result = message.getBinaryAttachment();
-                      if (String(message.getDestination()).indexOf('LTA/temp') >= 0){
+                      if (String(message.getDestination()).indexOf('NEA/1/temp_data/raw') >= 0){
                         var dict = JSON.parse("{" + result + "}");
                         //pubsub.table(result);
                         if (dict['id'] in pubsub.temp){
@@ -500,8 +500,9 @@ var PubSub = function (params) {
                                 var date2 = new Date(pubsub.temp[dict['id']].timestamp);
                                 if (date1.getTime() - date2.getTime() >= 300000){
                                     if ((Math.abs(dict['value'] - Math.max.apply(null, pubsub.temp[dict['id']].value)) >= 0.5) || (Math.abs(dict['value'] - Math.min.apply(null, pubsub.temp[dict['id']].value)) >= 0.5)){
+                                        dict['change'] = Math.max(Math.abs(dict['value'] - Math.max.apply(null, pubsub.temp[dict['id']].value)), Math.abs(dict['value'] - Math.min.apply(null, pubsub.temp[dict['id']].value)));
+                                        pubsub.EventMsg(dict);
                                         pubsub.log("SEND SUCCESSFUL");
-                                        pubsub.EventMsg(result);
                                         pubsub.temp[dict['id']].value = [dict['value']];
                                         
                                     }
