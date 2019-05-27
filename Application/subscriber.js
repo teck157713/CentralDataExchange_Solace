@@ -17,7 +17,7 @@ var TopicSubscriber = function (logname) {
         logTextArea.innerHTML += timestamp + line + '<br />';
         logTextArea.scrollTop = logTextArea.scrollHeight;
     };
-    
+
     subscriber.table = function (messagee) {
         var table = document.getElementById("table1");
         var row = table.insertRow(-1);
