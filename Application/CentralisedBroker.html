@@ -15,6 +15,8 @@
     <script src="lib/solclient-debug.js"></script>
 
     <!-- Load the Confirmed Delivery tutorial -->
+    <script src="EventMsg.js"></script>
+    <script src="microsoftanalyse.js"></script>
     <script src="Centralpubsub.js"></script>
     <script src="config/config.js" type="text/javascript"></script>
     <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
@@ -37,6 +39,14 @@
         document.getElementById("subdisconnect").addEventListener("click", central.disconnect);
         document.getElementById("startconsume").addEventListener("click", central.startConsume);
         document.getElementById("stopconsume").addEventListener("click", central.stopConsume);
+
+        // var mapOptions = {
+        //   zoom:8,
+        //   center: new google.maps.LatLng(103.99,1.358),
+        //   mapTypeId: google.maps.MapTypeId.ROADMAP
+        // };
+        // var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+        
       };
     </script>
   </head>
@@ -100,6 +110,8 @@
 
       </form>
     </div>
+    <div id="map-canvas"></div>
   </body>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+  <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_0qaGwK5ZWdKYXHRlJ-05CI_geHWo6v4"></script> -->
 </html>
