@@ -19,11 +19,10 @@ function processImage(sourceImageUrl, location, callback) {
 
   // Request parameters.
   var params = {
-      "visualFeatures": "Categories,Description,Color,Objects,Faces",
+      "visualFeatures": "Categories,Description,Color,Objects,Faces,Tags",
       "details": "",
       "language": "en",
   };
-
   // Display the image.
   //var sourceImageUrl = document.getElementById("inputImage").value;
   //document.querySelector("#sourceImage").src = sourceImageUrl;
@@ -48,8 +47,7 @@ function processImage(sourceImageUrl, location, callback) {
   .done(function(data) {
       // Show formatted JSON on webpage.
       result = JSON.parse(JSON.stringify(data, null, 2));
-      //$("#responseTextArea").val(result.description.tags);
-      callback(sourceImageUrl, location, result.description.tags);
+      callback(sourceImageUrl, location, result);
 
   })
 

@@ -36,16 +36,17 @@
         solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
         // create the producer, specifying name of the subscription topic
-        producer = new PubSub({logname : "publishlog", topicName : "NEA/1/temp_data/raw", topicID : "publishtopic", contentmsg : "content", contentfile : "fileimg"});
+        producer = new PubSub({logname : "publishlog", topicName : "MEA/1/temp_data/raw", topicID : "publishtopic", contentmsg : "content", contentfile : "fileimg"});
         // assign buttons to the producer functions
         document.getElementById("pubconnect").addEventListener("click", producer.connect);
         document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
         document.getElementById("publish").addEventListener("click", producer.sendgovdata);
         document.getElementById("stoppublish").addEventListener("click", producer.stopgovdata);
         document.getElementById("sendmsg").addEventListener("click", producer.sendMessages);
-        //test
         document.getElementById("pubTemp").addEventListener("click", producer.pubTemp);
         document.getElementById("stoppubTemp").addEventListener("click", producer.stoppubTemp);
+        document.getElementById("pubTaxi").addEventListener("click", producer.sendtaxidata);
+        document.getElementById("stoppubTaxi").addEventListener("click", producer.stoptaxidata);
 
         subscriber = new PubSub({queueName : 'SOLACE_QUEUE', logname : 'subscribelog', tableName : 'table2'});
         subscriber2 = new PubSub({logname : 'subscribelog2', tableName : 'table1', topicID : 'topicname'});
@@ -120,6 +121,8 @@
           <button type="button" class="pure-button button-error" id="stoppublish">Stop Publish</button>
           <button type="button" class="pure-button pure-button-primary" id="pubTemp">Publish Temperature</button>
           <button type="button" class="pure-button button-error" id="stoppubTemp">Stop Publish Temperature</button>
+          <button type="button" class="pure-button pure-button-primary" id="pubTaxi">Publish Taxi</button>
+          <button type="button" class="pure-button button-error" id="stoppubTaxi">Stop Publish Taxi</button>
         </p>
         <div class = "input">
           <div class="publishlog" id="publishlog" contentEditable="true"></div>
