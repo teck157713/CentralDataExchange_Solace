@@ -26,6 +26,9 @@ var PubSub = function (params) {
         var logTextArea = document.getElementById(logname);
         logTextArea.innerHTML += timestamp + line + '<br />';
         logTextArea.scrollTop = logTextArea.scrollHeight;
+        if (logTextArea.innerHTML.lastIndexOf('<br>') >= 1000){
+            logTextArea.innerHTML = logTextArea.innerHTML.substring(logTextArea.innerHTML.indexOf('<br>') + 1);
+        }
       } catch (error) {
         alert(error.toString());
       }
@@ -182,7 +185,7 @@ var PubSub = function (params) {
 
     //Initiate govData Sending
     pubsub.sendgovdata = function () {
-      govdataon = setInterval(pubsub.sendGovText, 10000);
+      govdataon = setInterval(pubsub.sendGovText, 5000);
       pubsub.log('Publishing, the interval has been started.');
     }
 
@@ -193,47 +196,59 @@ var PubSub = function (params) {
 
     pubsub.sendGovText = function () {
         if (pubsub.session !== null) {
-            processgov(function(resdict){
-              pubsub.sendviaTopics(resdict);
+            processgov("https://api.data.gov.sg/v1/transport/traffic-images", function(resdict){
+                resdict = resdict.items[0].cameras;
+                pubsub.sendtrafficimg("LTA/1/img_data/raw", resdict[enumvalue]);
             });
         } else {
             pubsub.log('Cannot send messages because not connected to Solace message router.');
         }
     }
 
-    // Sends one picture with tags of topics
-    pubsub.sendviaTopics = function (result) {
-        for (var i = 0; i < result.length; i ++){
-          var messageText = '\"imageurl\": \"' + result[i].image + '\", \"lat\": \"' + result[i].location.latitude + '\", \"long\": \"' + result[i].location.longitude + '\"';
-          var topicDest = result[i].tags;
-          var message = solace.SolclientFactory.createMessage();
-          setTopic(topicDest);
-        }
-
-        function setTopic(x){
-          if (x.length == 0){
-
+    //Initiate taxi availability
+    pubsub.sendtaxidata = function () {
+        taxidataon = setInterval(pubsub.sendTaxiText, 5000);
+        pubsub.log('Publishing, the interval has been started.');
+      }
+  
+      pubsub.stoptaxidata = function () {
+        clearInterval(taxidataon);
+        pubsub.log('Publishing has been stopped.');
+      }
+  
+      pubsub.sendTaxiText = function () {
+          if (pubsub.session !== null) {
+              processgov("https://api.data.gov.sg/v1/transport/taxi-availability", function(resdict){
+                resdict = resdict.features[0].geometry.coordinates;
+                pubsub.sendtrafficimg("LTA/1/taxi_data/raw", resdict);
+              });
           } else {
-            message.setDestination(solace.SolclientFactory.createTopicDestination( pubsub.topicName + '/' + x.pop()));
-            message.setBinaryAttachment(messageText);
-            message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
-            // Define a correlation key object
-            const correlationKey = {
-                name: "MESSAGE_CORRELATIONKEY",
-                id: messageText,
-            };
-            message.setCorrelationKey(correlationKey);
-            try {
-                pubsub.session.send(message);
-                pubsub.log('Message #' + messageText + ' sent to topic "' + pubsub.topicName + '"' + JSON.stringify(correlationKey));
-            } catch (error) {
-                pubsub.log(error.toString());
-            }
-            return setTopic(x);
+              pubsub.log('Cannot send messages because not connected to Solace message router.');
           }
-        }
+      }
 
-    };
+
+
+    pubsub.sendtrafficimg = function (topName, result) {
+        try {
+          enumvalue += 1;
+          sequenceNr = enumvalue;
+          var statictopicName = topName;
+          var messageText = JSON.stringify(result);
+          var message = solace.SolclientFactory.createMessage();
+          message.setDestination(solace.SolclientFactory.createTopicDestination(statictopicName));
+          message.setBinaryAttachment(messageText);
+          message.setDeliveryMode(solace.MessageDeliveryModeType.DIRECT);
+          try {
+              pubsub.session.send(message);
+              pubsub.log('Message #' + messageText + ' sent to topic "' + statictopicName + '"');
+          } catch (error) {
+              pubsub.log(error.toString());
+          }
+        } catch (error) {
+            producer.log(error.toString());
+        }
+      };
 
     //Initiate tempData Sending
     pubsub.pubTemp = function () {
@@ -248,8 +263,11 @@ var PubSub = function (params) {
 
     pubsub.sendTempData = function () {
         if (pubsub.session !== null) {
-            processTemp(function(resdict){
-              pubsub.sendTempMsg(resdict);
+            processTemp("https://api.data.gov.sg/v1/environment/air-temperature", function(resdict){
+                pubsub.sendTempMsg("NEA/1/temp_data/raw", resdict);
+            });
+            processTemp("https://api.data.gov.sg/v1/environment/rainfall", function(resrain){
+                pubsub.sendTempMsg("NEA/1/rain_data/raw", resrain);
             });
         } else {
             pubsub.log('Cannot send messages because not connected to Solace message router.');
@@ -257,7 +275,7 @@ var PubSub = function (params) {
     }
 
     // Sends one picture with tags of topics
-    pubsub.sendTempMsg = function (result) {
+    pubsub.sendTempMsg = function (topName, result) {
         for (var i = 0; i < result.length; i ++){
           var messageText = '\"id\": \"' + result[i].id + '\", \"lat\": \"' + result[i].location.latitude + '\", \"long\": \"' + result[i].location.longitude + '\", \"value\": \"' + result[i].value + '\", \"timestamp\": \"' + result[i].timestamp + '\"';
           var message = solace.SolclientFactory.createMessage();
@@ -265,7 +283,7 @@ var PubSub = function (params) {
         }
 
         function setTopic(x, y){
-          message.setDestination(solace.SolclientFactory.createTopicDestination( pubsub.topicName + '/' + x + '/' + y));
+          message.setDestination(solace.SolclientFactory.createTopicDestination( topName + '/' + x + '/' + y));
           message.setBinaryAttachment(messageText);
           message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
           const correlationKey = {
@@ -275,7 +293,7 @@ var PubSub = function (params) {
           message.setCorrelationKey(correlationKey);
           try {
               pubsub.session.send(message);
-              pubsub.log('Message #' + messageText + ' sent to queue "' + pubsub.topicName + '"' + JSON.stringify(correlationKey));
+              pubsub.log('Message #' + messageText + ' sent to queue "' + topName + '"' + JSON.stringify(correlationKey));
           } catch (error) {
               pubsub.log(error.toString());
           }
