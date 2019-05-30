@@ -1,7 +1,4 @@
-function processTemp(callback) {
-  var subscriptionKey = "5eb74f8f5a844acaa8c29118c43c83a6";
-  var uriBase =
-      "https://api.data.gov.sg/v1/environment/air-temperature";
+function processTemp(uriBase, callback) {
 
   // Request parameters.
   var now = new Date();
