@@ -84,7 +84,7 @@ function ImageEventCall(result, pubsub, callback){
             Topstr += temp;
             temp = "/0";
         }       
-        pubsub.EventMsg("LTA/1/img_data", finalres, Topstr);
+        pubsub.EventMsg("LTA/1/img_data/filter", finalres, Topstr);
         pubsub.log("SEND SUCCESSFUL");
         callback();
     });
