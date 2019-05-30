@@ -1,7 +1,4 @@
-function processgov(callback) {
-  var subscriptionKey = "5eb74f8f5a844acaa8c29118c43c83a6";
-  var uriBase =
-      "https://api.data.gov.sg/v1/transport/traffic-images";
+function processgov(uriBase, callback) {
 
   // Request parameters.
   var now = new Date();
@@ -19,7 +16,11 @@ function processgov(callback) {
       url: uriBase + "?" + $.param(params),
 
       beforeSend: function(xhrObj){
-          xhrObj.setRequestHeader("Content-Type","application/json");
+          if (uriBase.indexOf('taxi-availability') >= 0){
+            xhrObj.setRequestHeader("Content-Type","application/vnd.geo+json");
+          } else {
+            xhrObj.setRequestHeader("Content-Type","application/json");
+          }
       },
 
       type: "GET",
@@ -27,19 +28,7 @@ function processgov(callback) {
 
   .done(function(data) {
       result = JSON.parse(JSON.stringify(data,null,2));
-      var cameras = result.items[0].cameras;
-      var resdict = [];
-      for (var i = 0; i < 1; i++){
-        processImage(cameras[i].image, cameras[i].location, function(imgres, loc, resulvar){
-          resdict.push({"image" : imgres, "tags" : resulvar, "location" : loc});
-          if (resdict.length >= 1) {
-            callback(resdict);
-          }
-        }
-      );
-
-    }
-
+      callback(result);
   })
 
   .fail(function(jqXHR, textStatus, errorThrown) {
@@ -50,4 +39,4 @@ function processgov(callback) {
           jQuery.parseJSON(jqXHR.responseText).message;
       alert(errorString);
   });
-  };
+};
