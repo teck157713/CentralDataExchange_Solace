@@ -20,8 +20,6 @@ var QueueProducer = function (queueName) {
 
     producer.log('\n*** Publisher is ready to connect ***');
 
-
-
     // Establishes connection to Solace message router
     producer.connect = function () {
         if (producer.session !== null) {
