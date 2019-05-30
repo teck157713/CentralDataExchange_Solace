@@ -26,6 +26,9 @@ var PubSub = function (params) {
         var logTextArea = document.getElementById(logname);
         logTextArea.innerHTML += timestamp + line + '<br />';
         logTextArea.scrollTop = logTextArea.scrollHeight;
+        if (logTextArea.innerHTML.lastIndexOf('<br>') >= 1000){
+            logTextArea.innerHTML = logTextArea.innerHTML.substring(logTextArea.innerHTML.indexOf('<br>') + 1);
+        }
       } catch (error) {
         alert(error.toString());
       }
@@ -174,209 +177,15 @@ var PubSub = function (params) {
         }
     };
 
-    //***have to be revisited
-    pubsub.sendMessages = function () {
-        if (pubsub.session !== null) {
-          try {
-            if (document.getElementById(contentmsg).value != ''){
-              pubsub.sendMessage();
-            }
-          } catch (error) {
-              producer.log(error.toString());
-          }
-          try {
-            if (document.getElementById(contentfile).value != ''){
-              pubsub.sendImage();
-            }
-          } catch (error) {
-              producer.log(error.toString());
-          }
-        } else {
-            pubsub.log('Cannot send messages because not connected to Solace message router.');
-        }
-    }
-
-    //Initiate govData Sending
-    pubsub.sendgovdata = function () {
-      govdataon = setInterval(pubsub.sendGovText, 10000);
-      pubsub.log('Publishing, the interval has been started.');
-    }
-
-    pubsub.stopgovdata = function () {
-      clearInterval(govdataon);
-      pubsub.log('Publishing has been stopped.');
-    }
-
-    pubsub.sendGovText = function () {
-        if (pubsub.session !== null) {
-            processgov(function(resdict){
-              pubsub.sendviaTopics(resdict);
-            });
-        } else {
-            pubsub.log('Cannot send messages because not connected to Solace message router.');
-        }
-    }
-
-    // Sends one picture with tags of topics
-    pubsub.sendviaTopics = function (result) {
-        for (var i = 0; i < result.length; i ++){
-          var messageText = result[i].image + ', lat: ' + result[i].location.latitude + ', long: ' + result[i].location.longitude;
-          var topicDest = result[i].tags;
-          var message = solace.SolclientFactory.createMessage();
-          setTopic(topicDest);
-        }
-
-        function setTopic(x){
-          if (x.length == 0){
-
-          } else {
-            message.setDestination(solace.SolclientFactory.createTopicDestination( pubsub.topicName + '/' + x.pop()));
-            message.setBinaryAttachment(messageText);
-            message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
-            // Define a correlation key object
-            const correlationKey = {
-                name: "MESSAGE_CORRELATIONKEY",
-                id: messageText,
-            };
-            message.setCorrelationKey(correlationKey);
-            try {
-                pubsub.session.send(message);
-                pubsub.log('Message #' + messageText + ' sent to queue "' + pubsub.topicName + '"' + JSON.stringify(correlationKey));
-            } catch (error) {
-                pubsub.log(error.toString());
-            }
-            return setTopic(x);
-          }
-        }
-
-    };
-
-    //Initiate tempData Sending
-    pubsub.pubTemp = function () {
-      TempOn = setInterval(pubsub.sendTempData, 1000);
-      pubsub.log('Publishing, the interval has been started.');
-    }
-
-    pubsub.stoppubTemp = function () {
-      clearInterval(TempOn);
-      pubsub.log('Publishing has been stopped.');
-    }
-
-    pubsub.sendTempData = function () {
-        if (pubsub.session !== null) {
-            processTemp(function(resdict){
-              pubsub.sendTempMsg(resdict);
-            });
-        } else {
-            pubsub.log('Cannot send messages because not connected to Solace message router.');
-        }
-    }
-
-    // Sends one picture with tags of topics
-    pubsub.sendTempMsg = function (result) {
-        for (var i = 0; i < result.length; i ++){
-          var messageText = 'id: ' + result[i].id + ', lat: ' + result[i].location.latitude + ', long: ' + result[i].location.longitude + ', value: ' + result[i].value;
-          var message = solace.SolclientFactory.createMessage();
-          setTopic(result[i].location.latitude, result[i].location.longitude);
-        }
-
-        function setTopic(x, y){
-          message.setDestination(solace.SolclientFactory.createTopicDestination( pubsub.topicName + '/' + x + '/' + y));
-          message.setBinaryAttachment(messageText);
-          message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
-          const correlationKey = {
-              name: "MESSAGE_CORRELATIONKEY",
-              id: messageText,
-          };
-          message.setCorrelationKey(correlationKey);
-          try {
-              pubsub.session.send(message);
-              pubsub.log('Message #' + messageText + ' sent to queue "' + pubsub.topicName + '"' + JSON.stringify(correlationKey));
-          } catch (error) {
-              pubsub.log(error.toString());
-          }
-        }
-
-    };
-
-    // Sends one message
-    pubsub.sendMessage = function () {
-      try {
-        enumvalue += 1;
-        sequenceNr = enumvalue;
-        var statictopicName = document.getElementById(topicID).value;
-        var messageText = document.getElementById(contentmsg).value;
-        var message = solace.SolclientFactory.createMessage();
-        message.setDestination(solace.SolclientFactory.createTopicDestination(statictopicName));
-        message.setBinaryAttachment(messageText);
-        message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
-        // Define a correlation key object
-        const correlationKey = {
-            name: "MESSAGE_CORRELATIONKEY",
-            id: sequenceNr,
-        };
-        message.setCorrelationKey(correlationKey);
-        try {
-            pubsub.session.send(message);
-            pubsub.log('Message #' + sequenceNr + ' sent to queue "' + statictopicName + '", correlation key = ' + JSON.stringify(correlationKey));
-        } catch (error) {
-            pubsub.log(error.toString());
-        }
-      } catch (error) {
-          producer.log(error.toString());
-      }
-    };
-
-    // Sends one image
-    pubsub.sendImage = function () {
-      try {
-        enumvalue += 1;
-        sequenceNr = enumvalue;
-        var statictopicName = document.getElementById(topicID).value;
-        var file = document.getElementById(contentfile).files[0];
-        var reader = new FileReader();
-        var fileByteArray = [];
-        reader.readAsArrayBuffer(file);
-        reader.onloadend = function (evt){
-            if (evt.target.readyState == FileReader.DONE){
-                var arrayBuffer = evt.target.result, array = new Uint8Array(arrayBuffer);
-                for (var i = 0; i < array.length; i++){
-                    fileByteArray.push(array[i]);
-                }
-
-                var message = solace.SolclientFactory.createMessage();
-                message.setDestination(solace.SolclientFactory.createTopicDestination(statictopicName));
-                message.setBinaryAttachment(fileByteArray.toString());
-                message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
-                // Define a correlation key object
-                const correlationKey = {
-                    name: "MESSAGE_CORRELATIONKEY",
-                    id: sequenceNr,
-                };
-                message.setCorrelationKey(correlationKey);
-                try {
-                    pubsub.session.send(message);
-                    pubsub.log('Message #' + sequenceNr + ' sent to queue "' + statictopicName + '", correlation key = ' + JSON.stringify(correlationKey));
-                } catch (error) {
-                    pubsub.log(error.toString());
-                }
-
-            }
-        }
-      } catch (error) {
-          producer.log(error.toString());
-      }
-    };
-
     // Event-Driven Re-publish Topic
-    pubsub.EventMsg = function (result) {
+    pubsub.EventMsg = function (topicSend, result, addTopic = "") {
         try {
           enumvalue += 1;
           sequenceNr = enumvalue;
-          var statictopicName = document.getElementById('nene').value;
+          var statictopicName = topicSend;
           var messageText = JSON.stringify(result);
           var message = solace.SolclientFactory.createMessage();
-          message.setDestination(solace.SolclientFactory.createTopicDestination(statictopicName + '/' + result['lat'] + '/' + result['long']));
+          message.setDestination(solace.SolclientFactory.createTopicDestination(statictopicName + '/' + result['lat'] + '/' + result['long'] + addTopic));
           message.setBinaryAttachment(messageText);
           message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
           // Define a correlation key object
@@ -490,34 +299,16 @@ var PubSub = function (params) {
                     pubsub.messageConsumer.on(solace.MessageConsumerEventName.MESSAGE, function (message) {
                       var result = message.getBinaryAttachment();
                       if (String(message.getDestination()).indexOf('NEA/1/temp_data/raw') >= 0){
-                        var dict = JSON.parse("{" + result + "}");
-                        //pubsub.table(result);
-                        if (dict['id'] in pubsub.temp){
-                            if (pubsub.temp[dict['id']].value.length <= 11){
-                                pubsub.temp[dict['id']].value.unshift(dict['value']);
-                            } else {
-                                var date1 = new Date(dict['timestamp']);
-                                var date2 = new Date(pubsub.temp[dict['id']].timestamp);
-                                if (date1.getTime() - date2.getTime() >= 300000){
-                                    if ((Math.abs(dict['value'] - Math.max.apply(null, pubsub.temp[dict['id']].value)) >= 0.5) || (Math.abs(dict['value'] - Math.min.apply(null, pubsub.temp[dict['id']].value)) >= 0.5)){
-                                        dict['change'] = Math.max(Math.abs(dict['value'] - Math.max.apply(null, pubsub.temp[dict['id']].value)), Math.abs(dict['value'] - Math.min.apply(null, pubsub.temp[dict['id']].value)));
-                                        pubsub.EventMsg(dict);
-                                        pubsub.log("SEND SUCCESSFUL");
-                                        pubsub.temp[dict['id']].value = [dict['value']];
-                                        
-                                    }
-                                    pubsub.temp[dict['id']].value.unshift(dict['value']);
-                                    pubsub.temp[dict['id']].value.pop();
-                                    pubsub.temp[dict['id']].timestamp = dict['timestamp'];
-                                    pubsub.log(JSON.stringify(pubsub.temp));
-                                }
-                                
-                            }
-                            
-                        } else {
-                            pubsub.temp[dict['id']] = { 'value' : [dict['value']], 'timestamp' : dict['timestamp'], 'lat' : dict['lat'], 'long' : dict['long']};
-                        }
-
+                        TempEventCall(result, pubsub);
+                        message.acknowledge();
+                      } else if (String(message.getDestination()).indexOf('NEA/1/rain_data/raw') >= 0){
+                        RainEventCall(result, pubsub);
+                        message.acknowledge();
+                      } else if (String(message.getDestination()).indexOf('LTA/1/img_data/raw') >= 0){
+                        ImageEventCall(result, pubsub, function(){});
+                        message.acknowledge();
+                      } else if (String(message.getDestination()).indexOf('LTA/1/taxi_data/raw') >= 0){
+                        TaxiEventCall(result, pubsub, function(){});
                         message.acknowledge();
                       } else {
                         // assuming if message is a message if less than 255, else image
