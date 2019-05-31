@@ -22,7 +22,7 @@ var PubSub = function (params) {
         var now = new Date();
         var time = [('0' + now.getHours()).slice(-2), ('0' + now.getMinutes()).slice(-2), ('0' + now.getSeconds()).slice(-2)];
         var timestamp = '[' + time.join(':') + '] ';
-        console.log(timestamp + line);
+        line = JSON.stringify(line);
         var logTextArea = document.getElementById(logname);
         logTextArea.innerHTML += timestamp + line + '<br />';
         logTextArea.scrollTop = logTextArea.scrollHeight;
@@ -44,7 +44,7 @@ var PubSub = function (params) {
         var cell1 = row.insertCell(0);
         cell1.innerHTML = messagee;
       } catch (error) {
-          producer.log(error.toString());
+        pubsub.log(error.toString());
       }
     }
 
@@ -76,7 +76,7 @@ var PubSub = function (params) {
                 },
             });
         } catch (error) {
-            producer.log(error.toString());
+            pubsub.log(error.toString());
         }
         // define session event listeners
         pubsub.session.on(solace.SessionEventCode.UP_NOTICE, function (sessionEvent) {
@@ -246,7 +246,7 @@ var PubSub = function (params) {
               pubsub.log(error.toString());
           }
         } catch (error) {
-            producer.log(error.toString());
+            pubsub.log(error.toString());
         }
       };
 
@@ -325,7 +325,7 @@ var PubSub = function (params) {
             pubsub.log(error.toString());
         }
       } catch (error) {
-          producer.log(error.toString());
+        pubsub.log(error.toString());
       }
     };
 
@@ -366,7 +366,7 @@ var PubSub = function (params) {
             }
         }
       } catch (error) {
-          producer.log(error.toString());
+        pubsub.log(error.toString());
       }
     };
 
@@ -395,7 +395,7 @@ var PubSub = function (params) {
             pubsub.log('Cannot subscribe because not connected to Solace message router.');
         }
       } catch (error) {
-          producer.log(error.toString());
+        pubsub.log(error.toString());
       }
     };
 
@@ -424,7 +424,7 @@ var PubSub = function (params) {
             pubsub.log('Cannot unsubscribe because not connected to Solace message router.');
         }
       } catch (error) {
-          producer.log(error.toString());
+        pubsub.log(error.toString());
       }
     };
 
