@@ -49,7 +49,7 @@
       document.getElementById("stoppublish").addEventListener("click", producer.stopgovdata);
       document.getElementById("sendmsg").addEventListener("click", producer.sendMessages);
 
-      subscriber = new PubSub({queueName : 'SOLACE_QUEUE', logname : 'subscribelog', tableName : 'table2'});
+      subscriber = new PubSub({queueName : 'SOLACE_ALL', logname : 'subscribelog', tableName : 'table2'});
       document.getElementById("subconnect").addEventListener("click", subscriber.connect);
       document.getElementById("subdisconnect").addEventListener("click", subscriber.disconnect);
       document.getElementById("startconsume").addEventListener("click", subscriber.startConsume);

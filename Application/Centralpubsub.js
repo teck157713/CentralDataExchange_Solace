@@ -35,7 +35,7 @@ var PubSub = function (params) {
     };
 
     pubsub.log('\n*** Broker is ready to connect ***');
-
+    
     //table Log
     pubsub.table = function (messagee) {
       try {
