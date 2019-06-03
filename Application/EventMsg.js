@@ -30,7 +30,7 @@ function TempEventCall(result, pubsub){
 var tempTemp = {};
 
 function RainEventCall(result, pubsub){
-    var dict = JSON.parse("{" + result + "}");
+    var dict = JSON.parse("{" + result + "}");  
     //pubsub.table(result);
     if (dict['id'] in tempRain){
         if (tempRain[dict['id']].value.length <= 1){
