@@ -3,88 +3,135 @@
 <html lang="en">
 
 <head>
-  <title>Prototype Demo (Homepage)</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
-  <meta charset="utf-8" />
+    <title>Prototype Demo (Homepage)</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
+    <meta charset="utf-8" />
 
-  <link rel="stylesheet" type="text/css" href="css/pure.css">
-  </link>
-  <link rel="stylesheet" type="text/css" href="css/samples.css">
-  </link>
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
+    <link rel="stylesheet" type="text/css" href="css/pure.css">
+    </link>
+    <link rel="stylesheet" type="text/css" href="css/samples.css">
+    </link>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
 
-  <!-- Load Solace Web Messaging API for JavaScript -->
-  <script src="lib/solclient-debug.js"></script>
+    <!-- Load Solace Web Messaging API for JavaScript -->
+    <script src="lib/solclient-debug.js"></script>
 
-  <!-- Load the Confirmed Delivery tutorial -->
-  <!-- <script src="producer.js"></script>
+    <!-- Load the Confirmed Delivery tutorial -->
+    <!-- <script src="producer.js"></script>
     <script src="subscriber.js"></script> -->
-  <script src="pubsub.js"></script>
-  <script src="ui.js"></script>
-  <script src="config/config.js" type="text/javascript"></script>
-  <!-- script for microsoft api -->
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  <!-- Execute the Confirmed Delivery tutorial -->
-  <script src="tempData.js"></script>
-  <script>
-    var producer = null;
-    window.onload = function () {
-      // Initialize factory with the most recent API defaults
-      var factoryProps = new solace.SolclientFactoryProperties();
-      factoryProps.profile = solace.SolclientFactoryProfiles.version10;
-      solace.SolclientFactory.init(factoryProps);
+    <script src="pubsub.js"></script>
+    <script src="ui.js"></script>
+    <script src="config/config.js" type="text/javascript"></script>
+    <!-- script for microsoft api -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!-- Execute the Confirmed Delivery tutorial -->
+    <script src="tempData.js"></script>
+    <script>
+        var producer = null;
+        window.onload = function () {
+            // Initialize factory with the most recent API defaults
+            var factoryProps = new solace.SolclientFactoryProperties();
+            factoryProps.profile = solace.SolclientFactoryProfiles.version10;
+            solace.SolclientFactory.init(factoryProps);
 
-      // enable logging to JavaScript console at WARN level
-      // NOTICE: works only with "solclientjs-debug.js"
-      solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
+            // enable logging to JavaScript console at WARN level
+            // NOTICE: works only with "solclientjs-debug.js"
+            solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
-      // create the producer, specifying name of the subscription topic
-      producer = new PubSub({logname : "publishlog", topicName : "NEA/temperature", topicID : "publishtopic", contentmsg : "content", contentfile : "fileimg"});
-      // assign buttons to the producer functions
-      document.getElementById("pubconnect").addEventListener("click", producer.connect);
-      document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
-      document.getElementById("pubTemp").addEventListener("click", producer.pubTemp);
-      document.getElementById("stoppubTemp").addEventListener("click", producer.stoppubTemp);
-      document.getElementById("sendmsg").addEventListener("click", producer.sendMessages);
+            // create the producer, specifying name of the subscription topic
+            producer = new PubSub({
+                logname: "publishlog",
+                topicName: "NEA/temperature",
+                topicID: "publishtopic",
+                contentmsg: "content",
+                contentfile: "fileimg"
+            });
+            // assign buttons to the producer functions
+            document.getElementById("pubconnect").addEventListener("click", producer.connect);
+            document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
+            document.getElementById("pubTemp").addEventListener("click", producer.pubTemp);
+            document.getElementById("stoppubTemp").addEventListener("click", producer.stoppubTemp);
+            document.getElementById("sendmsg").addEventListener("click", producer.sendMessages);
 
-      subscriber = new PubSub({queueName : 'SOLACE_QUEUE', logname : 'subscribelog', tableName : 'table2'});
-      document.getElementById("subconnect").addEventListener("click", subscriber.connect);
-      document.getElementById("subdisconnect").addEventListener("click", subscriber.disconnect);
-      document.getElementById("startconsume").addEventListener("click", subscriber.startConsume);
-      document.getElementById("stopconsume").addEventListener("click", subscriber.stopConsume);
+            subscriber = new PubSub({
+                queueName: 'SOLACE_QUEUE',
+                logname: 'subscribelog',
+                tableName: 'table2'
+            });
+            document.getElementById("subconnect").addEventListener("click", subscriber.connect);
+            document.getElementById("subdisconnect").addEventListener("click", subscriber.disconnect);
+            document.getElementById("startconsume").addEventListener("click", subscriber.startConsume);
+            document.getElementById("stopconsume").addEventListener("click", subscriber.stopConsume);
 
-      subscriber2 = new PubSub({logname : 'subscribelog2', tableName : 'table1', topicID : 'topicname'});
-      document.getElementById("subconnect2").addEventListener("click", subscriber2.connect);
-      document.getElementById("subdisconnect2").addEventListener("click", subscriber2.disconnect);
-      document.getElementById("subscribe").addEventListener("click", subscriber2.subscribe);
-      document.getElementById("unsubscribe").addEventListener("click", subscriber2.unsubscribe);
+            subscriber2 = new PubSub({
+                logname: 'subscribelog2',
+                tableName: 'table1',
+                topicID: 'topicname'
+            });
+            document.getElementById("subconnect2").addEventListener("click", subscriber2.connect);
+            document.getElementById("subdisconnect2").addEventListener("click", subscriber2.disconnect);
+            document.getElementById("subscribe").addEventListener("click", subscriber2.subscribe);
+            document.getElementById("unsubscribe").addEventListener("click", subscriber2.unsubscribe);
 
-    };
-  </script>
+        };
+    </script>
 </head>
 
 <body>
 
-  <div class="banner">
-    <div class="banner-interior">
-      <span class="logo">
-        <img src="image/solace.png" />
-      </span>
-      <div class="banner-heading">
-        Demo (Iter 1)
-      </div>
+    <div class="banner">
+        <div class="banner-interior">
+            <span class="logo">
+                <img src="image/solace.png" />
+            </span>
+            <div class="banner-heading">
+                Demo (Iter 1)
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="w3-bar w3-black">
-    <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'Published')">Published Topics</button>
-    <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'AvilTopics')">Topics Available</button>
-  </div>
+    <div class="w3-bar w3-black">
+        <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'Published')">Published
+            Topics</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'AvilTopics')">Topics Available</button>
+    </div>
 
-  <div id="Published" class="w3-container w3-border pubsub">
-      Under Progress - Published Topic
-  </div>
+    <div id="Published" class="w3-container w3-border pubsub">
+        <br><br>
+        <table class="w3-table-all w3-hoverable w3-card-4" , id='publishTopic'>
+            <tr class='w3-teal'>
+                <th>Published Topics</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>NEA/1/temp_data/raw</td>
+                <td>This is a description</td>
+            </tr>
+            <tr>
+                <td>NEA/1/rain_data/raw</td>
+                <td>This is a description</td>
+            </tr>
+            <tr>
+                <td>NEA/1/temp_data/change</td>
+                <td>This is a description</td>
+            </tr>
+            <tr>
+                <td>NEA/1/rain_data/start</td>
+                <td>This is a description</td>
+            </tr>
+            <tr>
+                <td>NEA/1/rain_data/stop</td>
+                <td>This is a description</td>
+            </tr>
+        </table>
+    </div>
 
-  <div id="AvilTopics" class="w3-container w3-border pubsub" style="display:none">
-      Under Progress - Topic Available
-  </div>
-</body>
+    <div id="AvilTopics" class="w3-container w3-border pubsub" style="display:none">
+        <br><br>
+        <table class="w3-table-all w3-hoverable w3-card-4" , id='avilTopic'>
+            <tr class='w3-teal'>
+                <th>Available Topics</th>
+                <th>Description</th>
+            </tr>
+        </table>
+    </div>
+</body> 
