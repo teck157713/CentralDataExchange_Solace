@@ -35,7 +35,7 @@ var PubSub = function (params) {
     };
 
     pubsub.log('\n*** Broker is ready to connect ***');
-    
+
     //table Log
     pubsub.table = function (messagee) {
       try {
@@ -69,7 +69,7 @@ var PubSub = function (params) {
         if (pubsub.session !== null) {
             pubsub.log('Already connected and ready to send messages.');
             return;
-        }
+        }x
 
         var hosturl = account.HOSTURL;
         var username = account.USERNAME;
