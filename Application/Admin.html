@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <title>Prototype Demo (Admin)</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
+    <meta charset="utf-8" />
+    <script src="lib/solclient-debug.js"></script>
+    <script src="log.js"></script>
+    <script src="config/config.js" type="text/javascript"></script>
+    <script src="ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/pure.css">
+    </link>
+    <link rel="stylesheet" type="text/css" href="css/samples.css">
+    </link>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script>
+        var producer = null;
+        window.onload = function () {
+            // Initialize factory with the most recent API defaults
+            var factoryProps = new solace.SolclientFactoryProperties();
+            factoryProps.profile = solace.SolclientFactoryProfiles.version10;
+            solace.SolclientFactory.init(factoryProps);
+
+            // enable logging to JavaScript console at WARN level
+            // NOTICE: works only with "solclientjs-debug.js"
+            solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
+            consumer = new QueueConsumer('SOLACE_QUEUE', 'logtable', 'log');
+            document.getElementById("connect").addEventListener("click", consumer.connect);
+            document.getElementById("disconnect").addEventListener("click", consumer.disconnect);
+            document.getElementById("startconsume").addEventListener("click", consumer.startConsume);
+            document.getElementById("stopconsume").addEventListener("click", consumer.stopConsume);
+
+            consumer2 = new QueueConsumer('SOLACE_REGISTER', 'regtable','log2');
+            document.getElementById("connect2").addEventListener("click", consumer2.connect);
+            document.getElementById("disconnect2").addEventListener("click", consumer2.disconnect);
+            document.getElementById("startconsume2").addEventListener("click", consumer2.startConsume);
+            document.getElementById("stopconsume2").addEventListener("click", consumer2.stopConsume);
+        };
+    </script>
+</head>
+
+<body>
+
+    <div class="banner">
+        <div class="banner-interior">
+            <span class="logo">
+                <img src="image/solace.png" />
+            </span>
+            <div class="banner-heading">
+                Demo (Iter 1)
+            </div>
+        </div>
+    </div>
+    <div class="w3-bar w3-black">
+        <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'messageLog')">Message
+            Log</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'regAgency')">Register Agency</button>
+    </div>
+
+    <div id="messageLog" class="w3-container w3-border pubsub">
+        <div class="w3-bar">
+            <p>
+                <button type="button" class="pure-button pure-button-primary" id="connect">Connect</button>
+                <button type="button" class="pure-button button-error" id="disconnect">Disconnect</button>
+                <button type="button" class="pure-button pure-button-primary" id="startconsume">Consume message log
+                </button>
+                <button type="button" class="pure-button button-error" id="stopconsume">Stop consuming</button>
+            </p>
+        </div>
+            <p>
+                <div class="input">
+                    <div class="publishlog" id="log" contentEditable="true"></div>
+                </div>
+            </p>
+            <table class="w3-table-all w3-hoverable w3-card-4" , id="logtable">
+                <tr class='w3-teal'>
+                    <th>Topic Destination</th>
+                    <th>Message</th>
+                </tr>
+            </table>
+        </div>
+
+        <div id="regAgency" class="w3-container w3-border pubsub" style="display:none">
+            <div class="w3-bar">
+                <p>
+                    <button type="button" class="pure-button pure-button-primary" id="connect2">Connect</button>
+                    <button type="button" class="pure-button button-error" id="disconnect2">Disconnect</button>
+                    <button type="button" class="pure-button pure-button-primary" id="startconsume2">Consume message log
+                    </button>
+                    <button type="button" class="pure-button button-error" id="stopconsume2">Stop consuming</button>
+                </p>
+            </div>
+                <p>
+                    <div class="input">
+                        <div class="publishlog" id="log2" contentEditable="true"></div>
+                    </div>
+                </p>
+                <table class="w3-table-all w3-hoverable w3-card-4" , id="regtable">
+                    <tr class='w3-teal'>
+                        <th>Agency Name</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                    </tr>
+                </table>
+            </div>
+        
+</body>

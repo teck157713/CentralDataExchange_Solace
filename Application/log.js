@@ -1,9 +1,10 @@
-var QueueConsumer = function (queueName,table) {
+var QueueConsumer = function (queueName,table,logs) {
     'use strict';
     var consumer = {};
     consumer.session = null;
     consumer.flow = null;
     consumer.queueName = queueName;
+    consumer.logName = logs;
     consumer.queueDestination = new solace.Destination(consumer.queueName, solace.DestinationType.QUEUE);
     consumer.consuming = false;
     consumer.tableName = table;
@@ -14,7 +15,7 @@ var QueueConsumer = function (queueName,table) {
             var time = [('0' + now.getHours()).slice(-2), ('0' + now.getMinutes()).slice(-2), ('0' + now.getSeconds()).slice(-2)];
             var timestamp = '[' + time.join(':') + '] ';
             console.log(timestamp + line);
-            var logTextArea = document.getElementById('log');
+            var logTextArea = document.getElementById(consumer.logName);
             logTextArea.innerHTML += timestamp + line + '<br />';
             logTextArea.scrollTop = logTextArea.scrollHeight;
           } catch (error) {
@@ -34,7 +35,7 @@ var QueueConsumer = function (queueName,table) {
                 cell1.innerHTML = topic;
                 cell2.innerHTML = messagee;
               } catch (error) {
-                  producer.log(error.toString());
+                  consumer.log(error.toString());
               }
         } else {
             try {
@@ -50,7 +51,7 @@ var QueueConsumer = function (queueName,table) {
                 cell2.innerHTML = arr[1];
                 cell3.innerHTML = arr[2];
               } catch (error) {
-                  producer.log(error.toString());
+                  consumer.log(error.toString());
               }
         }
       };
