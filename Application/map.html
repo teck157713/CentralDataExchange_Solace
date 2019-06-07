@@ -4,6 +4,8 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <title>Listening to Events</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel="stylesheet" type="text/css" href="css/samples.css"></link>
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -21,13 +23,29 @@
     <script src="lib/solclient-debug.js"></script>
 
     <!-- Load the Confirmed Delivery tutorial -->
-    <script src="pubsub.js"></script>
+    <script src="pubsubmap.js"></script>
     <script src="config/config.js" type="text/javascript"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzHU1Oi7smE91XPeiY43wsRXdPG9RqzV8">
     </script>
   </head>
   <body>
     <div id="map"></div>
+    <div class="header">
+      <ul class="animations">
+        <li><a href="#" id="drop">Drop</a>
+        <li><a href="#" id="wobble">Wobble</a>
+        <li><a href="#" id="bounce">Bounce</a>
+      </ul>
+    </div>
+    <select id="filtertype" onchange="filterMarkers(this.value);">
+      <option value="default">Please select category</option>
+      <option value="taxi">taxi</option>
+      <option value="temperature">temperature</option>
+      <option value="rain">rain</option>
+    </select>
+    <div type="hidden" class="subscribelog" id="subscribelog" contentEditable="true"></div>
+    <table border="1", width="400px", id='table1' type="hidden"></table>
+    <input id="topicname" type="hidden" placeholder="Insert Topic" value="*/>"/>
     <script>
       // In the following example, markers appear when the user clicks on the map.
       // Each marker is labeled with a single alphabetical character.
@@ -40,7 +58,12 @@
       var rectangle;
       var map;
       var infoWindow;
-      var data = [[103.62653,1.29505],[103.63049,1.31887],[103.63777,1.33202],[103.64755,1.33786],[103.65249,1.32981],[103.65382,1.32786],[103.65682,1.32445],[103.66078,1.31968],[103.66123,1.31992]];
+      var markers = [];
+      var markers2 = [];
+      var markerCluster;
+      var locations2 = [];
+      var markers3 = [];
+      var locations3 = [];
 
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -49,10 +72,10 @@
         });
 
         var bounds = {
-          east: 104.05,
-          west: 103.6,
-          north: 1.25,
-          south: 1.45
+          east: 103.9,
+          west: 103.7,
+          north: 1.30,
+          south: 1.40
         };
 
         // Define the rectangle and set its editable property to true.
@@ -62,21 +85,28 @@
           draggable: true
         });
 
-        rectangle.setMap(map);
+        //ENABLE RECTANGLE FILTER
+        //rectangle.setMap(map);
 
         // Add an event listener on the rectangle.
         rectangle.addListener('bounds_changed', showNewRect);
 
         // Define an info window on the map.
         infoWindow = new google.maps.InfoWindow();
+        // Initialize factory with the most recent API defaults
+        var factoryProps = new solace.SolclientFactoryProperties();
+        factoryProps.profile = solace.SolclientFactoryProfiles.version10;
+        solace.SolclientFactory.init(factoryProps);
 
-        //data input
-        for (var i in data){
-            var res = {};
-            res['lat'] = data[i][1];
-            res['lng'] = data[i][0];
-            addMarker(res, map);
-        }
+        // enable logging to JavaScript console at WARN level
+        // NOTICE: works only with "solclientjs-debug.js"
+        solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
+
+        subscriber = new PubSub({logname : 'subscribelog', tableName : 'table1', topicID : 'topicname'});
+        subscriber.connect(function(callback){
+          subscriber.subscribe();
+        });
+
       }
       // Show the new coordinates for the rectangle in an info window.
 
@@ -96,30 +126,204 @@
         infoWindow.open(map);
       }
 
-      //Adds a market to the map.
-      function addMarker(location, map) {
-        // Add the marker at the clicked location, and add the next-available label
-        // from the array of alphabetical characters.
-        var marker = new google.maps.Marker({
-          position: location,
-          label: labels[labelIndex++ % labels.length],
-          map: map
-        });
+      // Deletes All markers in the array
+      function deleteMarkers(map, dictmarkers) {
+        for (var i = 0; i < dictmarkers.length; i++) {
+          dictmarkers[i].setMap(map);
+        }
+        dictmarkers = [];
       }
 
-      // Deletes All markers in the array
-      function deleteMarkers(map) {
-        for (var i = 0; i < markers.length; i++) {
-          markers[i].setMap(map);
+      filterMarkers = function (category){
+        //filter to clear visible markers
+        switch (category){
+          case "taxi":
+            clearlocations2();
+            clearlocations3();
+            break;
+          case "temperature":
+            clearmarkers();
+            clearlocations3();
+            break;
+          case "rain":
+            clearmarkers();
+            clearlocations2();
+            break;
         }
-        markers = [];
+        function clearlocations2(){
+          deleteMarkers(null, locations2);
+          locations2 = [];
+        }
+        function clearlocations3(){
+          deleteMarkers(null, locations3);
+          locations3 = [];
+        }
+        function clearmarkers(){
+          deleteMarkers(null, markers);
+          markers = [];
+          if (markerCluster){
+            markerCluster.clearMarkers();
+          }
+        }
+
       }
+
+
+      CustomMarker.prototype = new google.maps.OverlayView();
+
+      function CustomMarker(opts) {
+          this.setValues(opts);
+      }
+
+      CustomMarker.prototype.draw = function() {
+          var self = this;
+          var div = this.div;
+          if (!div) {
+              div = this.div = $('' +
+                  '<div>' +
+                  '<div class="shadow"></div>' +
+                  '<div class="pulse"></div>' +
+                  '<div class="pin-wrap">' +
+                  '<div class="pin"></div>' +
+                  '</div>' +
+                  '</div>' +
+                  '')[0];
+              this.pinWrap = this.div.getElementsByClassName('pin-wrap');
+              this.pin = this.div.getElementsByClassName('pin');
+              this.pinShadow = this.div.getElementsByClassName('shadow');
+              div.style.position = 'absolute';
+              div.style.cursor = 'pointer';
+              var panes = this.getPanes();
+              panes.overlayImage.appendChild(div);
+              google.maps.event.addDomListener(div, "click", function(event) {
+                  google.maps.event.trigger(self, "click", event);
+              });
+          }
+          var point = this.getProjection().fromLatLngToDivPixel(this.position);
+          if (point) {
+              div.style.left = point.x + 'px';
+              div.style.top = point.y + 'px';
+          }
+      };
+
+      CustomMarker.prototype.animateDrop = function() {
+          dynamics.stop(this.pinWrap);
+          dynamics.css(this.pinWrap, {
+              'transform': 'scaleY(2) translateY(-'+$('#map').outerHeight()+'px)',
+              'opacity': '1',
+          });
+          dynamics.animate(this.pinWrap, {
+              translateY: 0,
+              scaleY: 1.0,
+          }, {
+              type: dynamics.gravity,
+              duration: 1800,
+          });
+
+          dynamics.stop(this.pin);
+          dynamics.css(this.pin, {
+              'transform': 'none',
+          });
+          dynamics.animate(this.pin, {
+              scaleY: 0.8
+          }, {
+              type: dynamics.bounce,
+              duration: 1800,
+              bounciness: 600,
+          })
+
+          dynamics.stop(this.pinShadow);
+          dynamics.css(this.pinShadow, {
+              'transform': 'scale(0,0)',
+          });
+          dynamics.animate(this.pinShadow, {
+              scale: 1,
+          }, {
+              type: dynamics.gravity,
+              duration: 1800,
+          });
+      }
+
+      CustomMarker.prototype.animateBounce = function() {
+          dynamics.stop(this.pinWrap);
+          dynamics.css(this.pinWrap, {
+              'transform': 'none',
+          });
+          dynamics.animate(this.pinWrap, {
+              translateY: -30
+          }, {
+              type: dynamics.forceWithGravity,
+              bounciness: 0,
+              duration: 500,
+              delay: 150,
+          });
+
+          dynamics.stop(this.pin);
+          dynamics.css(this.pin, {
+              'transform': 'none',
+          });
+          dynamics.animate(this.pin, {
+              scaleY: 0.8
+          }, {
+              type: dynamics.bounce,
+              duration: 800,
+              bounciness: 0,
+          });
+          dynamics.animate(this.pin, {
+              scaleY: 0.8
+          }, {
+              type: dynamics.bounce,
+              duration: 800,
+              bounciness: 600,
+              delay: 650,
+          });
+
+          dynamics.stop(this.pinShadow);
+          dynamics.css(this.pinShadow, {
+              'transform': 'none',
+          });
+          dynamics.animate(this.pinShadow, {
+              scale: 0.6,
+          }, {
+              type: dynamics.forceWithGravity,
+              bounciness: 0,
+              duration: 500,
+              delay: 150,
+          });
+      }
+
+      CustomMarker.prototype.animateWobble = function() {
+          dynamics.stop(this.pinWrap);
+          dynamics.css(this.pinWrap, {
+              'transform': 'none',
+          });
+          dynamics.animate(this.pinWrap, {
+              rotateZ: -45,
+          }, {
+              type: dynamics.bounce,
+              duration: 1800,
+          });
+
+          dynamics.stop(this.pin);
+          dynamics.css(this.pin, {
+              'transform': 'none',
+          });
+          dynamics.animate(this.pin, {
+              scaleX: 0.8
+          }, {
+              type: dynamics.bounce,
+              duration: 800,
+              bounciness: 1800,
+          });
+      }
+
+
 
       google.maps.event.addDomListener(window, 'load', initMap);
     </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzHU1Oi7smE91XPeiY43wsRXdPG9RqzV8">
-    </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzHU1Oi7smE91XPeiY43wsRXdPG9RqzV8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+    <script src='http://github.com/michaelvillar/dynamics.js/releases/download/0.0.8/dynamics.min.js'></script>
   </body>
 </html>
