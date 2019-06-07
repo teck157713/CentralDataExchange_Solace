@@ -4,11 +4,11 @@ function validate() {
     var username = document.getElementById("uname").value;
     var password = document.getElementById("pwd").value;
     if (username == "LTA" && password == "pass") {
-        alert("Login successfully");
+        console.log("Login successfully");
         window.location.replace("homepage.html"); // Redirecting to other page.
         return false;
     } else if (username == "admin" && password == "pass") {
-        alert("Login successfully");
+        console.log("Login successfully");
         window.location.replace("admin.html"); // Redirecting to other page.
         return false;
     } else {
