@@ -5,7 +5,7 @@ function validate(){
     var password = document.getElementById("pwd").value;
     if ( username == "admin" && password == "pass"){
     alert ("Login successfully");
-    window.location.replace("index.html"); // Redirecting to other page.
+    window.location.replace("homepage.html"); // Redirecting to other page.
     return false;
     }
     else{
