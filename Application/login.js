@@ -9,7 +9,7 @@ function validate() {
         return false;
     } else if (username == "admin" && password == "pass") {
         alert("Login successfully");
-        window.location.replace("index.html"); // Redirecting to other page.
+        window.location.replace("admin.html"); // Redirecting to other page.
         return false;
     } else {
         attempt--; // Decrementing by one.
