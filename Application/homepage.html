@@ -24,13 +24,6 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <!-- Execute the Confirmed Delivery tutorial -->
     <script src="tempData.js"></script>
-    <link rel="import" href="map.html">
-    <script>
-        var link = document.querySelector('link[rel="import"]');
-        var content = link.import;
-        var el = content.querySelector('.put-include-here');
-        document.body.appendChild(el.cloneNode(true));
-      </script>
     <!-- <script>
         var producer = null;
         window.onload = function () {
@@ -98,6 +91,7 @@
             Topics</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'AvilTopics')">Topics Available</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'mapped')">Analytics and Mapping Example</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'RegTopic')">Register a topic</button>
     </div>
 
     <div id="Published" class="w3-container w3-border pubsub">
@@ -139,6 +133,10 @@
             </tr>
         </table>
     </div>
+
+    <div id="RegTopic" class="w3-container w3-border pubsub" style="display:none">
+            <iframe src = "registertopic.html" height="500" width="100%"></iframe>
+        </div>
 
     <div id="mapped" class="w3-container w3-border pubsub" style="display:none">
         <iframe src = "map.html" height="500" width="100%"></iframe>
