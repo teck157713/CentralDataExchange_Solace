@@ -233,7 +233,7 @@ var PubSub = function (params) {
                     }
                 }
                 
-            } else if (e == 'temperature' && String(message.getDestination()).indexOf("NEA/1/temp_data/change") >= 0){
+            } else if ((e == 'temperature'|| e == 'default') && String(message.getDestination()).indexOf("NEA/1/temp_data/change") >= 0){
                 var dict4 = JSON.parse(result);
                 for (var ind in locations2) {
                     if (dict4['id'] == locations2[ind].getTitle()){
@@ -241,24 +241,23 @@ var PubSub = function (params) {
                         var Iconset =locations2[ind].getIcon();
                         Iconset.url='image/thermometer-red.png';
                         locations2[ind].setIcon(Iconset);
-                        placeholder = setTimeout(function(){
+                        this.placeholder = setTimeout(function(){
                             Iconset.url=tempurl;
                             locations2[ind].setIcon(Iconset);
                         }, 60000);
                         break;
                     }
                 }
-            } else if (e == 'default' && String(message.getDestination()).indexOf("LTA/1/img_data/filter") >= 0){
+            } else if ((e == 'event'|| e == 'default') && String(message.getDestination()).indexOf("LTA/1/img_data/filter") >= 0 && pubsub.topicName != "*/>"){
                 var lst = JSON.parse(result);
-                markers3 = new google.maps.Marker({
-                    position: {'lat': Number(lst['location']['latitude']), 'lng' : Number(lst['location']['longitude'])},
-                    title: lst['image'],
-                    icon: {url:'image/thermometer-red.png', scaledSize: new google.maps.Size(30,30), anchor: new google.maps.Point(15, 15)},
-                    map: map
+                console.log(message.getDestination());
+                markers1 = new CustomMarker({
+                    position: new google.maps.LatLng(lst['lat'], lst['long']),
+                    map: map,
                 });
-                placeholder = setTimeout(function(){
-                    deleteMarkers(null, markers3);
-                }, 60000);
+                setTimeout(function(){
+                    $('#drop').click();
+                }, 20);
             }
             
         });
@@ -498,7 +497,7 @@ var PubSub = function (params) {
     // Subscribes to topic on Solace message router
     pubsub.subscribe = function () {
       try {
-        placeholder = document.getElementById(topicID).value;
+        placeholder = pubsub.topicName;
         if (pubsub.session !== null) {
             if (pubsub.subscribed) {
                 pubsub.log('Already subscribed to "' + placeholder
