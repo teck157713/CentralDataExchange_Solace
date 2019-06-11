@@ -196,9 +196,13 @@ var PubSub = function (params) {
 
     pubsub.sendGovText = function () {
         if (pubsub.session !== null) {
-            processgov("https://api.data.gov.sg/v1/transport/traffic-images", function(resdict){
+            processgov("https://api.data.gov.sg/v1/transport/traffic-images", function lambda(resdict){
                 resdict = resdict.items[0].cameras;
-                pubsub.sendtrafficimg("LTA/1/img_data/raw", resdict[enumvalue]);
+                if (resdict.length > enumvalue){
+                    pubsub.sendtrafficimg("LTA/1/img_data/raw", resdict[enumvalue]);
+                } else {
+                    enumvalue = 0;
+                }
             });
         } else {
             pubsub.log('Cannot send messages because not connected to Solace message router.');
