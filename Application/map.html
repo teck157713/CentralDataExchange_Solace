@@ -31,18 +31,38 @@
   <body>
     <div id="map"></div>
     <div class="header">
+        
       <ul class="animations">
-        <li><a href="#" id="drop">Drop</a>
-        <li><a href="#" id="wobble">Wobble</a>
-        <li><a href="#" id="bounce">Bounce</a>
+        <li><a href="#" id="drop">Drop</a></li>
+        <li><select id="filtertype" onchange="filterMarkers(this.id, this.value);">
+          <option value="default">Please select category</option>
+          <option value="taxi">taxi</option>
+          <option value="temperature">temperature</option>
+          <option value="event">event</option>
+        </select></li>
+        <li><select id="traffic" onchange="filterMarkers(this.id, this.value);">
+            <option value="*">Define prediction chances of Traffic</option>
+            <option value="1*">>30%</option>
+            <option value="11*">>50%</option>
+            <option value="111*">>65%</option>
+            <option value="1111*">>80%</option>
+        </select></li>
+        <li><select id="fire" onchange="filterMarkers(this.id, this.value);">
+            <option value="*">Define prediction chances of Fire</option>
+            <option value="1*">>30%</option>
+            <option value="11*">>50%</option>
+            <option value="111*">>65%</option>
+            <option value="1111*">>80%</option>
+        </select></li>
+        <li><select id="smoke" onchange="filterMarkers(this.id, this.value);">
+            <option value="*">Define prediction chances of Smoke</option>
+            <option value="1*">>30%</option>
+            <option value="11*">>50%</option>
+            <option value="111*">>65%</option>
+            <option value="1111*">>80%</option>
+        </select></li>
       </ul>
     </div>
-    <select id="filtertype" onchange="filterMarkers(this.value);">
-      <option value="default">Please select category</option>
-      <option value="taxi">taxi</option>
-      <option value="temperature">temperature</option>
-      <option value="rain">rain</option>
-    </select>
     <div type="hidden" class="subscribelog" id="subscribelog" contentEditable="true"></div>
     <table border="1", width="400px", id='table1' type="hidden"></table>
     <input id="topicname" type="hidden" placeholder="Insert Topic" value="*/>"/>
@@ -64,11 +84,97 @@
       var locations2 = [];
       var markers3 = [];
       var locations3 = [];
+      var markers1 = [];
+      var FilterInput = "";
 
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 1.35, lng: 103.8},
-          zoom: 11
+          zoom: 11,
+        });
+
+        CustomMarker.prototype = new google.maps.OverlayView();
+
+        CustomMarker.prototype.draw = function() {
+            var self = this;
+            var res = "";
+            var div = this.div;
+            if (!div) {
+                div = this.div = $('' +
+                    '<div>' +
+                    '<div class="shadow"></div>' +
+                    '<div class="pulse"></div>' +
+                    '<div class="pin-wrap">' +
+                    '<div class="pin"></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '')[0];
+                this.pinWrap = this.div.getElementsByClassName('pin-wrap');
+                this.pin = this.div.getElementsByClassName('pin');
+                this.pinShadow = this.div.getElementsByClassName('shadow');
+                div.style.position = 'absolute';
+                div.style.cursor = 'pointer';
+                var panes = this.getPanes();
+                panes.overlayImage.appendChild(div);
+                google.maps.event.addDomListener(div, "click", function(event) {
+                    google.maps.event.trigger(self, "click", event);
+                });
+            }
+            var point = this.getProjection().fromLatLngToDivPixel(this.position);
+            if (point) {
+                div.style.left = point.x + 'px';
+                div.style.top = point.y + 'px';
+            }
+            this.res = setTimeout(function(){
+                CustomMarker.prototype.remove(div);
+            }, 60000);
+        };
+        CustomMarker.prototype.remove = function(spec) {
+          try {
+          spec.parentNode.removeChild(spec);
+          } catch (err){}
+        };
+
+        CustomMarker.prototype.animateDrop = function() {
+            dynamics.stop(this.pinWrap);
+            dynamics.css(this.pinWrap, {
+                'transform': 'scaleY(2) translateY(-'+$('#map').outerHeight()+'px)',
+                'opacity': '1',
+            });
+            dynamics.animate(this.pinWrap, {
+                translateY: 0,
+                scaleY: 1.0,
+            }, {
+                type: dynamics.gravity,
+                duration: 1800,
+            });
+
+            dynamics.stop(this.pin);
+            dynamics.css(this.pin, {
+                'transform': 'none',
+            });
+            dynamics.animate(this.pin, {
+                scaleY: 0.8
+            }, {
+                type: dynamics.bounce,
+                duration: 1800,
+                bounciness: 600,
+            })
+
+            dynamics.stop(this.pinShadow);
+            dynamics.css(this.pinShadow, {
+                'transform': 'scale(0,0)',
+            });
+            dynamics.animate(this.pinShadow, {
+                scale: 1,
+            }, {
+                type: dynamics.gravity,
+                duration: 1800,
+            });
+        }
+
+        $('#drop').on('click', function(e) {
+            markers1.animateDrop();
         });
 
         var bounds = {
@@ -84,6 +190,7 @@
           editable: true,
           draggable: true
         });
+
 
         //ENABLE RECTANGLE FILTER
         //rectangle.setMap(map);
@@ -102,9 +209,13 @@
         // NOTICE: works only with "solclientjs-debug.js"
         solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
-        subscriber = new PubSub({logname : 'subscribelog', tableName : 'table1', topicID : 'topicname'});
+        subscriber = new PubSub({logname : 'subscribelog', tableName : 'table1', topicName : '*/>'});
         subscriber.connect(function(callback){
           subscriber.subscribe();
+        });
+        subscriberImage = new PubSub({logname : 'subscribelog', tableName : 'table1', topicName : 'LTA/1/img_data/filter/*/*/*/*/*'});
+        subscriberImage.connect(function(callback){
+          subscriberImage.subscribe();
         });
 
       }
@@ -134,21 +245,30 @@
         dictmarkers = [];
       }
 
-      filterMarkers = function (category){
+      filterMarkers = function (identification, category){
         //filter to clear visible markers
-        switch (category){
-          case "taxi":
-            clearlocations2();
-            clearlocations3();
-            break;
-          case "temperature":
-            clearmarkers();
-            clearlocations3();
-            break;
-          case "rain":
-            clearmarkers();
-            clearlocations2();
-            break;
+        if (identification == "filtertype"){
+          switch (category){
+            case "taxi":
+              clearlocations2();
+              clearlocations3();
+              break;
+            case "temperature":
+              clearmarkers();
+              clearlocations3();
+              break;
+            case "event":
+              clearmarkers();
+              clearlocations2();
+              break;
+          }
+        } else {
+          subscriberImage.unsubscribe();
+          FilterInput = document.getElementById('traffic').value + "/" + document.getElementById('fire').value + "/" + document.getElementById('smoke').value;
+          subscriberImage.topicName = "LTA/1/img_data/filter/*/*/" + FilterInput;
+          setTimeout(function(){
+            subscriberImage.subscribe();
+          }, 50);
         }
         function clearlocations2(){
           deleteMarkers(null, locations2);
@@ -168,156 +288,9 @@
 
       }
 
-
-      CustomMarker.prototype = new google.maps.OverlayView();
-
       function CustomMarker(opts) {
           this.setValues(opts);
       }
-
-      CustomMarker.prototype.draw = function() {
-          var self = this;
-          var div = this.div;
-          if (!div) {
-              div = this.div = $('' +
-                  '<div>' +
-                  '<div class="shadow"></div>' +
-                  '<div class="pulse"></div>' +
-                  '<div class="pin-wrap">' +
-                  '<div class="pin"></div>' +
-                  '</div>' +
-                  '</div>' +
-                  '')[0];
-              this.pinWrap = this.div.getElementsByClassName('pin-wrap');
-              this.pin = this.div.getElementsByClassName('pin');
-              this.pinShadow = this.div.getElementsByClassName('shadow');
-              div.style.position = 'absolute';
-              div.style.cursor = 'pointer';
-              var panes = this.getPanes();
-              panes.overlayImage.appendChild(div);
-              google.maps.event.addDomListener(div, "click", function(event) {
-                  google.maps.event.trigger(self, "click", event);
-              });
-          }
-          var point = this.getProjection().fromLatLngToDivPixel(this.position);
-          if (point) {
-              div.style.left = point.x + 'px';
-              div.style.top = point.y + 'px';
-          }
-      };
-
-      CustomMarker.prototype.animateDrop = function() {
-          dynamics.stop(this.pinWrap);
-          dynamics.css(this.pinWrap, {
-              'transform': 'scaleY(2) translateY(-'+$('#map').outerHeight()+'px)',
-              'opacity': '1',
-          });
-          dynamics.animate(this.pinWrap, {
-              translateY: 0,
-              scaleY: 1.0,
-          }, {
-              type: dynamics.gravity,
-              duration: 1800,
-          });
-
-          dynamics.stop(this.pin);
-          dynamics.css(this.pin, {
-              'transform': 'none',
-          });
-          dynamics.animate(this.pin, {
-              scaleY: 0.8
-          }, {
-              type: dynamics.bounce,
-              duration: 1800,
-              bounciness: 600,
-          })
-
-          dynamics.stop(this.pinShadow);
-          dynamics.css(this.pinShadow, {
-              'transform': 'scale(0,0)',
-          });
-          dynamics.animate(this.pinShadow, {
-              scale: 1,
-          }, {
-              type: dynamics.gravity,
-              duration: 1800,
-          });
-      }
-
-      CustomMarker.prototype.animateBounce = function() {
-          dynamics.stop(this.pinWrap);
-          dynamics.css(this.pinWrap, {
-              'transform': 'none',
-          });
-          dynamics.animate(this.pinWrap, {
-              translateY: -30
-          }, {
-              type: dynamics.forceWithGravity,
-              bounciness: 0,
-              duration: 500,
-              delay: 150,
-          });
-
-          dynamics.stop(this.pin);
-          dynamics.css(this.pin, {
-              'transform': 'none',
-          });
-          dynamics.animate(this.pin, {
-              scaleY: 0.8
-          }, {
-              type: dynamics.bounce,
-              duration: 800,
-              bounciness: 0,
-          });
-          dynamics.animate(this.pin, {
-              scaleY: 0.8
-          }, {
-              type: dynamics.bounce,
-              duration: 800,
-              bounciness: 600,
-              delay: 650,
-          });
-
-          dynamics.stop(this.pinShadow);
-          dynamics.css(this.pinShadow, {
-              'transform': 'none',
-          });
-          dynamics.animate(this.pinShadow, {
-              scale: 0.6,
-          }, {
-              type: dynamics.forceWithGravity,
-              bounciness: 0,
-              duration: 500,
-              delay: 150,
-          });
-      }
-
-      CustomMarker.prototype.animateWobble = function() {
-          dynamics.stop(this.pinWrap);
-          dynamics.css(this.pinWrap, {
-              'transform': 'none',
-          });
-          dynamics.animate(this.pinWrap, {
-              rotateZ: -45,
-          }, {
-              type: dynamics.bounce,
-              duration: 1800,
-          });
-
-          dynamics.stop(this.pin);
-          dynamics.css(this.pin, {
-              'transform': 'none',
-          });
-          dynamics.animate(this.pin, {
-              scaleX: 0.8
-          }, {
-              type: dynamics.bounce,
-              duration: 800,
-              bounciness: 1800,
-          });
-      }
-
-
 
       google.maps.event.addDomListener(window, 'load', initMap);
     </script>
