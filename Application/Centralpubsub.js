@@ -69,7 +69,7 @@ var PubSub = function (params) {
         if (pubsub.session !== null) {
             pubsub.log('Already connected and ready to send messages.');
             return;
-        }x
+        }
 
         var hosturl = account.HOSTURL;
         var username = account.USERNAME;
@@ -298,6 +298,7 @@ var PubSub = function (params) {
                     // Define message received event listener
                     pubsub.messageConsumer.on(solace.MessageConsumerEventName.MESSAGE, function (message) {
                       var result = message.getBinaryAttachment();
+                      console.log(result);
                       if (String(message.getDestination()).indexOf('NEA/1/temp_data/raw') >= 0){
                         TempEventCall(result, pubsub);
                         message.acknowledge();
