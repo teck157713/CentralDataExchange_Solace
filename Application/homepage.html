@@ -11,22 +11,27 @@
     </link>
     <link rel="stylesheet" type="text/css" href="css/samples.css">
     </link>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
 
     <!-- Load Solace Web Messaging API for JavaScript -->
     <script src="lib/solclient-debug.js"></script>
-
-    <!-- Load the Confirmed Delivery tutorial -->
-    <!-- <script src="producer.js"></script>
-    <script src="subscriber.js"></script> -->
     <script src="pubsub.js"></script>
+    <script src="pubsubmap.js"></script>
     <script src="ui.js"></script>
     <script src="config/config.js" type="text/javascript"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzHU1Oi7smE91XPeiY43wsRXdPG9RqzV8">
+    </script>
     <!-- script for microsoft api -->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <!-- Execute the Confirmed Delivery tutorial -->
     <script src="tempData.js"></script>
+    <link rel="import" href="map.html">
     <script>
+        var link = document.querySelector('link[rel="import"]');
+        var content = link.import;
+        var el = content.querySelector('.put-include-here');
+        document.body.appendChild(el.cloneNode(true));
+      </script>
+    <!-- <script>
         var producer = null;
         window.onload = function () {
             // Initialize factory with the most recent API defaults
@@ -38,7 +43,7 @@
             // NOTICE: works only with "solclientjs-debug.js"
             solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
-            // create the producer, specifying name of the subscription topic
+            create the producer, specifying name of the subscription topic
             producer = new PubSub({
                 logname: "publishlog",
                 topicName: "NEA/temperature",
@@ -72,9 +77,8 @@
             document.getElementById("subdisconnect2").addEventListener("click", subscriber2.disconnect);
             document.getElementById("subscribe").addEventListener("click", subscriber2.subscribe);
             document.getElementById("unsubscribe").addEventListener("click", subscriber2.unsubscribe);
-
         };
-    </script>
+    </script> -->
 </head>
 
 <body>
@@ -90,8 +94,10 @@
         </div>
     </div>
     <div class="w3-bar w3-black">
-        <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'Published')">Published Topics</button>
+        <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'Published')">Published
+            Topics</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'AvilTopics')">Topics Available</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'mapped')">Analytics and Mapping Example</button>
     </div>
 
     <div id="Published" class="w3-container w3-border pubsub">
@@ -132,6 +138,9 @@
                 <th>Description</th>
             </tr>
         </table>
+    </div>
 
+    <div id="mapped" class="w3-container w3-border pubsub" style="display:none">
+        <iframe src = "map.html" height="500" width="100%"></iframe>
     </div>
 </body>
