@@ -1,4 +1,4 @@
-var QueueConsumer = function (queueName,table,logs) {
+var QueueConsumer = function (queueName, table, logs) {
     'use strict';
     var consumer = {};
     consumer.session = null;
@@ -18,25 +18,25 @@ var QueueConsumer = function (queueName,table,logs) {
             var logTextArea = document.getElementById(consumer.logName);
             logTextArea.innerHTML += timestamp + line + '<br />';
             logTextArea.scrollTop = logTextArea.scrollHeight;
-          } catch (error) {
+        } catch (error) {
             alert(error.toString());
-          }
-        };
+        }
+    };
 
     consumer.log('\n*** Consumer to queue "' + consumer.queueName + '" is ready to connect ***');
 
-    consumer.table = function (messagee,topic,table) {
-        if(table === 'logtable'){
+    consumer.table = function (messagee, topic, table) {
+        if (table === 'logtable') {
             try {
                 var table = document.getElementById('logtable');
                 var row = table.insertRow(-1);
                 var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);    
+                var cell2 = row.insertCell(1);
                 cell1.innerHTML = topic;
                 cell2.innerHTML = messagee;
-              } catch (error) {
-                  consumer.log(error.toString());
-              }
+            } catch (error) {
+                consumer.log(error.toString());
+            }
         } else {
             try {
                 var text = String(messagee)
@@ -50,11 +50,11 @@ var QueueConsumer = function (queueName,table,logs) {
                 cell1.innerHTML = arr[0];
                 cell2.innerHTML = arr[1];
                 cell3.innerHTML = arr[2];
-              } catch (error) {
-                  consumer.log(error.toString());
-              }
+            } catch (error) {
+                consumer.log(error.toString());
+            }
         }
-      };
+    };
 
     // Establishes connection to Solace message router
     consumer.connect = function () {
@@ -74,11 +74,11 @@ var QueueConsumer = function (queueName,table,logs) {
         try {
             consumer.session = solace.SolclientFactory.createSession({
                 // solace.SessionProperties
-                url:      hosturl,
-                vpnName:  vpn,
+                url: hosturl,
+                vpnName: vpn,
                 userName: username,
                 password: pass,
-                });
+            });
         } catch (error) {
             consumer.log(error.toString());
         }
@@ -122,7 +122,10 @@ var QueueConsumer = function (queueName,table,logs) {
                     // Create a message consumer
                     consumer.messageConsumer = consumer.session.createMessageConsumer({
                         // solace.MessageConsumerProperties
-                        queueDescriptor: { name: consumer.queueName, type: solace.QueueType.QUEUE },
+                        queueDescriptor: {
+                            name: consumer.queueName,
+                            type: solace.QueueType.QUEUE
+                        },
                         acknowledgeMode: solace.MessageConsumerAcknowledgeMode.CLIENT, // Enabling Client ack
                     });
                     // Define message consumer event listeners
@@ -148,21 +151,30 @@ var QueueConsumer = function (queueName,table,logs) {
                         // assuming if message is a message if less than 255, else image
                         if (result.length < 255) {
                             consumer.log('Received message: "' + result + '",' +
-                            ' details:\n' + message.getBinaryAttachment());
+                                ' details:\n' + message.getBinaryAttachment());
                             // Need to explicitly ack otherwise it will not be deleted from the message router
                             var topic = String(message.getDestination())
-                            consumer.table(message.getBinaryAttachment(), topic,consumer.tableName);
+                            consumer.table(message.getBinaryAttachment(), topic, consumer.tableName);
                             message.acknowledge();
-                            consumer.temp = {'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
+                            consumer.temp = {
+                                'content': result,
+                                'topic': message.getDestination(),
+                                'delivery': message.getDeliveryMode()
+                            };
                         } else {
                             //convert and show image
                             var imgbyte = result.split(",");
                             var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
                             consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
                             var topic = String(message.getDestination())
-                            consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />', topic,consumer.tableName);
+                            consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />', topic, consumer.tableName);
                             message.acknowledge();
-                            consumer.temp = {'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />', 'content' : result, 'topic' : message.getDestination(), 'delivery' : message.getDeliveryMode()};
+                            consumer.temp = {
+                                'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />',
+                                'content': result,
+                                'topic': message.getDestination(),
+                                'delivery': message.getDeliveryMode()
+                            };
                         }
 
                     });
@@ -215,4 +227,3 @@ var QueueConsumer = function (queueName,table,logs) {
 
     return consumer;
 };
-
