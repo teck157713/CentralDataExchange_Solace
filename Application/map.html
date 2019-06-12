@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<script>
 
 <head>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
@@ -39,28 +39,32 @@
   <div class="header">
 
     <ul class="animations">
-      <li><a href="#" id="drop">Drop</a></li>
-      <li><select class="w3-select w3-hover-border-teal" id="filtertype" onchange="filterMarkers(this.id, this.value);">
+      <li><a href="#" id="drop" style="visibility: hidden">Drop</a></li>
+      <li><select class="w3-select w3-border w3-hover-border-teal" id="filtertype"
+          onchange="filterMarkers(this.id, this.value);">
           <option value="default">Please select category</option>
           <option value="taxi">taxi</option>
           <option value="temperature">temperature</option>
           <option value="event">event</option>
         </select></li>
-      <li><select class="w3-select w3-hover-border-teal" id="traffic" onchange="filterMarkers(this.id, this.value);">
+      <li><select class="w3-select w3-border w3-hover-border-teal" id="traffic"
+          onchange="filterMarkers(this.id, this.value);">
           <option value="*">Define prediction chances of Traffic</option>
           <option value="1*">>30%</option>
           <option value="11*">>50%</option>
           <option value="111*">>65%</option>
           <option value="1111*">>80%</option>
         </select></li>
-      <li><select class="w3-select w3-hover-border-teal" id="fire" onchange="filterMarkers(this.id, this.value);">
+      <li><select class="w3-select w3-border w3-hover-border-teal" id="fire"
+          onchange="filterMarkers(this.id, this.value);">
           <option value="*">Define prediction chances of Fire</option>
           <option value="1*">>30%</option>
           <option value="11*">>50%</option>
           <option value="111*">>65%</option>
           <option value="1111*">>80%</option>
         </select></li>
-      <li><select class="w3-select w3-hover-border-teal" id="smoke" onchange="filterMarkers(this.id, this.value);">
+      <li><select class="w3-select w3-border w3-hover-border-teal" id="smoke"
+          onchange="filterMarkers(this.id, this.value);">
           <option value="*">Define prediction chances of Smoke</option>
           <option value="1*">>30%</option>
           <option value="11*">>50%</option>
@@ -69,7 +73,7 @@
         </select></li>
     </ul>
   </div>
-  <div type="hidden" class="subscribelog" id="subscribelog" contentEditable="true"></div>
+  <div style="visibility: hidden" id="subscribelog" contentEditable="true"></div>
   <table border="1" , width="400px" , id='table1' type="hidden"></table>
   <input id="topicname" type="hidden" placeholder="Insert Topic" value="*/>" />
   <script>
@@ -312,12 +316,14 @@
           markerCluster.clearMarkers();
         }
       }
-      function showPredictionlabel(){
+
+      function showPredictionlabel() {
         document.getElementById('traffic').style.display = "block";
         document.getElementById('fire').style.display = "block";
         document.getElementById('smoke').style.display = "block";
       }
-      function hidePredictionlabel(){
+
+      function hidePredictionlabel() {
         document.getElementById('traffic').style.display = "none";
         document.getElementById('fire').style.display = "none";
         document.getElementById('smoke').style.display = "none";
@@ -339,4 +345,4 @@
   <script src='http://github.com/michaelvillar/dynamics.js/releases/download/0.0.8/dynamics.min.js'></script>
 </body>
 
-</html>
+</script>
