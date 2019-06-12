@@ -39,11 +39,11 @@
             document.getElementById("startconsume2").addEventListener("click", consumer2.startConsume);
             document.getElementById("stopconsume2").addEventListener("click", consumer2.stopConsume);
 
-            consumer3 = new QueueConsumer('SOLACE_TOPICREG', 'regtable','log2');
-            document.getElementById("connect2").addEventListener("click", consumer3.connect);
-            document.getElementById("disconnect2").addEventListener("click", consumer3.disconnect);
-            document.getElementById("startconsume2").addEventListener("click", consumer3.startConsume);
-            document.getElementById("stopconsume2").addEventListener("click", consumer3.stopConsume);
+            consumer3 = new QueueConsumer('SOLACE_TOPICREG', 'toptable','log3');
+            document.getElementById("connect3").addEventListener("click", consumer3.connect);
+            document.getElementById("disconnect3").addEventListener("click", consumer3.disconnect);
+            document.getElementById("startconsume3").addEventListener("click", consumer3.startConsume);
+            document.getElementById("stopconsume3").addEventListener("click", consumer3.stopConsume);
         };
     </script>
 </head>
@@ -64,6 +64,7 @@
         <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'messageLog')">Message
             Log</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'regAgency')">Register Agency</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'regTopic')">Register New Topic</button>
     </div>
 
     <div id="messageLog" class="w3-container w3-border pubsub">
@@ -125,10 +126,10 @@
                 </div>
                     <p>
                         <div class="input">
-                            <div class="publishlog" id="log2" contentEditable="true"></div>
+                            <div class="publishlog" id="log3" contentEditable="true"></div>
                         </div>
                     </p>
-                    <table class="w3-table-all w3-hoverable w3-card-4" , id="regtable">
+                    <table class="w3-table-all w3-hoverable w3-card-4" , id="toptable">
                         <tr class='w3-teal'>
                             <th>Agency Name</th>
                             <th>Topic</th>

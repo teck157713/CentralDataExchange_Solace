@@ -28,7 +28,7 @@ var QueueConsumer = function (queueName, table, logs) {
     consumer.table = function (messagee, topic, table) {
         if (table === 'logtable') {
             try {
-                var table = document.getElementById('logtable');
+                var table = document.getElementById(table);
                 var row = table.insertRow(-1);
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
@@ -42,7 +42,7 @@ var QueueConsumer = function (queueName, table, logs) {
                 var text = String(messagee)
                 var arr = text.split(",")
                 // alert(arr)
-                var table = document.getElementById('regtable');
+                var table = document.getElementById(table);
                 var row = table.insertRow(-1);
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
