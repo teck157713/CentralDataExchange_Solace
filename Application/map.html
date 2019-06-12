@@ -6,6 +6,7 @@
     <title>Listening to Events</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <link rel="stylesheet" type="text/css" href="css/samples.css"></link>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -34,27 +35,27 @@
         
       <ul class="animations">
         <li><a href="#" id="drop">Drop</a></li>
-        <li><select id="filtertype" onchange="filterMarkers(this.id, this.value);">
+        <li><select class="w3-select w3-hover-border-teal" id="filtertype" onchange="filterMarkers(this.id, this.value);">
           <option value="default">Please select category</option>
           <option value="taxi">taxi</option>
           <option value="temperature">temperature</option>
           <option value="event">event</option>
         </select></li>
-        <li><select id="traffic" onchange="filterMarkers(this.id, this.value);">
+        <li><select class="w3-select w3-hover-border-teal" id="traffic" onchange="filterMarkers(this.id, this.value);">
             <option value="*">Define prediction chances of Traffic</option>
             <option value="1*">>30%</option>
             <option value="11*">>50%</option>
             <option value="111*">>65%</option>
             <option value="1111*">>80%</option>
         </select></li>
-        <li><select id="fire" onchange="filterMarkers(this.id, this.value);">
+        <li><select class="w3-select w3-hover-border-teal" id="fire" onchange="filterMarkers(this.id, this.value);">
             <option value="*">Define prediction chances of Fire</option>
             <option value="1*">>30%</option>
             <option value="11*">>50%</option>
             <option value="111*">>65%</option>
             <option value="1111*">>80%</option>
         </select></li>
-        <li><select id="smoke" onchange="filterMarkers(this.id, this.value);">
+        <li><select class="w3-select w3-hover-border-teal" id="smoke" onchange="filterMarkers(this.id, this.value);">
             <option value="*">Define prediction chances of Smoke</option>
             <option value="1*">>30%</option>
             <option value="11*">>50%</option>
