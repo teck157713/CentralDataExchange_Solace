@@ -5,15 +5,23 @@ function validate() {
     var password = document.getElementById("pwd").value;
     if (username == "NEA" && password == "pass") {
         console.log("Login successfully");
-        window.location.replace("homepage.html"); // Redirecting to other page.
+        // window.location.replace("homepage.html"); // Redirecting to other page.
+        swal({title: "Login successful", text: "Welcome Back!", icon: "success"
+            })
+        .then((value) => window.location.replace("admin.html"));
         return false;
     } else if (username == "admin" && password == "pass") {
         console.log("Login successfully");
-        window.location.replace("admin.html"); // Redirecting to other page.
+         // Redirecting to other page.
+        swal({title: "Login successful", text: "Welcome Back!", icon: "success"
+            })
+        .then((value) => window.location.replace("admin.html"));
         return false;
     } else {
         attempt--; // Decrementing by one.
-        alert("You have left " + attempt + " attempt;");
+        // alert("You have left " + attempt + " attempt;");
+        swal({title: "Wrong Login Details!", text: "You have " + attempt + " attempts left", icon: "error"
+            });
         // Disabling fields after 3 attempts.
         if (attempt == 0) {
             document.getElementById("uname").disabled = true;
