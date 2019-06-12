@@ -26,6 +26,7 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
     var publisher = null;
 		window.onload = function () {
@@ -44,7 +45,10 @@
             console.debug("Caught send button event");
             publisher.publish()
             publisher.disconnect()
-            window.location.href = 'postreg.html';
+            swal({title: "Thanks for registering! ", text: "Your registration will be confirmed in 3 working days", icon: "success"
+            })
+            .then((value) => window.location.replace("login.html"))
+            // window.location.href = 'postreg.html';
         });
     };
   </script>

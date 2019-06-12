@@ -26,6 +26,7 @@
 
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script>
     var publisher = null;
     window.onload = function () {
@@ -44,7 +45,8 @@
         console.debug("Caught send button event");
         publisher.publish()
         publisher.disconnect()
-        alert("Registered successfully");
+        swal({title: "Thanks for registering! ", text: "Your registration will be confirmed in 3 working days", icon: "success"
+            })
         document.getElementById("topicreg").reset();
       });
     };
@@ -55,21 +57,21 @@
   <form id='topicreg' class="w3-panel was-validated">
     <div class="form-group">
       <label class="w3-text-teal" for="aname">Agency Name:</label>
-      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id=" aname"
+      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="aname"
         placeholder="Enter the publishing Agency Name" name="aname" required>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="form-group">
       <label class="w3-text-teal" for="topic">Topic:</label>
-      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id=" topic"
+      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="topic"
         placeholder="Enter Topic to be Published" name="topic" required>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="form-group">
       <label class="w3-text-teal" for="desc">Description:</label>
-      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id=" desc"
+      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="desc"
         placeholder="Give a brief description about the topic" name="desc" required>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
