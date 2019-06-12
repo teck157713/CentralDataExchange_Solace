@@ -269,14 +269,20 @@
           case "taxi":
             clearlocations2();
             clearlocations3();
+            hidePredictionlabel();
             break;
           case "temperature":
             clearmarkers();
             clearlocations3();
+            hidePredictionlabel();
             break;
           case "event":
             clearmarkers();
             clearlocations2();
+            showPredictionlabel();
+            break;
+          case "default":
+            showPredictionlabel();
             break;
         }
       } else {
@@ -305,6 +311,16 @@
         if (markerCluster) {
           markerCluster.clearMarkers();
         }
+      }
+      function showPredictionlabel(){
+        document.getElementById('traffic').style.display = "block";
+        document.getElementById('fire').style.display = "block";
+        document.getElementById('smoke').style.display = "block";
+      }
+      function hidePredictionlabel(){
+        document.getElementById('traffic').style.display = "none";
+        document.getElementById('fire').style.display = "none";
+        document.getElementById('smoke').style.display = "none";
       }
 
     }
