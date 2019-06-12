@@ -1,303 +1,326 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <title>Listening to Events</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-    <link rel="stylesheet" type="text/css" href="css/samples.css"></link>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-    <!-- Load Solace Web Messaging API for JavaScript -->
-    <script src="lib/solclient-debug.js"></script>
 
-    <!-- Load the Confirmed Delivery tutorial -->
-    <script src="pubsubmap.js"></script>
-    <script src="config/config.js" type="text/javascript"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzHU1Oi7smE91XPeiY43wsRXdPG9RqzV8">
-    </script>
-  </head>
-  <body>
-    <div id="map"></div>
-    <div class="header">
-        
-      <ul class="animations">
-        <li><a href="#" id="drop">Drop</a></li>
-        <li><select class="w3-select w3-hover-border-teal" id="filtertype" onchange="filterMarkers(this.id, this.value);">
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Listening to Events</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <link rel="stylesheet" type="text/css" href="css/samples.css">
+  </link>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    #map {
+      height: 100%;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <!-- Load Solace Web Messaging API for JavaScript -->
+  <script src="lib/solclient-debug.js"></script>
+
+  <!-- Load the Confirmed Delivery tutorial -->
+  <script src="pubsubmap.js"></script>
+  <script src="config/config.js" type="text/javascript"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzHU1Oi7smE91XPeiY43wsRXdPG9RqzV8">
+  </script>
+</head>
+
+<body>
+  <div id="map"></div>
+  <div class="header">
+
+    <ul class="animations">
+      <li><a href="#" id="drop">Drop</a></li>
+      <li><select class="w3-select w3-hover-border-teal" id="filtertype" onchange="filterMarkers(this.id, this.value);">
           <option value="default">Please select category</option>
           <option value="taxi">taxi</option>
           <option value="temperature">temperature</option>
           <option value="event">event</option>
         </select></li>
-        <li><select class="w3-select w3-hover-border-teal" id="traffic" onchange="filterMarkers(this.id, this.value);">
-            <option value="*">Define prediction chances of Traffic</option>
-            <option value="1*">>30%</option>
-            <option value="11*">>50%</option>
-            <option value="111*">>65%</option>
-            <option value="1111*">>80%</option>
+      <li><select class="w3-select w3-hover-border-teal" id="traffic" onchange="filterMarkers(this.id, this.value);">
+          <option value="*">Define prediction chances of Traffic</option>
+          <option value="1*">>30%</option>
+          <option value="11*">>50%</option>
+          <option value="111*">>65%</option>
+          <option value="1111*">>80%</option>
         </select></li>
-        <li><select class="w3-select w3-hover-border-teal" id="fire" onchange="filterMarkers(this.id, this.value);">
-            <option value="*">Define prediction chances of Fire</option>
-            <option value="1*">>30%</option>
-            <option value="11*">>50%</option>
-            <option value="111*">>65%</option>
-            <option value="1111*">>80%</option>
+      <li><select class="w3-select w3-hover-border-teal" id="fire" onchange="filterMarkers(this.id, this.value);">
+          <option value="*">Define prediction chances of Fire</option>
+          <option value="1*">>30%</option>
+          <option value="11*">>50%</option>
+          <option value="111*">>65%</option>
+          <option value="1111*">>80%</option>
         </select></li>
-        <li><select class="w3-select w3-hover-border-teal" id="smoke" onchange="filterMarkers(this.id, this.value);">
-            <option value="*">Define prediction chances of Smoke</option>
-            <option value="1*">>30%</option>
-            <option value="11*">>50%</option>
-            <option value="111*">>65%</option>
-            <option value="1111*">>80%</option>
+      <li><select class="w3-select w3-hover-border-teal" id="smoke" onchange="filterMarkers(this.id, this.value);">
+          <option value="*">Define prediction chances of Smoke</option>
+          <option value="1*">>30%</option>
+          <option value="11*">>50%</option>
+          <option value="111*">>65%</option>
+          <option value="1111*">>80%</option>
         </select></li>
-      </ul>
-    </div>
-    <div type="hidden" class="subscribelog" id="subscribelog" contentEditable="true"></div>
-    <table border="1", width="400px", id='table1' type="hidden"></table>
-    <input id="topicname" type="hidden" placeholder="Insert Topic" value="*/>"/>
-    <script>
-      // In the following example, markers appear when the user clicks on the map.
-      // Each marker is labeled with a single alphabetical character.
-      var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      var labelIndex = 0;
-      // This example adds a user-editable rectangle to the map.
-      // When the user changes the bounds of the rectangle,
-      // an info window pops up displaying the new bounds.
+    </ul>
+  </div>
+  <div type="hidden" class="subscribelog" id="subscribelog" contentEditable="true"></div>
+  <table border="1" , width="400px" , id='table1' type="hidden"></table>
+  <input id="topicname" type="hidden" placeholder="Insert Topic" value="*/>" />
+  <script>
+    // In the following example, markers appear when the user clicks on the map.
+    // Each marker is labeled with a single alphabetical character.
+    var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var labelIndex = 0;
+    // This example adds a user-editable rectangle to the map.
+    // When the user changes the bounds of the rectangle,
+    // an info window pops up displaying the new bounds.
 
-      var rectangle;
-      var map;
-      var infoWindow;
-      var markers = [];
-      var markers2 = [];
-      var markerCluster;
-      var locations2 = [];
-      var markers3 = [];
-      var locations3 = [];
-      var markers1 = [];
-      var FilterInput = "";
+    var rectangle;
+    var map;
+    var infoWindow;
+    var markers = [];
+    var markers2 = [];
+    var markerCluster;
+    var locations2 = [];
+    var markers3 = [];
+    var locations3 = [];
+    var markers1 = [];
+    var FilterInput = "";
 
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 1.35, lng: 103.8},
-          zoom: 11,
-        });
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: {
+          lat: 1.35,
+          lng: 103.8
+        },
+        zoom: 11,
+      });
 
-        CustomMarker.prototype = new google.maps.OverlayView();
+      CustomMarker.prototype = new google.maps.OverlayView();
 
-        CustomMarker.prototype.draw = function() {
-            var self = this;
-            var res = "";
-            var div = this.div;
-            if (!div) {
-                div = this.div = $('' +
-                    '<div>' +
-                    '<div class="shadow"></div>' +
-                    '<div class="pulse"></div>' +
-                    '<div class="pin-wrap">' +
-                    '<div class="pin"></div>' +
-                    '</div>' +
-                    '</div>' +
-                    '')[0];
-                this.pinWrap = this.div.getElementsByClassName('pin-wrap');
-                this.pin = this.div.getElementsByClassName('pin');
-                this.pinShadow = this.div.getElementsByClassName('shadow');
-                div.style.position = 'absolute';
-                div.style.cursor = 'pointer';
-                var panes = this.getPanes();
-                panes.overlayImage.appendChild(div);
-                google.maps.event.addDomListener(div, "click", function(event) {
-                    google.maps.event.trigger(self, "click", event);
-                });
-            }
-            var point = this.getProjection().fromLatLngToDivPixel(this.position);
-            if (point) {
-                div.style.left = point.x + 'px';
-                div.style.top = point.y + 'px';
-            }
-            this.res = setTimeout(function(){
-                CustomMarker.prototype.remove(div);
-            }, 60000);
-        };
-        CustomMarker.prototype.remove = function(spec) {
-          try {
+      CustomMarker.prototype.draw = function () {
+        var self = this;
+        var res = "";
+        var div = this.div;
+        if (!div) {
+          div = this.div = $('' +
+            '<div>' +
+            '<div class="shadow"></div>' +
+            '<div class="pulse"></div>' +
+            '<div class="pin-wrap">' +
+            '<div class="pin"></div>' +
+            '</div>' +
+            '</div>' +
+            '')[0];
+          this.pinWrap = this.div.getElementsByClassName('pin-wrap');
+          this.pin = this.div.getElementsByClassName('pin');
+          this.pinShadow = this.div.getElementsByClassName('shadow');
+          div.style.position = 'absolute';
+          div.style.cursor = 'pointer';
+          var panes = this.getPanes();
+          panes.overlayImage.appendChild(div);
+          google.maps.event.addDomListener(div, "click", function (event) {
+            google.maps.event.trigger(self, "click", event);
+          });
+        }
+        var point = this.getProjection().fromLatLngToDivPixel(this.position);
+        if (point) {
+          div.style.left = point.x + 'px';
+          div.style.top = point.y + 'px';
+        }
+        this.res = setTimeout(function () {
+          CustomMarker.prototype.remove(div);
+        }, 60000);
+      };
+      CustomMarker.prototype.remove = function (spec) {
+        try {
           spec.parentNode.removeChild(spec);
-          } catch (err){}
-        };
+        } catch (err) {}
+      };
 
-        CustomMarker.prototype.animateDrop = function() {
-            dynamics.stop(this.pinWrap);
-            dynamics.css(this.pinWrap, {
-                'transform': 'scaleY(2) translateY(-'+$('#map').outerHeight()+'px)',
-                'opacity': '1',
-            });
-            dynamics.animate(this.pinWrap, {
-                translateY: 0,
-                scaleY: 1.0,
-            }, {
-                type: dynamics.gravity,
-                duration: 1800,
-            });
+      CustomMarker.prototype.animateDrop = function () {
+        dynamics.stop(this.pinWrap);
+        dynamics.css(this.pinWrap, {
+          'transform': 'scaleY(2) translateY(-' + $('#map').outerHeight() + 'px)',
+          'opacity': '1',
+        });
+        dynamics.animate(this.pinWrap, {
+          translateY: 0,
+          scaleY: 1.0,
+        }, {
+          type: dynamics.gravity,
+          duration: 1800,
+        });
 
-            dynamics.stop(this.pin);
-            dynamics.css(this.pin, {
-                'transform': 'none',
-            });
-            dynamics.animate(this.pin, {
-                scaleY: 0.8
-            }, {
-                type: dynamics.bounce,
-                duration: 1800,
-                bounciness: 600,
-            })
+        dynamics.stop(this.pin);
+        dynamics.css(this.pin, {
+          'transform': 'none',
+        });
+        dynamics.animate(this.pin, {
+          scaleY: 0.8
+        }, {
+          type: dynamics.bounce,
+          duration: 1800,
+          bounciness: 600,
+        })
 
-            dynamics.stop(this.pinShadow);
-            dynamics.css(this.pinShadow, {
-                'transform': 'scale(0,0)',
-            });
-            dynamics.animate(this.pinShadow, {
-                scale: 1,
-            }, {
-                type: dynamics.gravity,
-                duration: 1800,
-            });
+        dynamics.stop(this.pinShadow);
+        dynamics.css(this.pinShadow, {
+          'transform': 'scale(0,0)',
+        });
+        dynamics.animate(this.pinShadow, {
+          scale: 1,
+        }, {
+          type: dynamics.gravity,
+          duration: 1800,
+        });
+      }
+
+      $('#drop').on('click', function (e) {
+        markers1.animateDrop();
+      });
+
+      var bounds = {
+        east: 103.9,
+        west: 103.7,
+        north: 1.30,
+        south: 1.40
+      };
+
+      // Define the rectangle and set its editable property to true.
+      rectangle = new google.maps.Rectangle({
+        bounds: bounds,
+        editable: true,
+        draggable: true
+      });
+
+
+      //ENABLE RECTANGLE FILTER
+      //rectangle.setMap(map);
+
+      // Add an event listener on the rectangle.
+      rectangle.addListener('bounds_changed', showNewRect);
+
+      // Define an info window on the map.
+      infoWindow = new google.maps.InfoWindow();
+      // Initialize factory with the most recent API defaults
+      var factoryProps = new solace.SolclientFactoryProperties();
+      factoryProps.profile = solace.SolclientFactoryProfiles.version10;
+      solace.SolclientFactory.init(factoryProps);
+
+      // enable logging to JavaScript console at WARN level
+      // NOTICE: works only with "solclientjs-debug.js"
+      solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
+
+      subscriber = new PubSub({
+        logname: 'subscribelog',
+        tableName: 'table1',
+        topicName: '*/>'
+      });
+      subscriber.connect(function (callback) {
+        subscriber.subscribe();
+      });
+      subscriberImage = new PubSub({
+        logname: 'subscribelog',
+        tableName: 'table1',
+        topicName: 'LTA/1/img_data/filter/*/*/*/*/*'
+      });
+      subscriberImage.connect(function (callback) {
+        subscriberImage.subscribe();
+      });
+
+    }
+    // Show the new coordinates for the rectangle in an info window.
+
+    /** @this {google.maps.Rectangle} */
+    function showNewRect(event) {
+      var ne = rectangle.getBounds().getNorthEast();
+      var sw = rectangle.getBounds().getSouthWest();
+
+      var contentString = '<b>Rectangle moved.</b><br>' +
+        'New north-east corner: ' + ne.lat() + ', ' + ne.lng() + '<br>' +
+        'New south-west corner: ' + sw.lat() + ', ' + sw.lng();
+
+      // Set the info window's content and position.
+      infoWindow.setContent(contentString);
+      infoWindow.setPosition(ne);
+
+      infoWindow.open(map);
+    }
+
+    // Deletes All markers in the array
+    function deleteMarkers(map, dictmarkers) {
+      for (var i = 0; i < dictmarkers.length; i++) {
+        dictmarkers[i].setMap(map);
+      }
+      dictmarkers = [];
+    }
+
+    filterMarkers = function (identification, category) {
+      //filter to clear visible markers
+      if (identification == "filtertype") {
+        switch (category) {
+          case "taxi":
+            clearlocations2();
+            clearlocations3();
+            break;
+          case "temperature":
+            clearmarkers();
+            clearlocations3();
+            break;
+          case "event":
+            clearmarkers();
+            clearlocations2();
+            break;
         }
-
-        $('#drop').on('click', function(e) {
-            markers1.animateDrop();
-        });
-
-        var bounds = {
-          east: 103.9,
-          west: 103.7,
-          north: 1.30,
-          south: 1.40
-        };
-
-        // Define the rectangle and set its editable property to true.
-        rectangle = new google.maps.Rectangle({
-          bounds: bounds,
-          editable: true,
-          draggable: true
-        });
-
-
-        //ENABLE RECTANGLE FILTER
-        //rectangle.setMap(map);
-
-        // Add an event listener on the rectangle.
-        rectangle.addListener('bounds_changed', showNewRect);
-
-        // Define an info window on the map.
-        infoWindow = new google.maps.InfoWindow();
-        // Initialize factory with the most recent API defaults
-        var factoryProps = new solace.SolclientFactoryProperties();
-        factoryProps.profile = solace.SolclientFactoryProfiles.version10;
-        solace.SolclientFactory.init(factoryProps);
-
-        // enable logging to JavaScript console at WARN level
-        // NOTICE: works only with "solclientjs-debug.js"
-        solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
-
-        subscriber = new PubSub({logname : 'subscribelog', tableName : 'table1', topicName : '*/>'});
-        subscriber.connect(function(callback){
-          subscriber.subscribe();
-        });
-        subscriberImage = new PubSub({logname : 'subscribelog', tableName : 'table1', topicName : 'LTA/1/img_data/filter/*/*/*/*/*'});
-        subscriberImage.connect(function(callback){
+      } else {
+        subscriberImage.unsubscribe();
+        FilterInput = document.getElementById('traffic').value + "/" + document.getElementById('fire').value + "/" +
+          document.getElementById('smoke').value;
+        subscriberImage.topicName = "LTA/1/img_data/filter/*/*/" + FilterInput;
+        setTimeout(function () {
           subscriberImage.subscribe();
-        });
-
-      }
-      // Show the new coordinates for the rectangle in an info window.
-
-      /** @this {google.maps.Rectangle} */
-      function showNewRect(event) {
-        var ne = rectangle.getBounds().getNorthEast();
-        var sw = rectangle.getBounds().getSouthWest();
-
-        var contentString = '<b>Rectangle moved.</b><br>' +
-            'New north-east corner: ' + ne.lat() + ', ' + ne.lng() + '<br>' +
-            'New south-west corner: ' + sw.lat() + ', ' + sw.lng();
-
-        // Set the info window's content and position.
-        infoWindow.setContent(contentString);
-        infoWindow.setPosition(ne);
-
-        infoWindow.open(map);
+        }, 50);
       }
 
-      // Deletes All markers in the array
-      function deleteMarkers(map, dictmarkers) {
-        for (var i = 0; i < dictmarkers.length; i++) {
-          dictmarkers[i].setMap(map);
-        }
-        dictmarkers = [];
+      function clearlocations2() {
+        deleteMarkers(null, locations2);
+        locations2 = [];
       }
 
-      filterMarkers = function (identification, category){
-        //filter to clear visible markers
-        if (identification == "filtertype"){
-          switch (category){
-            case "taxi":
-              clearlocations2();
-              clearlocations3();
-              break;
-            case "temperature":
-              clearmarkers();
-              clearlocations3();
-              break;
-            case "event":
-              clearmarkers();
-              clearlocations2();
-              break;
-          }
-        } else {
-          subscriberImage.unsubscribe();
-          FilterInput = document.getElementById('traffic').value + "/" + document.getElementById('fire').value + "/" + document.getElementById('smoke').value;
-          subscriberImage.topicName = "LTA/1/img_data/filter/*/*/" + FilterInput;
-          setTimeout(function(){
-            subscriberImage.subscribe();
-          }, 50);
-        }
-        function clearlocations2(){
-          deleteMarkers(null, locations2);
-          locations2 = [];
-        }
-        function clearlocations3(){
-          deleteMarkers(null, locations3);
-          locations3 = [];
-        }
-        function clearmarkers(){
-          deleteMarkers(null, markers);
-          markers = [];
-          if (markerCluster){
-            markerCluster.clearMarkers();
-          }
-        }
-
+      function clearlocations3() {
+        deleteMarkers(null, locations3);
+        locations3 = [];
       }
 
-      function CustomMarker(opts) {
-          this.setValues(opts);
+      function clearmarkers() {
+        deleteMarkers(null, markers);
+        markers = [];
+        if (markerCluster) {
+          markerCluster.clearMarkers();
+        }
       }
 
-      google.maps.event.addDomListener(window, 'load', initMap);
-    </script>
-    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzHU1Oi7smE91XPeiY43wsRXdPG9RqzV8"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
-    <script src='http://github.com/michaelvillar/dynamics.js/releases/download/0.0.8/dynamics.min.js'></script>
-  </body>
+    }
+
+    function CustomMarker(opts) {
+      this.setValues(opts);
+    }
+
+    google.maps.event.addDomListener(window, 'load', initMap);
+  </script>
+  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzHU1Oi7smE91XPeiY43wsRXdPG9RqzV8">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+  <script src='http://github.com/michaelvillar/dynamics.js/releases/download/0.0.8/dynamics.min.js'></script>
+</body>
+
 </html>
