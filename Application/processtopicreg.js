@@ -118,7 +118,7 @@ var RegPublisher = function (queueName) {
             var aname = document.getElementById('aname').value;
             var desc = document.getElementById('desc').value;
             var topic = document.getElementById('topic').value;
-            var messageText = aname+","+desc+","+topic;
+            var messageText = aname+","+topic+","+desc;
             var message = solace.SolclientFactory.createMessage();
             publisher.log('Sending message "' + messageText + '" to queue "' + publisher.queueName + '"...');
             message.setDestination(solace.SolclientFactory.createDurableQueueDestination(publisher.queueName));
