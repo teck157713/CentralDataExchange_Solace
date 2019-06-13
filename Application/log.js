@@ -18,6 +18,9 @@ var QueueConsumer = function (queueName, table, logs) {
             var logTextArea = document.getElementById(consumer.logName);
             logTextArea.innerHTML += timestamp + line + '<br />';
             logTextArea.scrollTop = logTextArea.scrollHeight;
+            if (logTextArea.innerHTML.lastIndexOf('<br>') >= 1000) {
+                logTextArea.innerHTML = logTextArea.innerHTML.substring(logTextArea.innerHTML.indexOf('<br>') + 1);
+            }
         } catch (error) {
             alert(error.toString());
         }
