@@ -43,13 +43,19 @@
 		  publisher = new RegPublisher('SOLACE_REGISTER');
         $("#submit").click(function() {
             console.debug("Caught send button event");
-            publisher.publish()
-            publisher.disconnect()
-            swal({title: "Thanks for registering! ", text: "Your registration will be confirmed in 3 working days", icon: "success"
-            })
-            .then((value) => window.location.replace("login.html"))
-            // window.location.href = 'postreg.html';
-        });
+            var a = document.forms["register"]["aname"].value
+            var u = document.forms["register"]["uname"].value
+            var p = document.forms["register"]["pwd"].value
+            if (a ===""|| u ==="" ||p==="") {
+              swal({title: "Missing Inputs! ", text: "Please input all fields!", icon: "error"
+              })
+            }else{
+                publisher.publish()
+                publisher.disconnect()
+                swal({title: "Thanks for registering! ", text: "Your registration will be confirmed in 3 working days", icon: "success"
+                })
+                .then((value) => window.location.replace("login.html"))};
+          });
     };
   </script>
 </head>
@@ -68,7 +74,7 @@
         <div class="w3-container w3-teal">
         <p><strong>To register to make use of the Central Broker Service, please provide your solace cloud credentials (Username and Password), used to log in to the Solace Cloud Console</strong></p>
         </div>
-        <form  class="w3-panel was-validated">
+        <form name="register" class="w3-panel was-validated">
             <div class="form-group">
                 <label class="w3-text-teal" for="aname">Agency Name:</label>
                 <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="aname" placeholder="Enter Agency Name" name="aname" required>
