@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-  <title>Prototype Demo - Register</title>
+  <title>Prototype Demo - Register Topic</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
   <meta charset="utf-8" />
   <script src="lib/solclient-debug.js"></script>
@@ -27,7 +27,7 @@
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <script>
+  <script type="text/javascript">
     var publisher = null;
     window.onload = function () {
       // Initialize factory with the most recent API defaults
@@ -42,19 +42,26 @@
       // create the publisher, specifying name of the subscription topic
       publisher = new RegPublisher('SOLACE_TOPICREG');
       $("#submit").click(function () {
-        console.debug("Caught send button event");
-        publisher.publish()
-        publisher.disconnect()
-        swal({title: "Thanks for registering! ", text: "Your registration will be confirmed in 3 working days", icon: "success"
-            })
-        document.getElementById("topicreg").reset();
-      });
+            console.debug("Caught send button event");
+            var a = document.forms["topicreg"]["aname"].value
+            var t = document.forms["topicreg"]["topic"].value
+            var d = document.forms["topicreg"]["desc"].value
+            if (a ===""|| t ==="" ||d==="") {
+              swal({title: "Missing Inputs! ", text: "Please input all fields!", icon: "error"
+              })
+            }else{
+                publisher.publish()
+                publisher.disconnect()
+                swal({title: "Thanks for registering! ", text: "Your registration will be confirmed in 3 working days", 
+                      icon: "success"})
+                document.getElementById("topicreg").reset();}
+          });
     };
   </script>
 </head>
 
 <body>
-  <form id='topicreg' class="w3-panel was-validated">
+  <form name='topicreg'id='topicreg' class="w3-panel was-validated">
     <div class="form-group">
       <label class="w3-text-teal" for="aname">Agency Name:</label>
       <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="aname"
