@@ -8,7 +8,7 @@ function validate() {
         // window.location.replace("homepage.html"); // Redirecting to other page.
         swal({title: "Login successful", text: "Welcome Back!", icon: "success"
             })
-        .then((value) => window.location.replace("admin.html"));
+        .then((value) => window.location.replace("homepage.html"));
         return false;
     } else if (username == "admin" && password == "pass") {
         console.log("Login successfully");
