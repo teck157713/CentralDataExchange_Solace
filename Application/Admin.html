@@ -33,13 +33,13 @@
             document.getElementById("startconsume").addEventListener("click", consumer.startConsume);
             document.getElementById("stopconsume").addEventListener("click", consumer.stopConsume);
 
-            consumer2 = new QueueConsumer('SOLACE_REGISTER', 'regtable','log2');
+            consumer2 = new QueueConsumer('SOLACE_REGISTER', 'regtable', 'log2');
             document.getElementById("connect2").addEventListener("click", consumer2.connect);
             document.getElementById("disconnect2").addEventListener("click", consumer2.disconnect);
             document.getElementById("startconsume2").addEventListener("click", consumer2.startConsume);
             document.getElementById("stopconsume2").addEventListener("click", consumer2.stopConsume);
 
-            consumer3 = new QueueConsumer('SOLACE_TOPICREG', 'toptable','log3');
+            consumer3 = new QueueConsumer('SOLACE_TOPICREG', 'toptable', 'log3');
             document.getElementById("connect3").addEventListener("click", consumer3.connect);
             document.getElementById("disconnect3").addEventListener("click", consumer3.disconnect);
             document.getElementById("startconsume3").addEventListener("click", consumer3.startConsume);
@@ -77,65 +77,74 @@
                 <button type="button" class="pure-button button-error" id="stopconsume">Stop consuming</button>
             </p>
         </div>
-            <p>
-                <div class="input">
-                    <div class="publishlog" id="log" contentEditable="true"></div>
-                </div>
-            </p>
-            <table class="w3-table-all w3-hoverable w3-card-4" , id="logtable">
-                <tr class='w3-teal'>
-                    <th>Topic Destination</th>
-                    <th>Message</th>
-                </tr>
-            </table>
-        </div>
+        <p>
+            <div class="input">
+                <div class="publishlog" id="log" contentEditable="true"></div>
+            </div>
+        </p>
+        <input class="w3-bar w3-input w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" type="text"
+            id="input1" onkeyup="myFunction('input1','logtable')" placeholder="Search (e.g. NEA)">
+        <br>
+        <table class="w3-table-all w3-hoverable w3-card-4" , id="logtable">
+            <tr class='w3-teal'>
+                <th>Topic Destination</th>
+                <th>Message</th>
+            </tr>
+        </table>
+    </div>
 
-        <div id="regAgency" class="w3-container w3-border pubsub" style="display:none">
-            <div class="w3-bar">
-                <p>
-                    <button type="button" class="pure-button pure-button-primary" id="connect2">Connect</button>
-                    <button type="button" class="pure-button button-error" id="disconnect2">Disconnect</button>
-                    <button type="button" class="pure-button pure-button-primary" id="startconsume2">Consume message log
-                    </button>
-                    <button type="button" class="pure-button button-error" id="stopconsume2">Stop consuming</button>
-                </p>
+    <div id="regAgency" class="w3-container w3-border pubsub" style="display:none">
+        <div class="w3-bar">
+            <p>
+                <button type="button" class="pure-button pure-button-primary" id="connect2">Connect</button>
+                <button type="button" class="pure-button button-error" id="disconnect2">Disconnect</button>
+                <button type="button" class="pure-button pure-button-primary" id="startconsume2">Consume message log
+                </button>
+                <button type="button" class="pure-button button-error" id="stopconsume2">Stop consuming</button>
+            </p>
+        </div>
+        <p>
+            <div class="input">
+                <div class="publishlog" id="log2" contentEditable="true"></div>
             </div>
-                <p>
-                    <div class="input">
-                        <div class="publishlog" id="log2" contentEditable="true"></div>
-                    </div>
-                </p>
-                <table class="w3-table-all w3-hoverable w3-card-4" , id="regtable">
-                    <tr class='w3-teal'>
-                        <th>Agency Name</th>
-                        <th>Username</th>
-                        <th>Password</th>
-                    </tr>
-                </table>
+        </p>
+        <input class="w3-bar w3-input w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" type="text"
+            id="input2" onkeyup="myFunction('input2','regtable')" placeholder="Search (e.g. NEA)">
+        <br>
+        <table class="w3-table-all w3-hoverable w3-card-4" , id="regtable">
+            <tr class='w3-teal'>
+                <th>Agency Name</th>
+                <th>Username</th>
+                <th>Password</th>
+            </tr>
+        </table>
+    </div>
+
+    <div id="regTopic" class="w3-container w3-border pubsub" style="display:none">
+        <div class="w3-bar">
+            <p>
+                <button type="button" class="pure-button pure-button-primary" id="connect3">Connect</button>
+                <button type="button" class="pure-button button-error" id="disconnect3">Disconnect</button>
+                <button type="button" class="pure-button pure-button-primary" id="startconsume3">Consume message log
+                </button>
+                <button type="button" class="pure-button button-error" id="stopconsume3">Stop consuming</button>
+            </p>
+        </div>
+        <p>
+            <div class="input">
+                <div class="publishlog" id="log3" contentEditable="true"></div>
             </div>
-        
-        <div id="regTopic" class="w3-container w3-border pubsub" style="display:none">
-                <div class="w3-bar">
-                    <p>
-                        <button type="button" class="pure-button pure-button-primary" id="connect3">Connect</button>
-                        <button type="button" class="pure-button button-error" id="disconnect3">Disconnect</button>
-                        <button type="button" class="pure-button pure-button-primary" id="startconsume3">Consume message log
-                        </button>
-                        <button type="button" class="pure-button button-error" id="stopconsume3">Stop consuming</button>
-                    </p>
-                </div>
-                    <p>
-                        <div class="input">
-                            <div class="publishlog" id="log3" contentEditable="true"></div>
-                        </div>
-                    </p>
-                    <table class="w3-table-all w3-hoverable w3-card-4" , id="toptable">
-                        <tr class='w3-teal'>
-                            <th>Agency Name</th>
-                            <th>Topic</th>
-                            <th>Description</th>
-                        </tr>
-                    </table>
-                </div>
-    
+        </p>
+        <input class="w3-bar w3-input w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" type="text"
+            id="input3" onkeyup="myFunction('input3','toptable')" placeholder="Search (e.g. NEA)">
+        <br>
+        <table class="w3-table-all w3-hoverable w3-card-4" , id="toptable">
+            <tr class='w3-teal'>
+                <th>Agency Name</th>
+                <th>Topic</th>
+                <th>Description</th>
+            </tr>
+        </table>
+    </div>
+
 </body>
