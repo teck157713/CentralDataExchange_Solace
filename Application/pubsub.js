@@ -185,7 +185,7 @@ var PubSub = function (params) {
 
     //Initiate govData Sending
     pubsub.sendgovdata = function () {
-      govdataon = setInterval(pubsub.sendGovText, 5000);
+      govdataon = setInterval(pubsub.sendGovText, 1000);
       pubsub.log('Publishing, the interval has been started.');
     }
 
