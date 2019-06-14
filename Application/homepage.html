@@ -13,19 +13,107 @@
 
     <!-- Load Solace Web Messaging API for JavaScript -->
     <script src="lib/solclient-debug.js"></script>
-    <script src="pubsub.js"></script>
-    <script src="pubsubmap.js"></script>
+    <script src="Centralpubsub.js"></script>
+    <script src="EventMsg.js"></script>
+    <script src="microsoftanalyse.js"></script>
     <script src="ui.js"></script>
     <script src="config/config.js" type="text/javascript"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzHU1Oi7smE91XPeiY43wsRXdPG9RqzV8">
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
     </script>
-    <!-- script for microsoft api -->
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <!-- Execute the Confirmed Delivery tutorial -->
-    <script src="tempData.js"></script>
-    <!-- <script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"></link>
+    <script>
         var producer = null;
+        var yTemp = 0;
+        var yRain = 0;
+        var yImg = 0;
+        var yTaxi = 0;
+
+
+        var Tempps = []; // dataPoints
+        var Rainps = [];
+        var Imgps = [];
+        var Taxips = [];
+
+        var xVal = 0;
+        var updateInterval = 1000;
+        var dataLength = 20; // number of dataPoints visible at any point
+        var chart;
+
+        var updateChart = function (count) {
+
+            count = count || 1;
+
+            for (var j = 0; j < count; j++) {
+                Tempps.push({
+                    x: xVal,
+                    y: yTemp
+                });
+                Rainps.push({
+                    x: xVal,
+                    y: yRain
+                });
+                Imgps.push({
+                    x: xVal,
+                    y: yImg
+                });
+                Taxips.push({
+                    x: xVal,
+                    y: yTaxi
+                });
+                xVal++;
+                yRain = 0;
+                yTemp = 0;
+                yImg = 0;
+                yTaxi = 0;
+            }
+
+            if (Tempps.length > dataLength) {
+                Tempps.shift();
+                Rainps.shift();
+                Imgps.shift();
+                Taxips.shift();
+            }
+
+            chart.render();
+        };
         window.onload = function () {
+            chart = new CanvasJS.Chart("chartContainer", {
+                title: {
+                    text: "Data Flow"
+                },
+                axisY: {
+                    includeZero: false,
+                    title: "msgs per sec."
+                },
+                axisX: {
+                    title: "Time elapsed"
+                },
+                data: [{
+                    type: "line",
+                    dataPoints: Tempps,
+                    showInLegend: true,
+                    legendText: "Temperature"
+                }, {
+                    type: "line",
+                    dataPoints: Rainps,
+                    showInLegend: true,
+                    legendText: "Rain"
+                }, {
+                    type: "line",
+                    dataPoints: Imgps,
+                    showInLegend: true,
+                    legendText: "Traffic Image"
+                }, {
+                    type: "line",
+                    dataPoints: Taxips,
+                    showInLegend: true,
+                    legendText: "Taxi"
+                }]
+            });
+
+            //setInterval(function(){updateChart()}, updateInterval);
+
             // Initialize factory with the most recent API defaults
             var factoryProps = new solace.SolclientFactoryProperties();
             factoryProps.profile = solace.SolclientFactoryProfiles.version10;
@@ -35,42 +123,14 @@
             // NOTICE: works only with "solclientjs-debug.js"
             solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
-            create the producer, specifying name of the subscription topic
-            producer = new PubSub({
-                logname: "publishlog",
-                topicName: "NEA/temperature",
-                topicID: "publishtopic",
-                contentmsg: "content",
-                contentfile: "fileimg"
-            });
-            // assign buttons to the producer functions
-            document.getElementById("pubconnect").addEventListener("click", producer.connect);
-            document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
-            document.getElementById("pubTemp").addEventListener("click", producer.pubTemp);
-            document.getElementById("stoppubTemp").addEventListener("click", producer.stoppubTemp);
-            document.getElementById("sendmsg").addEventListener("click", producer.sendMessages);
-
-            subscriber = new PubSub({
-                queueName: 'SOLACE_QUEUE',
-                logname: 'subscribelog',
-                tableName: 'table2'
-            });
-            document.getElementById("subconnect").addEventListener("click", subscriber.connect);
-            document.getElementById("subdisconnect").addEventListener("click", subscriber.disconnect);
-            document.getElementById("startconsume").addEventListener("click", subscriber.startConsume);
-            document.getElementById("stopconsume").addEventListener("click", subscriber.stopConsume);
-
-            subscriber2 = new PubSub({
-                logname: 'subscribelog2',
-                tableName: 'table1',
-                topicID: 'topicname'
-            });
-            document.getElementById("subconnect2").addEventListener("click", subscriber2.connect);
-            document.getElementById("subdisconnect2").addEventListener("click", subscriber2.disconnect);
-            document.getElementById("subscribe").addEventListener("click", subscriber2.subscribe);
-            document.getElementById("unsubscribe").addEventListener("click", subscriber2.unsubscribe);
+            central = new PubSub({queueName : 'SOLACE_ALL', logname : 'subscribelog', tableName : 'table'});
+            document.getElementById("subconnect").addEventListener("click", central.connect);
+            document.getElementById("subdisconnect").addEventListener("click", central.disconnect);
+            document.getElementById("startconsume").addEventListener("click", central.startConsume);
+            document.getElementById("stopconsume").addEventListener("click", central.stopConsume);
+            updateChart(dataLength);
         };
-    </script> -->
+    </script>
 </head>
 
 <body>
@@ -89,9 +149,11 @@
         <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'Published')">Published
             Topics</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'AvilTopics')">Topics Available</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'stat')">Current Message
+            Statistics</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'RegTopic')">Register a topic</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'mapped')">Analytics and Mapping
             Example</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'RegTopic')">Register a topic</button>
     </div>
 
     <div id="Published" class="w3-container w3-border pubsub">
@@ -155,6 +217,28 @@
             </tr>
         </table>
     </div>
+    <div id="stat" class="w3-container w3-border pubsub" style="display:none">
+        <br><br>
+        <form></form>
+        <div class="w3-bar">
+            <p>
+                <button type="button" class="pure-button pure-button-primary" id="subconnect">Connect</button>
+                <button type="button" class="pure-button button-error" id="subdisconnect">Disconnect</button>
+                <button type="button" class="pure-button pure-button-primary" id="startconsume">Consume Messages
+                </button>
+                <button type="button" class="pure-button button-error" id="stopconsume">Stop Consuming</button>
+            </p>
+        </div>
+        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+        <div class="subscribelog" id="subscribelog" contentEditable="true" style="visibility: hidden"></div>
+        <table id='table' style="visibility: hidden">
+            <tr>
+                <th>Image</th>
+            </tr>
+        </table>
+        <input type="hidden" id="nene" value="NEA/1/temp_data/change"></input>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+    </div>
 
     <div id="RegTopic" class="w3-container w3-border pubsub" style="display:none">
         <iframe src="registertopic.html" height="500" width="100%"></iframe>
@@ -163,4 +247,7 @@
     <div id="mapped" class="w3-container w3-border pubsub" style="display:none">
         <iframe src="map.html" height="500" width="100%"></iframe>
     </div>
+    
 </body>
+
+</html>
