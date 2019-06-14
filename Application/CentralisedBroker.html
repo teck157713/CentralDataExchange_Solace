@@ -28,10 +28,14 @@
       var producer = null;
       var yTemp = 0; 
       var yRain = 0;
+      var yImg = 0;
+      var yTaxi = 0;
       
 
-      var dps = []; // dataPoints
-      var tps = [];
+      var Tempps = []; // dataPoints
+      var Rainps = [];
+      var Imgps = [];
+      var Taxips = [];
 
       var xVal = 0;
       var updateInterval = 1000;
@@ -43,22 +47,34 @@
         count = count || 1;
 
         for (var j = 0; j < count; j++) {
-          dps.push({
+          Tempps.push({
             x: xVal,
             y: yTemp
           });
-          tps.push({
+          Rainps.push({
             x: xVal,
             y: yRain
+          });
+          Imgps.push({
+            x: xVal,
+            y: yImg
+          });
+          Taxips.push({
+            x: xVal,
+            y: yTaxi
           });
           xVal++;
           yRain = 0;
           yTemp = 0;
+          yImg = 0;
+          yTaxi = 0;
         }
 
-        if (dps.length > dataLength) {
-          dps.shift();
-          tps.shift();
+        if (Tempps.length > dataLength) {
+          Tempps.shift();
+          Rainps.shift();
+          Imgps.shift();
+          Taxips.shift();
         }
 
         chart.render();
@@ -69,14 +85,32 @@
             text: "Data Flow"
           },
           axisY: {
-            includeZero: false
-          },      
+            includeZero: false,
+            title: "msgs per sec."
+          },
+          axisX: {
+            title: "Time elapsed"
+          },     
           data: [{
             type: "line",
-            dataPoints: dps
+            dataPoints: Tempps,
+            showInLegend: true,
+            legendText: "Temperature"
           },{
             type: "line",
-            dataPoints: tps
+            dataPoints: Rainps,
+            showInLegend: true,
+            legendText: "Rain"
+          },{
+            type: "line",
+            dataPoints: Imgps,
+            showInLegend: true,
+            legendText: "Traffic Image"
+          },{
+            type: "line",
+            dataPoints: Taxips,
+            showInLegend: true,
+            legendText: "Taxi"
           }]
         });
 
