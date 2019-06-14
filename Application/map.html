@@ -47,9 +47,9 @@
           <option value="temperature">temperature</option>
           <option value="event">event</option>
         </select></li>
-      <li><select class="w3-select w3-border w3-hover-border-teal" id="traffic"
+      <li><select class="w3-select w3-border w3-hover-border-teal" id="flame"
           onchange="filterMarkers(this.id, this.value);">
-          <option value="*">Define prediction chances of Traffic</option>
+          <option value="*">Define prediction chances of Flame</option>
           <option value="1*">>30%</option>
           <option value="11*">>50%</option>
           <option value="111*">>65%</option>
@@ -232,8 +232,7 @@
       });
       subscriberImage = new PubSub({
         logname: 'subscribelog',
-        tableName: 'table1',
-        topicName: 'LTA/1/img_data/filter/*/*/*/*/*'
+        tableName: 'table1'
       });
       subscriberImage.connect(function (callback) {
         subscriberImage.subscribe();
@@ -291,8 +290,11 @@
         }
       } else {
         subscriberImage.unsubscribe();
-        FilterInput = document.getElementById('traffic').value + "/" + document.getElementById('fire').value + "/" +
-          document.getElementById('smoke').value;
+        FilterInput = document.getElementById('flame').value + "/" + document.getElementById('fire').value + "/" + document.getElementById('smoke').value;
+        switch (FilterInput) {
+          case "*/*/*":
+            FilterInput = "";
+        }
         subscriberImage.topicName = "LTA/1/img_data/filter/*/*/" + FilterInput;
         setTimeout(function () {
           subscriberImage.subscribe();
@@ -318,13 +320,13 @@
       }
 
       function showPredictionlabel() {
-        document.getElementById('traffic').style.display = "block";
+        document.getElementById('flame').style.display = "block";
         document.getElementById('fire').style.display = "block";
         document.getElementById('smoke').style.display = "block";
       }
 
       function hidePredictionlabel() {
-        document.getElementById('traffic').style.display = "none";
+        document.getElementById('flame').style.display = "none";
         document.getElementById('fire').style.display = "none";
         document.getElementById('smoke').style.display = "none";
       }
