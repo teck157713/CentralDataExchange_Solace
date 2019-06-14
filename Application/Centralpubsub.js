@@ -266,6 +266,7 @@ var PubSub = function (params) {
     // Starts consuming from a queue on Solace message router
     pubsub.startConsume = function () {
         if (pubsub.session !== null) {
+            setInterval(function(){updateChart()}, 1000);
             if (pubsub.consuming) {
                 pubsub.log('Already started consumer for queue "' + pubsub.queueName + '" and ready to receive messages.');
             } else {
@@ -298,11 +299,12 @@ var PubSub = function (params) {
                     // Define message received event listener
                     pubsub.messageConsumer.on(solace.MessageConsumerEventName.MESSAGE, function (message) {
                       var result = message.getBinaryAttachment();
-                      console.log(result);
                       if (String(message.getDestination()).indexOf('NEA/1/temp_data/raw') >= 0){
+                        yTemp += 1;
                         TempEventCall(result, pubsub);
                         message.acknowledge();
                       } else if (String(message.getDestination()).indexOf('NEA/1/rain_data/raw') >= 0){
+                        yRain += 1;
                         RainEventCall(result, pubsub);
                         message.acknowledge();
                       } else if (String(message.getDestination()).indexOf('LTA/1/img_data/raw') >= 0){
