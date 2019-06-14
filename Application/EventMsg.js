@@ -62,7 +62,7 @@ var tempRain = {};
 
 function ImageEventCall(result, pubsub, callback){
     var dict = JSON.parse(result);
-    var resvar = ['flame', 'fire', 'smoke'];
+    var resvar = ['traffic', 'fire', 'smoke'];
     processImage(dict['image'], dict['location'], function(imgres, loc, resulvar){
         var finalres = {};
         finalres['image'] = imgres;
