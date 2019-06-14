@@ -2,7 +2,7 @@ var PubSub = function (params) {
     //'use strict';
     var placeholder = "";
     var enumvalue = 0;
-    var govdataon = 0;
+    var govdataon;
     var pubsub = {};
     pubsub.temp = {};
     pubsub.session = null;
@@ -266,7 +266,10 @@ var PubSub = function (params) {
     // Starts consuming from a queue on Solace message router
     pubsub.startConsume = function () {
         if (pubsub.session !== null) {
-            setInterval(function(){updateChart()}, 1000);
+            try{
+                clearInterval(govdataon);
+            }catch(exception){}
+            govdataon = setInterval(function(){updateChart()}, updateInterval);
             if (pubsub.consuming) {
                 pubsub.log('Already started consumer for queue "' + pubsub.queueName + '" and ready to receive messages.');
             } else {
@@ -308,10 +311,12 @@ var PubSub = function (params) {
                         RainEventCall(result, pubsub);
                         message.acknowledge();
                       } else if (String(message.getDestination()).indexOf('LTA/1/img_data/raw') >= 0){
+                        yImg += 1;
                         ImageEventCall(result, pubsub, function(){});
                         message.acknowledge();
                       } else if (String(message.getDestination()).indexOf('LTA/1/taxi_data/raw') >= 0){
-                        TaxiEventCall(result, pubsub, function(){});
+                        console.log("received taxi");
+                        yTaxi += 1;
                         message.acknowledge();
                       } else {
                         // assuming if message is a message if less than 255, else image
