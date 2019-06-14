@@ -62,7 +62,7 @@ var tempRain = {};
 
 function ImageEventCall(result, pubsub, callback){
     var dict = JSON.parse(result);
-    var resvar = ['traffic', 'fire', 'smoke'];
+    var resvar = ['flame', 'fire', 'smoke'];
     processImage(dict['image'], dict['location'], function(imgres, loc, resulvar){
         var finalres = {};
         finalres['image'] = imgres;
@@ -88,12 +88,4 @@ function ImageEventCall(result, pubsub, callback){
         pubsub.log("SEND SUCCESSFUL");
         callback();
     });
-}
-
-function TaxiEventCall(result, pubsub, callback){
-    var dict = JSON.parse(result);
-    for (var i in dict){
-        //alert(dict[i]);
-        
-    }
 }
