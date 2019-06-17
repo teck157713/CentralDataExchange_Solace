@@ -1,3 +1,5 @@
+//this javascript provides functions to aid in the functioing of user interfaces implemented on front facing html
+
 //function to process the tab changes in admin.html and homepage.html
 function openStuff(evt, name) {
   var i, x, tablinks;
