@@ -1,3 +1,6 @@
+//this javascript provides functions to aid in the functioing of user interfaces implemented on front facing html
+
+//function to process the tab changes in admin.html and homepage.html
 function openStuff(evt, name) {
   var i, x, tablinks;
   x = document.getElementsByClassName("pubsub");
@@ -12,6 +15,7 @@ function openStuff(evt, name) {
   evt.currentTarget.className += " w3-red";
 };
 
+
 function connect() {
   var hosturl = account.HOSTURL;
   var username = account.USERNAME;
@@ -20,6 +24,7 @@ function connect() {
   connect.innerHTML = 'Username: ' + username + '<br>' + 'Message URL: ' + hosturl + '<br>' + 'VPN Name: ' + vpn;
 };
 
+//function to search through table for the input entered 
 function myFunction(inputs,tables) {
   // Declare variables
   var input, filter, table, tr, td, i, txtValue;
