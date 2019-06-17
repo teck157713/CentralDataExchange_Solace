@@ -21,11 +21,12 @@
     <script src="microsoftanalyse.js"></script>
     <script src="govtech.js"></script>
     <script src="tempData.js"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 
     <!-- Execute the Confirmed Delivery tutorial -->
     <script>
       var producer = null;
-      window.onload = function () {
+      $(document).ready(function(){
         // Initialize factory with the most recent API defaults
         var factoryProps = new solace.SolclientFactoryProperties();
         factoryProps.profile = solace.SolclientFactoryProfiles.version10;
@@ -58,7 +59,7 @@
         document.getElementById("subdisconnect2").addEventListener("click", subscriber2.disconnect);
         document.getElementById("subscribe").addEventListener("click", subscriber2.subscribe);
         document.getElementById("unsubscribe").addEventListener("click", subscriber2.unsubscribe);
-      };
+      });
       function preview(){
         var reader = new FileReader();
         var preview = document.getElementById('imgpreview');
