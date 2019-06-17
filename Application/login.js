@@ -1,3 +1,4 @@
+//This is javascript code to process the login inputs from login.html
 var attempt = 3; // Variable to count number of attempts.
 // Below function Executes on click of login button.
 function validate() {
