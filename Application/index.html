@@ -45,7 +45,7 @@
         document.getElementById("sendmsg").addEventListener("click", producer.sendMessages);
         document.getElementById("pubTemp").addEventListener("click", producer.pubTemp);
         document.getElementById("stoppubTemp").addEventListener("click", producer.stoppubTemp);
-        document.getElementById("pubTaxi").addEventListener("click", producer.sendtaxidata);
+        document.getElementById("pubTaxi").addEventListener("click", producer.sendTaxiInterval);
         document.getElementById("stoppubTaxi").addEventListener("click", producer.stoptaxidata);
 
         subscriber = new PubSub({queueName : 'SOLACE_QUEUE', logname : 'subscribelog', tableName : 'table2'});
@@ -189,7 +189,6 @@
 
       </form>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.js"></script>
