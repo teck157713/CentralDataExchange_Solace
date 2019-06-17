@@ -185,7 +185,7 @@ var PubSub = function (params) {
 
     //Initiate govData Sending
     pubsub.sendgovdata = function () {
-      govdataon = setInterval(pubsub.sendGovText, 1000);
+      govdataon = setInterval(pubsub.sendGovText, 2000);
       pubsub.log('Publishing, the interval has been started.');
     }
 
@@ -229,6 +229,41 @@ var PubSub = function (params) {
           } else {
               pubsub.log('Cannot send messages because not connected to Solace message router.');
           }
+      }
+
+      pubsub.sendTaxiInterval = function () {
+        taxidataon = setInterval(pubsub.sendRealTimeTaxi, 100);
+        pubsub.log('Publishing, the interval has been started.');
+      }
+
+      var taxitemp = {};
+      pubsub.sendRealTimeTaxi = function () {
+        if (pubsub.session !== null) {
+            var taxiid = "T" + String(Math.floor(Math.random() * 20) + 1);
+            if (taxitemp[taxiid]){
+                taxitemp[taxiid][0] += rand_move();
+                taxitemp[taxiid][1] += rand_move();
+                pubsub.sendtrafficimg("LTA/1/taxi_data/raw", {[taxiid] : taxitemp[taxiid]});
+            } else {
+                processgov("https://api.data.gov.sg/v1/transport/taxi-availability", function(resdict){
+                    resdict = resdict.features[0].geometry.coordinates;
+                    var rand = Math.floor(Math.random() * (resdict.length - 1));
+                    var taxi_x = resdict[rand][1];
+                    var taxi_y = resdict[rand][0];
+                    taxitemp[taxiid] = [taxi_x, taxi_y];
+                    pubsub.sendtrafficimg("LTA/1/taxi_data/raw", {[taxiid] : taxitemp[taxiid]});
+                });
+                // var taxi_x = parseFloat((Math.random() * 0.1 + (1.31)).toFixed(2));
+                // var taxi_y = parseFloat((Math.random() * 0.08 + (103.75)).toFixed(2));
+                // taxitemp[taxiid] = [taxi_x, taxi_y];
+            }
+            
+        } else {
+            pubsub.log('Cannot send messages because not connected to Solace message router.');
+        }
+        function rand_move(){
+            return parseFloat((Math.random() * 0.0008 + (-0.0004)).toFixed(4));
+        }
       }
 
 

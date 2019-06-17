@@ -50,26 +50,26 @@
       <li><select class="w3-select w3-border w3-hover-border-teal" id="traffic"
           onchange="filterMarkers(this.id, this.value);">
           <option value="*">Define prediction chances of Traffic</option>
-          <option value="1*">>30%</option>
-          <option value="11*">>50%</option>
-          <option value="111*">>65%</option>
-          <option value="1111*">>80%</option>
+          <option value="11*">>30%</option>
+          <option value="111*">>50%</option>
+          <option value="1111*">>65%</option>
+          <option value="11111">>80%</option>
         </select></li>
       <li><select class="w3-select w3-border w3-hover-border-teal" id="fire"
           onchange="filterMarkers(this.id, this.value);">
           <option value="*">Define prediction chances of Fire</option>
-          <option value="1*">>30%</option>
-          <option value="11*">>50%</option>
-          <option value="111*">>65%</option>
-          <option value="1111*">>80%</option>
+          <option value="11*">>30%</option>
+          <option value="111*">>50%</option>
+          <option value="1111*">>65%</option>
+          <option value="11111">>80%</option>
         </select></li>
       <li><select class="w3-select w3-border w3-hover-border-teal" id="smoke"
           onchange="filterMarkers(this.id, this.value);">
           <option value="*">Define prediction chances of Smoke</option>
-          <option value="1*">>30%</option>
-          <option value="11*">>50%</option>
-          <option value="111*">>65%</option>
-          <option value="1111*">>80%</option>
+          <option value="11*">>30%</option>
+          <option value="111*">>50%</option>
+          <option value="1111*">>65%</option>
+          <option value="11111">>80%</option>
         </select></li>
     </ul>
   </div>
@@ -91,6 +91,7 @@
     var markers = [];
     var markers2 = [];
     var markerCluster;
+    var locations = [];
     var locations2 = [];
     var markers3 = [];
     var locations3 = [];
@@ -293,12 +294,13 @@
         FilterInput = document.getElementById('traffic').value + "/" + document.getElementById('fire').value + "/" + document.getElementById('smoke').value;
         switch (FilterInput) {
           case "*/*/*":
-            FilterInput = "";
+          case "'@25.":
+            FilterInput = "*";
         }
         subscriberImage.topicName = "LTA/1/img_data/filter/*/*/" + FilterInput;
         setTimeout(function () {
           subscriberImage.subscribe();
-        }, 50);
+        }, 500);
       }
 
       function clearlocations2() {
@@ -312,11 +314,13 @@
       }
 
       function clearmarkers() {
-        deleteMarkers(null, markers);
-        markers = [];
-        if (markerCluster) {
-          markerCluster.clearMarkers();
-        }
+        // deleteMarkers(null, markers);
+        // markers = [];
+        // if (markerCluster) {
+        //   markerCluster.clearMarkers();
+        // }
+        deleteMarkers(null, locations);
+        locations = [];
       }
 
       function showPredictionlabel() {

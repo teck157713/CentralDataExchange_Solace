@@ -123,37 +123,57 @@ var PubSub = function (params) {
             var result = message.getBinaryAttachment();
             if ((e == 'taxi'|| e == 'default') && String(message.getDestination()).indexOf('LTA/1/taxi_data/raw') >= 0){
                 var dict = JSON.parse(result);
-                var locations = [];
-                for (var i in dict){
-                    var res = {};
-                    res['lat'] = dict[i][1];
-                    res['lng'] = dict[i][0];
-                    locations.push(res);
-                    //addMarker(res, map);
-                }
-                try {
-                    deleteMarkers(null, markers);
-                    if (markerCluster){
-                        markerCluster.clearMarkers();
+                var found = false;
+                for (var ind in locations){
+                    if (locations[ind].getTitle() == Object.keys(dict)[0]){
+                        locations[ind].setPosition(new google.maps.LatLng(dict[locations[ind].getTitle()][0], dict[locations[ind].getTitle()][1]));
+                        found = true;
+                        break;
                     }
-                } catch(exception){}
-
-                markers = locations.map(function(location, i) {
-                    return new google.maps.Marker({
-                      position: location,
-                      //label: {color: 'black', fontWeight: 'bold', text: ""},
-                      icon: {url:'image/frontal-taxi-cab.png', scaledSize: new google.maps.Size(20,20), anchor: new google.maps.Point(10, 10)},
+                }
+                if(!found){
+                    markers2 = new google.maps.Marker({
+                        //position: {'lat': Number(dict[Object.keys(dict)[0]][0]), 'lng' : Number(dict[Object.keys(dict)[0]][1])},
+                        position: new google.maps.LatLng(dict[Object.keys(dict)[0]][0], dict[Object.keys(dict)[0]][1]),
+                        title: Object.keys(dict)[0],
+                        icon: {url:'image/frontal-taxi-cab.png', scaledSize: new google.maps.Size(20,20), anchor: new google.maps.Point(10, 10)},
+                        map: map
                     });
-                });
+                    locations.push(markers2);
+                }
+            }
+            // if ((e == 'taxi'|| e == 'default') && String(message.getDestination()).indexOf('LTA/1/taxi_data/raw') >= 0){
+            //     var dict = JSON.parse(result);
+            //     var locations = [];
+            //     for (var i in dict){
+            //         var res = {};
+            //         res['lat'] = dict[i][1];
+            //         res['lng'] = dict[i][0];
+            //         locations.push(res);
+            //         //addMarker(res, map);
+            //     }
+            //     try {
+            //         deleteMarkers(null, markers);
+            //         if (markerCluster){
+            //             markerCluster.clearMarkers();
+            //         }
+            //     } catch(exception){}
+
+            //     markers = locations.map(function(location, i) {
+            //         return new google.maps.Marker({
+            //           position: location,
+            //           //label: {color: 'black', fontWeight: 'bold', text: ""},
+            //           icon: {url:'image/frontal-taxi-cab.png', scaledSize: new google.maps.Size(20,20), anchor: new google.maps.Point(10, 10)},
+            //         });
+            //     });
           
-                // Add a marker clusterer to manage the markers.
-                markerCluster = new MarkerClusterer(map, markers,
-                    {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-                //markerCluster.clearMarkers();
-                
-            } else if ((e == 'temperature'|| e == 'default') && String(message.getDestination()).indexOf('NEA/1/temp_data/raw') >= 0){
+            //     // Add a marker clusterer to manage the markers.
+            //     markerCluster = new MarkerClusterer(map, markers,
+            //         {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+            //     //markerCluster.clearMarkers();
+            // }  
+            else if ((e == 'temperature'|| e == 'default') && String(message.getDestination()).indexOf('NEA/1/temp_data/raw') >= 0){
                 var dict2 = JSON.parse("{" + result + "}");
-                console.log(result);
                 var res2 = {};
                 res2['lat'] = Number(dict2['lat']);
                 res2['lng'] = Number(dict2['long']);
@@ -250,7 +270,6 @@ var PubSub = function (params) {
                 }
             } else if ((e == 'event'|| e == 'default') && String(message.getDestination()).indexOf("LTA/1/img_data/filter") >= 0 && pubsub.topicName != "*/>"){
                 var lst = JSON.parse(result);
-                console.log(message.getDestination());
                 markers1 = new CustomMarker({
                     position: new google.maps.LatLng(lst['lat'], lst['long']),
                     map: map,
