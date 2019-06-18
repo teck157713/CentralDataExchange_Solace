@@ -133,11 +133,28 @@ var PubSub = function (params) {
                 }
                 if(!found){
                     markers2 = new google.maps.Marker({
-                        //position: {'lat': Number(dict[Object.keys(dict)[0]][0]), 'lng' : Number(dict[Object.keys(dict)[0]][1])},
                         position: new google.maps.LatLng(dict[Object.keys(dict)[0]][0], dict[Object.keys(dict)[0]][1]),
                         title: Object.keys(dict)[0],
                         icon: {url:'image/frontal-taxi-cab.png', scaledSize: new google.maps.Size(20,20), anchor: new google.maps.Point(10, 10)},
                         map: map
+                    });
+                    google.maps.event.addListener(markers2, 'click', function(){
+                        map.setZoom(15);
+                        map.panTo(this.getPosition());
+                        infoWindow.setContent('<div style="font-family: Lucida Grande, Arial, sans-serif;">'+'<div id="title">'+ this.getTitle() +'</div><br>' + this.getPosition() + '<br></div>');
+                        infoWindow.open(map, this);
+                        subscriberMarker.unsubscribe();
+                        subscriberMarker.topicName = "LTA/1/img_data/filter/" + (Math.floor(dict[Object.keys(dict)[0]][0] * 100) / 100).toFixed(2) + '*/' + (Math.floor(dict[Object.keys(dict)[0]][1] * 100) / 100).toFixed(2) + "*/>";
+                        rectangle.setBounds({
+                            north: Math.floor(dict[Object.keys(dict)[0]][0] * 100) / 100,
+                            south: Math.floor(dict[Object.keys(dict)[0]][0] * 100) / 100 + 0.01,
+                            west: Math.floor(dict[Object.keys(dict)[0]][1] * 100) / 100,
+                            east: Math.floor(dict[Object.keys(dict)[0]][1] * 100) / 100 + 0.01
+                        });
+                        rectangle.setMap(map);
+                        setTimeout(function () {
+                            subscriberMarker.subscribe();
+                        }, 500);
                     });
                     locations.push(markers2);
                 }
@@ -277,6 +294,11 @@ var PubSub = function (params) {
                 setTimeout(function(){
                     $('#drop').click();
                 }, 20);
+                if (infoWindow.getContent() && pubsub.topicName.indexOf("LTA/1/img_data/filter") >= 0 && pubsub.topicName.indexOf("*/>") >= 0){
+                    console.log(pubsub.topicName);
+                    infoWindow.setContent(infoWindow.getContent() + "<br>" + result +  "</br>");
+                }
+                
             }
             
         });
