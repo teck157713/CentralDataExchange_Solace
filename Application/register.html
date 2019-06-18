@@ -1,19 +1,29 @@
 <!DOCTYPE html>
-
+<!-- THis is the html for the reguster page for new users to join the central broker-->
 <html lang="en">
 
 <head>
     <title>Prototype Demo - Register</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Load Solace Web Messaging API for JavaScript -->
     <script src="lib/solclient-debug.js"></script>
+
+    <!-- load js to run the ui for this page-->
     <script src="processregister.js"></script>
+
+    <!-- Solace cloud login details-->
     <script src="config/config.js" type="text/javascript"></script>
+
+    <!-- Load CSS-->
     <link rel="stylesheet" type="text/css" href="css/pure.css">
     </link>
     <link rel="stylesheet" type="text/css" href="css/samples.css">
     </link>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
+    <!-- Load W3.CSS-->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -26,7 +36,10 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- Load sweetalert css to be used in login.js-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    
+    <!-- run script to initalize solclient and listners for submit-->
     <script>
     var publisher = null;
 		window.onload = function () {
@@ -40,20 +53,24 @@
 		  solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
   
 		  // create the publisher, specifying name of the subscription topic
-		  publisher = new RegPublisher('SOLACE_REGISTER');
+      publisher = new RegPublisher('SOLACE_REGISTER');
+      // Below function Executes on click of submit button.
         $("#submit").click(function() {
             console.debug("Caught send button event");
             var a = document.forms["register"]["aname"].value
             var u = document.forms["register"]["uname"].value
             var p = document.forms["register"]["pwd"].value
             if (a ===""|| u ==="" ||p==="") {
+              // syntax from sweetalert.js library to create alrets
               swal({title: "Missing Inputs! ", text: "Please input all fields!", icon: "error"
               })
             }else{
                 publisher.publish()
                 publisher.disconnect()
+              // syntax from sweetalert.js library to create alrets
                 swal({title: "Thanks for registering! ", text: "Your registration will be confirmed in 3 working days", icon: "success"
                 })
+              // Redirecting to other page.
                 .then((value) => window.location.replace("login.html"))};
           });
     };
