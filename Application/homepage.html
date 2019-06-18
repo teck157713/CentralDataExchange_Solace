@@ -1,19 +1,25 @@
 <!DOCTYPE html>
-
+<!-- THis is the html for the homepage to demo the features accessed by users-->
 <html lang="en">
 
 <head>
     <title>Prototype Demo (Homepage)</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Load Solace Web Messaging API for JavaScript -->
+    <script src="lib/solclient-debug.js"></script>
+
+    <!-- load js to run the ui for this page-->
+    <script src="ui.js"></script>
+    
+    <!-- Load CSS-->
     <link rel="stylesheet" type="text/css" href="css/pure.css">
     </link>
     <link rel="stylesheet" type="text/css" href="css/samples.css">
     </link>
-
-    <!-- Load Solace Web Messaging API for JavaScript -->
-    <script src="lib/solclient-debug.js"></script>
-    <script src="ui.js"></script>
+    <!-- Load W3.CSS-->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"></link>
 </head>
 
@@ -40,8 +46,10 @@
             Example</button>
     </div>
 
+    <!-- Tab that showcases all the topics that is being published by the agency-->
     <div id="Published" class="w3-container w3-border pubsub">
         <br><br>
+        <!-- Table value can be changed as per the type of topics being published/demonstrated-->
         <table class="w3-table-all w3-hoverable w3-card-4" , id='publishTopic'>
             <tr class='w3-teal'>
                 <th>Published Topics</th>
@@ -82,8 +90,10 @@
         </table>
     </div>
 
+    <!-- Tab that showcases all the topics that is being published by other agencies and avil to be used-->
     <div id="AvilTopics" class="w3-container w3-border pubsub" style="display:none">
         <br><br>
+        <!-- Table value can be changed as per the type of topics being published/demonstrated-->
         <table class="w3-table-all w3-hoverable w3-card-4" , id='avilTopic'>
             <tr class='w3-teal'>
                 <th>Available Topics</th>
@@ -101,15 +111,19 @@
             </tr>
         </table>
     </div>
+    <!-- Tab that showcases the dataflow of all the messages being published-->
     <div id="stat" class="w3-container w3-border pubsub" style="display:none">
+        <!--Utilise iframe to render dataflow.html into this tab -->
         <iframe src="dataflow.html" height="500" width="100%"></iframe>
     </div>
-
+    <!-- Tab that agencies can use to register new topics into the centralised broker-->
     <div id="RegTopic" class="w3-container w3-border pubsub" style="display:none">
+        <!--Utilise iframe to render registertopi.html into this tab -->
         <iframe src="registertopic.html" height="500" width="100%"></iframe>
     </div>
-
+    <!-- Tab that showcases the realtime figure from topics being analysed and geospatialy mapped-->
     <div id="mapped" class="w3-container w3-border pubsub" style="display:none">
+        <!--Utilise iframe to render map.html into this tab -->
         <iframe src="map.html" height="500" width="100%"></iframe>
     </div>
     
