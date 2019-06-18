@@ -25,7 +25,7 @@ function connect() {
 };
 
 //function to search through table for the input entered 
-function myFunction(inputs,tables) {
+function mySearch(inputs,tables) {
   // Declare variables
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById(inputs);
