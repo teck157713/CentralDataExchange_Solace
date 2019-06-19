@@ -1,8 +1,8 @@
 var graph = new joint.dia.Graph();
 var paper = new joint.dia.Paper({
     el: document.getElementById('paper'),
-    width: 350,
-    height: 650,
+    width: 450,
+    height: 550,
     gridSize: 10,
     defaultAnchor: { name: 'perpendicular' },
     defaultConnectionPoint: { name: 'boundary' },
@@ -11,11 +11,11 @@ var paper = new joint.dia.Paper({
 
 var pn = joint.shapes.pn;
 
-var pPublisher = new pn.Place({
-    position: { x: 130, y: 50 },
+var pLta = new pn.Place({
+    position: { x: 100, y: 100 },
     attrs: {
         '.label': {
-            'text': 'Publisher',
+            'text': 'LTA',
             'fill': '#7c68fc' },
         '.root': {
             'stroke': '#9586fd',
@@ -28,26 +28,26 @@ var pPublisher = new pn.Place({
     tokens: 20
 });
 
-var pQueue1 = pPublisher.clone()
-    .attr('.label/text', 'Queue')
-    .position(30, 350)
+var pNea = pLta.clone()
+    .attr('.label/text', 'NEA')
+    .position(100, 300)
     .set('tokens', 0);
 
-var pConsumer1 = pPublisher.clone()
-    .attr('.label/text', 'Consumer')
-    .position(30, 550)
+var pCentral = pLta.clone()
+    .attr('.label/text', 'Central Broker')
+    .position(170, 200)
     .set('tokens', 0);
 
-var pConsumer2 = pPublisher.clone()
-    .attr('.label/text', 'Consumer')
-    .position(230, 550)
+var pAnalytics = pLta.clone()
+    .attr('.label/text', 'Analytics')
+    .position(260, 200)
     .set('tokens', 0);
 
-var pProduce = new pn.Transition({
-    position: { x: 150, y: 150 },
+var pPublish = new pn.Transition({
+    position: { x: 50, y: 50 },
     attrs: {
         '.label': {
-            'text': 'Produce',
+            'text': 'Publish',
             'fill': '#fe854f'
         },
         '.root': {
@@ -57,22 +57,17 @@ var pProduce = new pn.Transition({
     }
 });
 
-var pPublish1 = pProduce.clone()
+var pSubscribe = pPublish.clone()
+    .attr('.label/text', 'Subscribe')
+    .position(50, 150);
+
+var pPublish2 = pPublish.clone()
     .attr('.label/text', 'Publish')
     .position(50, 250);
 
-var pPublish2 = pProduce.clone()
-    .attr('.label/text', 'Publish')
-    .position(250, 250);
-
-var pConsume1 = pProduce.clone()
-    .attr('.label/text', 'Consume')
-    .position(50, 450);
-
-var pSubscribe = pProduce.clone()
+var pSubscribe2 = pPublish.clone()
     .attr('.label/text', 'Subscribe')
-    .position(250, 450);
-
+    .position(50, 350);
 
 function link(a, b) {
 
@@ -90,17 +85,16 @@ function link(a, b) {
     });
 }
 
-graph.addCell([pPublisher, pQueue1, pConsumer1, pConsumer2, pProduce, pPublish1, pPublish2, pConsume1, pSubscribe]);
+graph.addCell([pPublish, pSubscribe, pPublish2, pSubscribe2, pLta, pNea, pCentral, pAnalytics]);
 
 graph.addCell([
-    link(pPublisher, pProduce),
-    link(pProduce, pPublish1),
-    link(pPublish1, pQueue1),
-    link(pQueue1, pConsume1),
-    link(pConsume1, pConsumer1),
-    link(pProduce, pPublish2),
-    link(pPublish2, pSubscribe),
-    link(pSubscribe, pConsumer2)
+    link(pPublish, pLta),
+    link(pPublish2, pNea),
+    link(pLta, pCentral),
+    link(pNea, pCentral),
+    link(pCentral, pAnalytics),
+    link(pLta, pSubscribe),
+    link(pNea, pSubscribe2)
 ]);
 
 
@@ -160,7 +154,7 @@ function fireTransition(t, sec) {
 
 function simulate() {
 
-    var transitions = [pProduce, pPublish1, pPublish2, pConsume1, pSubscribe];
+    var transitions = [pPublish, pNea, pPublish2, pCentral, pLta];
     transitions.forEach(function(t) {
         if (Math.random() < 1) {
             fireTransition(t, 1);
