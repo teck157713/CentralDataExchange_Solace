@@ -15,11 +15,13 @@
     <!-- Load Solace Web Messaging API for JavaScript -->
     <script src="lib/solclient-debug.js"></script>
 
-    <!-- Load the Confirmed Delivery tutorial -->
+    <!-- load js to run the ui for this page-->
     <script src="pubsub.js"></script>
+    <!-- Solace cloud login details-->
     <script src="config/config.js" type="text/javascript"></script>
-    <!-- script for microsoft api -->
+    <!-- script for microsoft AI api -->
     <script src="microsoftanalyse.js"></script>
+    <!-- script to get and process data from govtech -->
     <script src="govtech.js"></script>
     <script src="tempData.js"></script>
     <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -27,7 +29,7 @@
     <!-- Load W3.CSS-->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
-    <!-- Execute the Confirmed Delivery tutorial -->
+    <!-- run script to initalize solclient and listners for buttons-->
     <script>
       var producer = null;
       $(document).ready(function(){
