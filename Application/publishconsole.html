@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" type="text/css" href="css/pure.css"></link>
     <link rel="stylesheet" type="text/css" href="css/samples.css"></link>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" /></link>
 
     <!-- Load Solace Web Messaging API for JavaScript -->
     <script src="lib/solclient-debug.js"></script>
@@ -89,13 +89,12 @@
     <br>
       <form class="w3-container">
         <fieldset>
-          <br>
             <label class='w3-hover-text-teal' for="content">Message Content (eg. Fire at Holland)</label>
             <input class="w3-input" id="content" type="text" placeholder="Insert Text">
-
+            <br>
             <label class='w3-hover-text-teal' for="publishtopic">What Topic to Publish Message to?</label>
             <input class="w3-input " id="publishtopic" type="text" placeholder="Insert Topic" value="tutorial/queue/message">
-
+            <br>
             <label class='w3-hover-text-teal' for="fileimg">Image Upload (e.g. Picture of accident)</label>
             <input id="fileimg" type="file" onchange="preview()"><br>
             <img src="image/blank.png" height="150" alt="Image Preview" id="imgpreview">
