@@ -37,6 +37,7 @@
     </div>
     <!--Tab bar to toggle between various tabs refer to the openstuff function in ui.js for the js running this ui-->
     <div class="w3-bar w3-black">
+        <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'info')"> How does it Work?</button>
         <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'Published')">Published
             Topics</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'AvilTopics')">Topics Available</button>
@@ -46,9 +47,12 @@
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'mapped')">Analytics and Mapping
             Example</button>
     </div>
-
     <!-- Tab that showcases all the topics that is being published by the agency-->
-    <div id="Published" class="w3-container w3-border pubsub">
+    <div id="info" class="w3-container w3-border pubsub">
+            <br><br>
+        </div>
+    <!-- Tab that showcases all the topics that is being published by the agency-->
+    <div id="Published" class="w3-container w3-border pubsub" style="display:none">
         <br><br>
         <!-- Table value can be changed as per the type of topics being published/demonstrated-->
         <table class="w3-table-all w3-hoverable w3-card-4" , id='publishTopic'>
