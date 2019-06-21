@@ -4,27 +4,31 @@
 
 <head>
     <title>Prototype Demo (Homepage)</title>
+    <meta name="description" content="Homepage to demo the solace features accessed by users">
     <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <!-- Load Solace Web Messaging API for JavaScript -->
     <script src="lib/solclient-debug.js"></script>
 
     <!-- load js to run the ui for this page-->
     <script src="ui.js"></script>
-    
+
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
     <!-- Load CSS-->
     <link rel="stylesheet" type="text/css" href="css/pure.css">
     </link>
     <link rel="stylesheet" type="text/css" href="css/samples.css">
     </link>
     <!-- Load W3.CSS-->
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"></link>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    </link>
 </head>
 
 <body>
-
+    <!--Warning for users to enable javascript to run this demo-->
+    <noscript>Please enable JavaScript on your browser to continue</noscript>
     <div class="banner">
         <div class="banner-interior">
             <span class="logo">
@@ -37,7 +41,9 @@
     </div>
     <!--Tab bar to toggle between various tabs refer to the openstuff function in ui.js for the js running this ui-->
     <div class="w3-bar w3-black">
-        <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'Published')">Published
+        <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'info')"> How does it
+            Work?</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'Published')">Published
             Topics</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'AvilTopics')">Topics Available</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'stat')">Current Message
@@ -46,9 +52,25 @@
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'mapped')">Analytics and Mapping
             Example</button>
     </div>
-
     <!-- Tab that showcases all the topics that is being published by the agency-->
-    <div id="Published" class="w3-container w3-border pubsub">
+    <div id="info" class="w3-container w3-border pubsub">
+        <br>
+        <div class="w3-white w3-light w3-blue-grey w3-card-4">
+            <div class="w3-container w3-card-2 w3-white w3-hover-shadow w3-margin-bottom">
+                <br>
+                <div class="w3-container w3-card w3-teal w3-center">
+                    <h2>Data Flow</h2>
+                    <p>Explanation of how central broker works</p>
+                </div>
+                <div id="sample">
+                    <div id="paper" class="joint-paper joint-theme-default"
+                        style="width: 100px; height: 100px; margin-left: 450px; "></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Tab that showcases all the topics that is being published by the agency-->
+    <div id="Published" class="w3-container w3-border pubsub" style="display:none">
         <br><br>
         <!-- Table value can be changed as per the type of topics being published/demonstrated-->
         <table class="w3-table-all w3-hoverable w3-card-4" , id='publishTopic'>
@@ -127,7 +149,11 @@
         <!--Utilise iframe to render map.html into this tab -->
         <iframe src="map.html" height="500" width="100%"></iframe>
     </div>
-    
+
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.js"></script>
+<script type="text/javascript" src="test.js"></script>
 
 </html>
