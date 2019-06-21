@@ -1,8 +1,6 @@
 var PubSub = function (params) {
     //'use strict';
     var placeholder = "";
-    var enumvalue = 0;
-    var govdataon = 0;
     var pubsub = {};
     pubsub.temp = {};
     pubsub.session = null;
@@ -118,203 +116,38 @@ var PubSub = function (params) {
         });
         // define message event listener
         pubsub.session.on(solace.SessionEventCode.MESSAGE, function (message) {
+            //SELECTOR FILTERING
+            // e gets the filtering categories
             var e = document.getElementById("filtertype");
             e = e.options[e.selectedIndex].value;
             var result = message.getBinaryAttachment();
+            // SELECTOR FILTERING FOR subscribing to Taxi data
             if ((e == 'taxi'|| e == 'default') && String(message.getDestination()).indexOf('LTA/1/taxi_data/raw') >= 0){
-                var dict = JSON.parse(result);
-                var found = false;
-                for (var ind in locations){
-                    if (locations[ind].getTitle() == Object.keys(dict)[0]){
-                        locations[ind].setPosition(new google.maps.LatLng(dict[locations[ind].getTitle()][0], dict[locations[ind].getTitle()][1]));
-                        found = true;
-                        break;
-                    }
-                }
-                if(!found){
-                    markers2 = new google.maps.Marker({
-                        position: new google.maps.LatLng(dict[Object.keys(dict)[0]][0], dict[Object.keys(dict)[0]][1]),
-                        title: Object.keys(dict)[0],
-                        icon: {url:'image/frontal-taxi-cab.png', scaledSize: new google.maps.Size(20,20), anchor: new google.maps.Point(10, 10)},
-                        map: map
-                    });
-                    google.maps.event.addListener(markers2, 'click', function(){
-                        map.setZoom(15);
-                        map.panTo(this.getPosition());
-                        infoWindow.setContent('<div style="font-family: Lucida Grande, Arial, sans-serif;">'+'<div id="title">'+ this.getTitle() +'</div><br>' + this.getPosition() + '<br></div>');
-                        infoWindow.open(map, this);
-                        subscriberMarker.unsubscribe();
-                        subscriberMarker.topicName = "LTA/1/img_data/filter/" + (Math.floor(dict[Object.keys(dict)[0]][0] * 100) / 100).toFixed(2) + '*/' + (Math.floor(dict[Object.keys(dict)[0]][1] * 100) / 100).toFixed(2) + "*/>";
-                        rectangle.setBounds({
-                            north: Math.floor(dict[Object.keys(dict)[0]][0] * 100) / 100,
-                            south: Math.floor(dict[Object.keys(dict)[0]][0] * 100) / 100 + 0.01,
-                            west: Math.floor(dict[Object.keys(dict)[0]][1] * 100) / 100,
-                            east: Math.floor(dict[Object.keys(dict)[0]][1] * 100) / 100 + 0.01
-                        });
-                        rectangle.setMap(map);
-                        setTimeout(function () {
-                            subscriberMarker.subscribe();
-                        }, 500);
-                    });
-                    locations.push(markers2);
-                }
+                selectorTaxi(result);
             }
-            // if ((e == 'taxi'|| e == 'default') && String(message.getDestination()).indexOf('LTA/1/taxi_data/raw') >= 0){
-            //     var dict = JSON.parse(result);
-            //     var locations = [];
-            //     for (var i in dict){
-            //         var res = {};
-            //         res['lat'] = dict[i][1];
-            //         res['lng'] = dict[i][0];
-            //         locations.push(res);
-            //         //addMarker(res, map);
-            //     }
-            //     try {
-            //         deleteMarkers(null, markers);
-            //         if (markerCluster){
-            //             markerCluster.clearMarkers();
-            //         }
-            //     } catch(exception){}
-
-            //     markers = locations.map(function(location, i) {
-            //         return new google.maps.Marker({
-            //           position: location,
-            //           //label: {color: 'black', fontWeight: 'bold', text: ""},
-            //           icon: {url:'image/frontal-taxi-cab.png', scaledSize: new google.maps.Size(20,20), anchor: new google.maps.Point(10, 10)},
-            //         });
-            //     });
-          
-            //     // Add a marker clusterer to manage the markers.
-            //     markerCluster = new MarkerClusterer(map, markers,
-            //         {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-            //     //markerCluster.clearMarkers();
-            // }  
+            // SELECTOR FILTERING for temperature data
             else if ((e == 'temperature'|| e == 'default') && String(message.getDestination()).indexOf('NEA/1/temp_data/raw') >= 0){
-                var dict2 = JSON.parse("{" + result + "}");
-                var res2 = {};
-                res2['lat'] = Number(dict2['lat']);
-                res2['lng'] = Number(dict2['long']);
-                var found = false;
-                for (var ind in locations2) {
-                    if (dict2['id'] == locations2[ind].getTitle()){
-                        var setText =locations2[ind].getLabel();
-                        setText.text=String(parseFloat(dict2['value']));
-                        locations2[ind].setLabel(setText);
-                        found = true;
-                        break;
-                    }
-                }
-                if(!found){
-                    markers2 = new google.maps.Marker({
-                        position: res2,
-                        title: dict2['id'],
-                        label: {color: 'black', fontWeight: 'bold', text: dict2['value']},
-                        icon: {url:'image/thermometer.png', scaledSize: new google.maps.Size(30,30), anchor: new google.maps.Point(15, 30), labelOrigin: new google.maps.Point(15,-10)},
-                        map: map
-                    });
-                    // markers2 = new CustomMarker({
-                    //     position: res2,
-                    //     setMap: map,
-                    // });
-                    locations2.push(markers2);
-                }
-                
-            } else if (e != 'taxi' && String(message.getDestination()).indexOf("NEA/1/rain_data/start") >= 0 || String(message.getDestination()).indexOf("NEA/1/rain_data/stop") >= 0){
-                var dict3 = JSON.parse(result);
-                var found = false;
-                for (var ind in locations2) {
-                    if (dict3['id'] == locations2[ind].getTitle()){
-                        var setIcon =locations2[ind].getIcon();
-                        switch (dict3['value']){
-                            case "1":
-                                setIcon.url='image/rain.png';
-                                break;
-                            case "0":
-                                setIcon.url='image/thermometer.png';
-                                break;
-                        }
-                        
-                        locations2[ind].setIcon(setIcon);
-                        found = true;
-                        break;
-                    }
-                }
-                if(!found){
-                    switch (dict3['value']){
-                        case "1":
-                            for (var ind in locations3){
-                                if (dict3['id'] == locations3[ind].getTitle()){
-                                    found = true;
-                                }
-                            }
-                            if (!found){
-                                markers3 = new google.maps.Marker({
-                                    position: {'lat': Number(dict3['lat']), 'lng' : Number(dict3['long'])},
-                                    title: dict3['id'],
-                                    icon: {url:'image/rain.png', scaledSize: new google.maps.Size(30,30), anchor: new google.maps.Point(15, 15)},
-                                    map: map
-                                });
-                                locations3.push(markers3);
-                            }
-                            console.log(JSON.stringify(locations3.length));
-                            break;
-                        case "0":
-                            for (var ind in locations3){
-                                if (dict3['id'] == locations3[ind].getTitle()){
-                                    locations3[ind].setMap(null);
-                                    locations3.splice(ind,1);
-                                    console.log(JSON.stringify(locations3.length));
-                                }
-                            }
-                            break;
-                    }
-                }
-                
-            } else if ((e == 'temperature'|| e == 'default') && String(message.getDestination()).indexOf("NEA/1/temp_data/change") >= 0){
-                var dict4 = JSON.parse(result);
-                for (var ind in locations2) {
-                    if (dict4['id'] == locations2[ind].getTitle()){
-                        var tempurl =locations2[ind].getIcon().url;
-                        var Iconset =locations2[ind].getIcon();
-                        Iconset.url='image/thermometer-red.png';
-                        locations2[ind].setIcon(Iconset);
-                        this.placeholder = setTimeout(function(){
-                            Iconset.url=tempurl;
-                            locations2[ind].setIcon(Iconset);
-                        }, 60000);
-                        break;
-                    }
-                }
-            } else if ((e == 'event'|| e == 'default') && String(message.getDestination()).indexOf("LTA/1/img_data/filter") >= 0 && pubsub.topicName != "*/>"){
-                var lst = JSON.parse(result);
-                markers1 = new CustomMarker({
-                    position: new google.maps.LatLng(lst['lat'], lst['long']),
-                    map: map,
-                });
-                setTimeout(function(){
-                    $('#drop').click();
-                }, 20);
+                selectorTemperature(result);
+            } 
+            // SELECTOR FILTERING for rain data
+            else if (e != 'taxi' && String(message.getDestination()).indexOf("NEA/1/rain_data/start") >= 0 || String(message.getDestination()).indexOf("NEA/1/rain_data/stop") >= 0){
+                selectorRain(result);
+            } 
+            // SELECTOR FILTERING for drastic Temperature change
+            else if ((e == 'temperature'|| e == 'default') && String(message.getDestination()).indexOf("NEA/1/temp_data/change") >= 0){
+                selectorTemperatureChange(result);
+            } 
+            // SELECTOR FILTERING for image analysis
+            else if ((e == 'event'|| e == 'default') && String(message.getDestination()).indexOf("LTA/1/img_data/filter") >= 0 && pubsub.topicName != "*/>"){
+                selectorImage(result);
+                // Add on to Google Maps InfoWindow that marker that has been selected
+                // to signifiy the receival of event messages.
                 if (infoWindow.getContent() && pubsub.topicName.indexOf("LTA/1/img_data/filter") >= 0 && pubsub.topicName.indexOf("*/>") >= 0){
-                    console.log(pubsub.topicName);
                     infoWindow.setContent(infoWindow.getContent() + "<br>" + result +  "</br>");
                 }
-                
             }
-            
         });
-
-        function validURL(str) {
-          var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-            '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-            '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-            '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-          return !!pattern.test(str);
-        }
-
         pubsub.connectToSolace();
-
     };
 
     // Actually connects the session triggered when the iframe has been loaded - see in html code
