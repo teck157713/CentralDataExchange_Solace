@@ -31,6 +31,7 @@
 
   <!-- Load the Javascript to process the map funtions -->
   <script src="pubsubmap.js"></script>
+  <script src="selectorFiltering.js"></script>
   <!-- Load the Javascript containing solace cloud login details-->
   <script src="config/config.js" type="text/javascript"></script>
   <!-- Google maps api key, generate and include own api key-->
@@ -50,6 +51,7 @@
           <option value="taxi">taxi</option>
           <option value="temperature">temperature</option>
           <option value="event">event</option>
+          <option value="hospital">hospital</option>
         </select></li>
       <li><select class="w3-select w3-border w3-hover-border-teal" id="traffic"
           onchange="filterMarkers(this.id, this.value);">
@@ -92,7 +94,7 @@
     var rectangle;
     var map;
     var infoWindow;
-    var markers = [];
+    var hospitalMarkers = [];
     var markers2 = [];
     var markerCluster;
     var locations = [];
@@ -111,6 +113,7 @@
         zoom: 11,
       });
 
+      // CustomMarker is a library to customize image analysis messages on the map
       CustomMarker.prototype = new google.maps.OverlayView();
 
       CustomMarker.prototype.draw = function () {
@@ -195,6 +198,7 @@
         markers1.animateDrop();
       });
 
+      // Initialising the bounds for the Rectangle
       var bounds = {
         east: 103.9,
         west: 103.7,
@@ -209,15 +213,11 @@
         draggable: false
       });
 
-
-      //ENABLE RECTANGLE FILTER
-      //rectangle.setMap(map);
-
       // Add an event listener on the rectangle.
       rectangle.addListener('bounds_changed', showNewRect);
 
       // Define an info window on the map.
-      infoWindow = new google.maps.InfoWindow();
+      infoWindow = new google.maps.InfoWindow({disableAutoPan: true, maxWidth: 320});
       // Initialize factory with the most recent API defaults
       var factoryProps = new solace.SolclientFactoryProperties();
       factoryProps.profile = solace.SolclientFactoryProfiles.version10;
@@ -227,14 +227,19 @@
       // NOTICE: works only with "solclientjs-debug.js"
       solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
+      // Initialising subscription functionality for the map 
+      // to receive and display markers on map
       subscriber = new PubSub({
         logname: 'subscribelog',
         tableName: 'table1',
         topicName: '*/>'
       });
+
       subscriber.connect(function (callback) {
         subscriber.subscribe();
       });
+
+      // Initialising subscription functionality for the image based on specified filtering 
       subscriberImage = new PubSub({
         logname: 'subscribelog',
         tableName: 'table1'
@@ -243,45 +248,19 @@
         subscriberImage.subscribe();
       });
 
+      // Initialising subscription functionality for the specified hospital marker
       subscriberMarker = new PubSub({
         logname: 'subscribelog',
         tableName: 'table1'
       });
+
+      // Initialising subscription functionality for the specified hospital marker
+      // to subscribe to the events nearby
       subscriberMarker.connect(function (callback) {
         subscriberMarker.subscribe();
       });
 
-      var hospitalLst = [['Alexandra Hospital', 1.2866, 103.8013],['Changi General Hospital', 1.3404, 103.9495],['Khoo Teck Puat Hopsital', 1.424635, 103.8382]
-        ,['National University Hospital', 1.2937, 103.7832],['Ng Teng Fong General Hospital', 1.3337, 103.7454],['Sengkang General Hospital', 1.3955, 103.8934]
-        ,['Singapore General Hospital', 1.2796, 103.8359],['Tan Tock Seng Hospital', 1.3213, 103.8458],['Kandang Kerbau Women\'s & Children\'s Hospital', 1.306332, 103.8415]];
-      for (var i in hospitalLst) {
-        var hospitalMarker = new google.maps.Marker({
-          position: new google.maps.LatLng(hospitalLst[i][1], hospitalLst[i][2]),
-          title: hospitalLst[i][0],
-          map: map
-        });
-        google.maps.event.addListener(hospitalMarker, 'click', function(){
-          map.setZoom(13);
-          map.panTo(this.getPosition());
-          infoWindow.setContent('<div style="font-family: Lucida Grande, Arial, sans-serif;">'+'<div id="title">'+ this.getTitle() +'</div><br>' + this.getPosition() + '<br></div>');
-          infoWindow.open(map, this);
-          subscriberMarker.unsubscribe();
-          subscriberMarker.topicName = "LTA/1/img_data/filter/" + (Math.floor(this.getPosition().lat() * 10) / 10).toFixed(1) + '*/' + (Math.floor(this.getPosition().lng() * 10) / 10).toFixed(1) + "*/>";
-          console.log(JSON.stringify(subscriberMarker.topicName));
-          rectangle.setBounds({
-              north: Math.floor(this.getPosition().lat() * 10) / 10,
-              south: Math.floor(this.getPosition().lat() * 10) / 10 + 0.1,
-              west: Math.floor(this.getPosition().lng() * 10) / 10,
-              east: Math.floor(this.getPosition().lng() * 10) / 10 + 0.1
-          });
-          rectangle.setMap(map);
-          setTimeout(function () {
-              subscriberMarker.subscribe();
-          }, 500);
-        });
-      }
-      
-
+      InitializeHospital();
     }
     // Show the new coordinates for the rectangle in an info window.
 
@@ -293,6 +272,7 @@
       var contentString = '<b>Radius position.</b><br>' +
         'New north-east corner: ' + ne.lat() + ', ' + ne.lng() + '<br>' +
         'New south-west corner: ' + sw.lat() + ', ' + sw.lng();
+      contentString = '';
 
       // Set the info window's content and position.
       infoWindow.setContent(infoWindow.getContent() + contentString);
@@ -309,29 +289,40 @@
     }
 
     filterMarkers = function (identification, category) {
-      //filter to clear visible markers
+      //filter to clear visible markers or hide the image analytics filtering
       if (identification == "filtertype") {
         switch (category) {
           case "taxi":
-            clearlocations2();
-            clearlocations3();
-            hidePredictionlabel();
+            clear(hospitalMarkers);
+            clear(locations2);
+            clear(locations3);
+            Predictionlabel("none");
             break;
           case "temperature":
-            clearmarkers();
-            clearlocations3();
-            hidePredictionlabel();
+            clear(hospitalMarkers);
+            clear(locations);
+            clear(locations3);
+            Predictionlabel("none");
             break;
           case "event":
-            clearmarkers();
-            clearlocations2();
-            showPredictionlabel();
+            clear(hospitalMarkers);
+            clear(locations);
+            clear(locations2);
+            Predictionlabel("block");
             break;
+          case "hospital":
+            InitializeHospital();
+            clear(locations);
+            clear(locations2);
+            clear(locations3);
           case "default":
-            showPredictionlabel();
+            InitializeHospital();
+            Predictionlabel("block");
             break;
         }
-      } else {
+      } 
+      // If the filtering changes are made for Image Analytics, Resubscribe for topic changes.
+      else {
         subscriberImage.unsubscribe();
         FilterInput = document.getElementById('traffic').value + "/" + document.getElementById('fire').value + "/" + document.getElementById('smoke').value;
         switch (FilterInput) {
@@ -345,36 +336,15 @@
         }, 500);
       }
 
-      function clearlocations2() {
-        deleteMarkers(null, locations2);
-        locations2 = [];
+      function clear(lst){
+        deleteMarkers(null, lst);
+        lst.length = 0;
       }
 
-      function clearlocations3() {
-        deleteMarkers(null, locations3);
-        locations3 = [];
-      }
-
-      function clearmarkers() {
-        // deleteMarkers(null, markers);
-        // markers = [];
-        // if (markerCluster) {
-        //   markerCluster.clearMarkers();
-        // }
-        deleteMarkers(null, locations);
-        locations = [];
-      }
-
-      function showPredictionlabel() {
-        document.getElementById('traffic').style.display = "block";
-        document.getElementById('fire').style.display = "block";
-        document.getElementById('smoke').style.display = "block";
-      }
-
-      function hidePredictionlabel() {
-        document.getElementById('traffic').style.display = "none";
-        document.getElementById('fire').style.display = "none";
-        document.getElementById('smoke').style.display = "none";
+      function Predictionlabel(stylemode) {
+        document.getElementById('traffic').style.display = stylemode;
+        document.getElementById('fire').style.display = stylemode;
+        document.getElementById('smoke').style.display = stylemode;
       }
 
     }
@@ -383,14 +353,52 @@
       this.setValues(opts);
     }
 
-    function extractContent(s){
-      try {
-        var span = document.createElement('span');
-        span.innerHTML = s;
-        var res = span.textContent || span.innerText;
-        return res.replace(/\s/g, '').split('(').join(',').split(')').join('').split(',');
-      } catch (exception){
-        return null;
+    function infoWindowUpdate(marker){
+        var html = infoWindow.getContent();
+        var $html = $('<div />', {html: html});
+        if ($html.find('#title').html() == marker.getTitle()){
+          $html.find('#h4').html(JSON.stringify(marker.getPosition()));
+          if (((rectangle.getBounds().getNorthEast().lat() <= marker.getPosition().lat() && rectangle.getBounds().getSouthWest().lat() >= marker.getPosition().lat()) && (rectangle.getBounds().getSouthWest().lng() <= marker.getPosition().lng() && rectangle.getBounds().getNorthEast().lng() >= marker.getPosition().lng())) != true){
+            addMarkerEvent(marker);
+          }
+          infoWindow.setContent($html.html());
+          infoWindow.setPosition(marker.getPosition());
+        }
+    }
+
+    function InitializeHospital(){
+      // Initialising static hospital markers
+      var hospitalLst = [['Alexandra Hospital', 1.2866, 103.8013],['Changi General Hospital', 1.3404, 103.9495],['Khoo Teck Puat Hopsital', 1.424635, 103.8382]
+        ,['National University Hospital', 1.2937, 103.7832],['Ng Teng Fong General Hospital', 1.3337, 103.7454],['Sengkang General Hospital', 1.3955, 103.8934]
+        ,['Singapore General Hospital', 1.2796, 103.8359],['Tan Tock Seng Hospital', 1.3213, 103.8458],['Kandang Kerbau Women\'s & Children\'s Hospital', 1.306332, 103.8415]];
+      for (var i in hospitalLst) {
+        var hospitalMarker = new google.maps.Marker({
+          position: new google.maps.LatLng(hospitalLst[i][1], hospitalLst[i][2]),
+          title: hospitalLst[i][0],
+          map: map
+        });
+        hospitalMarkers.push(hospitalMarker);
+        // Adds each marker the ability to subscribe for nearby event messages when clicked
+        google.maps.event.addListener(hospitalMarker, 'click', function(){
+          map.setZoom(13);
+          map.panTo(this.getPosition());
+          infoWindow.setContent('<div style="font-family: Lucida Grande, Arial, sans-serif;">'+'<div id="title">'+ this.getTitle() +'</div><br>' + this.getPosition() + '<br></div>');
+          infoWindow.open(map, this);
+          subscriberMarker.unsubscribe();
+          subscriberMarker.topicName = "LTA/1/img_data/filter/" + (Math.floor(this.getPosition().lat() * 10) / 10).toFixed(1) + '*/' + (Math.floor(this.getPosition().lng() * 10) / 10).toFixed(1) + "*/>";
+          console.log(JSON.stringify(subscriberMarker.topicName));
+          // Shows the area of the event it is subscribed to
+          rectangle.setBounds({
+              north: Math.floor(this.getPosition().lat() * 10) / 10,
+              south: Math.floor(this.getPosition().lat() * 10) / 10 + 0.1,
+              west: Math.floor(this.getPosition().lng() * 10) / 10,
+              east: Math.floor(this.getPosition().lng() * 10) / 10 + 0.1
+          });
+          rectangle.setMap(map);
+          setTimeout(function () {
+              subscriberMarker.subscribe();
+          }, 500);
+        });
       }
     }
     google.maps.event.addDomListener(window, 'load', initMap);
