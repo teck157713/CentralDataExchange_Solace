@@ -124,7 +124,7 @@ var RegPublisher = function (queueName) {
             message.setDestination(solace.SolclientFactory.createDurableQueueDestination(publisher.queueName));
             message.setBinaryAttachment(messageText);
             message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
-            publisher.log('Publishing message "' + messageText + '" to topic "' + publisher.topicName + '"...');
+            publisher.log('Publishing message "' + messageText + '" to topic "' + publisher.queueName + '"...');
             try {
                 // Delivery not yet confirmed. See ConfirmedPublish.js
                 publisher.session.send(message);
