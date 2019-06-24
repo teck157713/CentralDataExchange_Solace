@@ -159,18 +159,24 @@
     </div>
     <!-- Tab that showcases the dataflow of all the messages being published-->
     <div id="stat" class="w3-container w3-border pubsub" style="display:none">
-        <!--Utilise iframe to render dataflow.html into this tab -->
-        <iframe src="dataflow.html" height="500" width="100%"></iframe>
+        <div class="resp-container">
+            <!--Utilise iframe to render dataflow.html into this tab -->
+            <iframe class="resp-iframe" src="dataflow.html" height="500" width="100%"></iframe>
+        </div>
     </div>
     <!-- Tab that agencies can use to register new topics into the centralised broker-->
     <div id="RegTopic" class="w3-container w3-border pubsub" style="display:none">
+        <div class="resp-container">
         <!--Utilise iframe to render registertopi.html into this tab -->
-        <iframe src="registertopic.html" height="500" width="100%"></iframe>
+        <iframe class="resp-iframe" src="registertopic.html"></iframe>
+        </div>
     </div>
     <!-- Tab that showcases the realtime figure from topics being analysed and geospatialy mapped-->
     <div id="mapped" class="w3-container w3-border pubsub" style="display:none">
-        <!--Utilise iframe to render map.html into this tab -->
-        <iframe src="map.html" height="1000" width="100%"></iframe>
+        <div class="resp-container">
+            <!--Utilise iframe to render map.html into this tab -->
+            <iframe class="resp-iframe" src="map.html"></iframe>
+        </div>
     </div>
 
 </body>
