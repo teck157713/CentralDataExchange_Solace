@@ -98,9 +98,15 @@
                 <div class="publishlog" id="log" contentEditable="true"></div>
             </div>
         </p>
-        <input class="w3-bar w3-input w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" type="text"
-            id="input1" onkeyup="mySearch('input1','logtable')" placeholder="Search (e.g. NEA)">
+        
         <br>
+        <div class="w3-dropdown-click">
+                <button onclick="myDropdown()" class="w3-button w3-black">Click Me!</button>
+                <div id="topicDropdown" class="w3-dropdown-content w3-bar-block w3-border">
+                <input class="w3-bar w3-input w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" type="text"
+                id="input1" onkeyup="mySearch('input1','logtable')" placeholder="Search (e.g. NEA)"></input>
+                </div>
+              </div>
         <table class="w3-table-all w3-hoverable w3-card-4" , id="logtable">
             <tr class='w3-teal'>
                 <th>Topic Destination</th>
@@ -166,3 +172,4 @@
     </div>
 
 </body>
+</html>

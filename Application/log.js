@@ -27,7 +27,14 @@ var QueueConsumer = function (queueName, table, logs) {
     };
 
     consumer.log('\n*** Consumer to queue "' + consumer.queueName + '" is ready to connect ***');
-
+    consumer.dropdown = function(topics){
+        var html = '<input class="w3-bar w3-input w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" type="text"'+
+        'id="input1" onkeyup="mySearch'+'("input1","logtable")"'+'placeholder="Search (e.g. NEA)"></input>';
+        for (var i = 0; i < topics.length; i++) {
+            html +='<a href="#'+topics[i]+ '"  class="w3-bar-item w3-button" onclick="mySearch'+"('"+topics[i]+"','logtable')>"+topics[i]+'</a>'
+        }
+        document.getElementById(topicDropdown).innerHTML= html
+    }
     consumer.table = function (messagee, topic, table) {
         if (table === 'logtable') {
             try {
@@ -116,6 +123,7 @@ var QueueConsumer = function (queueName, table, logs) {
 
     // Starts consuming from a queue on Solace message router
     consumer.startConsume = function () {
+        var topics = [];
         if (consumer.session !== null) {
             if (consumer.consuming) {
                 consumer.log('Already started consumer for queue "' + consumer.queueName + '" and ready to receive messages.');
@@ -158,6 +166,12 @@ var QueueConsumer = function (queueName, table, logs) {
                             // Need to explicitly ack otherwise it will not be deleted from the message router
                             var topic = String(message.getDestination())
                             consumer.table(message.getBinaryAttachment(), topic, consumer.tableName);
+                            if(topics.includes(topic)){
+                                consumer.dropdown(topics)
+                            } else {
+                                consumer.dropdown(topics)
+                                topics.push(topic)
+                            }
                             message.acknowledge();
                             consumer.temp = {
                                 'content': result,
@@ -171,6 +185,12 @@ var QueueConsumer = function (queueName, table, logs) {
                             consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
                             var topic = String(message.getDestination())
                             consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />', topic, consumer.tableName);
+                            if(topics.includes(topic)){
+                                consumer.dropdown(topics)
+                            } else {
+                                consumer.dropdown(topics)
+                                topics.push(topic)
+                            }
                             message.acknowledge();
                             consumer.temp = {
                                 'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />',
