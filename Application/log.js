@@ -164,7 +164,7 @@ var QueueConsumer = function (queueName, table, logs) {
                                 topics.push(topic)
                                 var x = document.getElementById("mySelect");
                                 var option = document.createElement("option");
-                                option.setAttribute("value", topic);
+                                option.setAttribute("value", topic.slice(1, -1));
                                 option.text = topic;
                                 x.add(option);
                             }
@@ -187,7 +187,7 @@ var QueueConsumer = function (queueName, table, logs) {
                                 topics.push(topic)
                                 var x = document.getElementById("mySelect");
                                 var option = document.createElement("option");
-                                option.setAttribute("value", topic);
+                                option.setAttribute("value", topic.slice(1, -1));
                                 option.text = topic;
                                 x.add(option);
                             }
