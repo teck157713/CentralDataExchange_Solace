@@ -59,6 +59,29 @@
             document.getElementById("startconsume3").addEventListener("click", consumer3.startConsume);
             document.getElementById("stopconsume3").addEventListener("click", consumer3.stopConsume);
         };
+
+        function topicChange() {
+        var input, filter, table, tr, td, i, txtValue;
+        var e = document.getElementById("mySelect");
+        input = e.options[e.selectedIndex].value;
+        filter = input.toUpperCase();
+        table = document.getElementById("logtable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) { 
+            td=tr[i].getElementsByTagName("td")[0]; 
+            if (td) { 
+                txtValue=td.textContent ||
+                td.innerText; 
+                if (txtValue.toUpperCase().indexOf(filter)> -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    };
     </script>
 </head>
 
@@ -102,8 +125,9 @@
             id="input1" onkeyup="mySearch('input1','logtable')" placeholder="Search (e.g. NEA)">
             <br>
             <form>
-                <select class="w3-select w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" id="mySelect">
-                 <option value="" disabled selected>Topic List</option>
+                <select class="w3-select w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" id="mySelect" onchange="topicChange()">
+                 <option value="" disabled selected>Search by Topic</option>
+                 <option value="" >Show All Topics</option>
                 </select>
               </form>
         <br>
