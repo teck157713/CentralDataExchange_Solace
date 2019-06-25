@@ -158,16 +158,19 @@ var QueueConsumer = function (queueName, table, logs) {
                                 ' details:\n' + message.getBinaryAttachment());
                             // Need to explicitly ack otherwise it will not be deleted from the message router
                             var topic = String(message.getDestination())
-                            if(topics.includes(topic)){
-                                console.log(topics)
-                            }else{
-                                topics.push(topic)
-                                var x = document.getElementById("mySelect");
-                                var option = document.createElement("option");
-                                option.setAttribute("value", topic.slice(1, -1));
-                                option.text = topic;
-                                x.add(option);
-                            }
+                            // populates the dropdown list for the search based on topic
+                            if(consumer.queueName==="SOLACE_QUEUE"){
+                                if(topics.includes(topic)){
+                                    console.log(topics)
+                                }else{
+                                    topics.push(topic)
+                                    var x = document.getElementById("mySelect");
+                                    var option = document.createElement("option");
+                                    option.setAttribute("value", topic.slice(1, -1));
+                                    option.text = topic;
+                                    x.add(option);
+                                }
+                            };
                             consumer.table(message.getBinaryAttachment(), topic, consumer.tableName);
                             message.acknowledge();
                             consumer.temp = {
@@ -181,16 +184,19 @@ var QueueConsumer = function (queueName, table, logs) {
                             var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
                             consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
                             var topic = String(message.getDestination())
-                            if(topics.includes(topic)){
-                                console.log(topics)
-                            }else{
-                                topics.push(topic)
-                                var x = document.getElementById("mySelect");
-                                var option = document.createElement("option");
-                                option.setAttribute("value", topic.slice(1, -1));
-                                option.text = topic;
-                                x.add(option);
-                            }
+                            // populates the dropdown list for the search based on topic
+                            if(consumer.queueName==="SOLACE_QUEUE"){
+                                if(topics.includes(topic)){
+                                    console.log(topics)
+                                }else{
+                                    topics.push(topic)
+                                    var x = document.getElementById("mySelect");
+                                    var option = document.createElement("option");
+                                    option.setAttribute("value", topic.slice(1, -1));
+                                    option.text = topic;
+                                    x.add(option);
+                                }
+                            };
                             consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />', topic, consumer.tableName);
                             message.acknowledge();
                             consumer.temp = {
