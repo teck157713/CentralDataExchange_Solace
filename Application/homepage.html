@@ -29,10 +29,11 @@
     <script>
         window.onload = function () {
             // Retrieve the list of topics that an agency can publish to and is subscribed to
-            var published = AccessListCall("LTA","GET");
-            var subscribed = AccessListCall("LTA","GETALL")
+            var published = AccessListCall("LTA","GET"); //["LTA/>", "LTA/1/IMD_DATA"]
+            var subscribed = AccessListCall("LTA","GETALL") //["NEA/>", "MHA/1/IMD_DATA"]
             for(var i=0; i < published.length;i++){
                 try {
+                    // iterates through the published topic list and populates a table
                     var table = document.getElementById('publishTopic');
                     var row = table.insertRow(-1);
                     var cell1 = row.insertCell(0);
@@ -43,6 +44,7 @@
             }
             for(var x=0; x < subscribed.length;x++){
                 try {
+                    // iterates through the subscribed topic list and populates a table
                     var table = document.getElementById('avilTopic');
                     var row = table.insertRow(-1);
                     var cell1 = row.insertCell(0);
