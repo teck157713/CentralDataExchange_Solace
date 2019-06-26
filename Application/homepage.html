@@ -28,6 +28,7 @@
     </link>
     <script>
         window.onload = function () {
+            // Retrieve the list of topics that an agency can publish to and is subscribed to
             var published = AccessListCall("LTA","GET");
             var subscribed = AccessListCall("LTA","GETALL")
             for(var i=0; i < published.length;i++){
