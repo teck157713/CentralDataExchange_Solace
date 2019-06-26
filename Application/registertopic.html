@@ -9,10 +9,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Load Solace Web Messaging API for JavaScript -->
-  <script src="lib/solclient-debug.js"></script>
+  <!-- <script src="lib/solclient-debug.js"></script> -->
 
   <!-- load js to run the ui for this page-->
-  <script src="processtopicreg.js"></script>
+  <!-- <script src="processtopicreg.js"></script> -->
 
   <!-- Load js to retrieve the ACL via SEMP API REST call -->
   <script src="AccessListCall.js"></script>
@@ -44,49 +44,54 @@
     var publisher = null;
     window.onload = function () {
       // Initialize factory with the most recent API defaults
-      var factoryProps = new solace.SolclientFactoryProperties();
-      factoryProps.profile = solace.SolclientFactoryProfiles.version10;
-      solace.SolclientFactory.init(factoryProps);
+      // var factoryProps = new solace.SolclientFactoryProperties();
+      // factoryProps.profile = solace.SolclientFactoryProfiles.version10;
+      // solace.SolclientFactory.init(factoryProps);
 
       // enable logging to JavaScript console at WARN level
       // NOTICE: works only with "solclientjs-debug.js"
-      solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
+      // solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
       // create the publisher, specifying name of the subscription topic
-      publisher = new RegPublisher('SOLACE_TOPICREG');
+      // publisher = new RegPublisher('SOLACE_TOPICREG');
       // Below function Executes on click of submit button.
       $("#submit").click(function () {
         console.debug("Caught send button event");
-        var a = document.forms["topicreg"]["aname"].value
+        // var a = document.forms["topicreg"]["aname"].value
         var t = document.forms["topicreg"]["topic"].value
-        var d = document.forms["topicreg"]["desc"].value
-        if (a === "" || t === "" || d === "") {
+        // var d = document.forms["topicreg"]["desc"].value
+        if (t === "") {
           // syntax from sweetalert.js library to create alrets
           // will output an error alert box with the title and text as the output
           swal({
-            title: "Missing Inputs! ",
-            text: "Please input all fields!",
+            title: "Missing Topic! ",
+            text: "Please input topic!",
             icon: "error"
           })
         } else {
-          var checkedValue = ""; 
+          var checkedValue = "";
           var inputElements = document.getElementsByClassName('w3-check');
-          for(var i=0; i<inputElements[i]; ++i){
-                if(inputElements[i].checked){
-                  if(i==inputElements.length){
-                    checkedValue += inputElements[i].value;
-                  }else{
-                    checkedValue += inputElements[i].value + ","
-                  }
+
+          for (var i = 0; i < inputElements.length; ++i) {
+            if (inputElements[i].checked) {
+              console.log(inputElements[i].value)
+              if (inputElements[i].value == "all") {
+                AccessListCall("LTA", "POST", t);
+                console.log('it went in')
+                break;
+              } else {
+                  checkedValue += inputElements[i].value + ","
                 }
+              }
+            }
           }
-          if(checkedValue=="all"){
-            AccessListCall("LTA", "POST", t);
-          }else{
+          console.log(checkedValue)
+          if(checkedValue!==""){
             AccessListCall("LTA", "POST", t, checkedValue);
           }
-          publisher.publish()
-          publisher.disconnect()
+            
+          // publisher.publish()
+          // publisher.disconnect()
           // syntax from sweetalert.js library to create alrets
           // will output an success alert box with the title and text as the output
           swal({
@@ -95,7 +100,8 @@
             icon: "success"
           })
           document.getElementById("topicreg").reset();
-        }
+          toggleSelection2();
+          toggleSelection();
       });
     };
     //function disables all other checkboxes when the all check box is clicked
@@ -133,25 +139,25 @@
   <form name='topicreg' id='topicreg' class="w3-panel was-validated">
     <!-- <div class="form-group">
       <label class="w3-text-teal" for="aname">Agency Name:</label>
-      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="aname"
+      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="aname"
         placeholder="Enter the publishing Agency Name" name="aname" required></input>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div> -->
     <div class="form-group">
       <label class="w3-text-teal" for="topic">Topic:</label>
-      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id=" topic"
+      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id=" topic"
         placeholder="Enter Topic to be Published" name="topic" required></input>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label class="w3-text-teal" for="desc">Description:</label>
-      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id=" desc"
+      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id=" desc"
         placeholder="Give a brief description about the topic" name="desc" required>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
-    </div>
+    </div> -->
     <div class="form-group">
       <label class="w3-text-teal" for="desc">Which Agency Can Access this topic?:</label>
       <input class="w3-check" type="checkbox" checked="checked" id='all' name="agency" value="all"
