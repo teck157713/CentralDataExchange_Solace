@@ -14,6 +14,9 @@
   <!-- load js to run the ui for this page-->
   <script src="processtopicreg.js"></script>
 
+  <!-- Load js to retrieve the ACL via SEMP API REST call -->
+  <script src="AccessListCall.js"></script>
+
   <!-- Solace cloud login details-->
   <script src="config/config.js" type="text/javascript"></script>
 
@@ -66,6 +69,22 @@
             icon: "error"
           })
         } else {
+          var checkedValue = ""; 
+          var inputElements = document.getElementsByClassName('w3-check');
+          for(var i=0; i<inputElements[i]; ++i){
+                if(inputElements[i].checked){
+                  if(i==inputElements.length){
+                    checkedValue += inputElements[i].value;
+                  }else{
+                    checkedValue += inputElements[i].value + ","
+                  }
+                }
+          }
+          if(checkedValue=="all"){
+            AccessListCall("LTA", "POST", t);
+          }else{
+            AccessListCall("LTA", "POST", t, checkedValue);
+          }
           publisher.publish()
           publisher.disconnect()
           // syntax from sweetalert.js library to create alrets
@@ -138,11 +157,11 @@
       <input class="w3-check" type="checkbox" checked="checked" id='all' name="agency" value="all"
         onClick="toggleSelection()">
       <label>All Agencies</label>
-      <input class="w3-check" type="checkbox" id='moh' name="agency" value="moh" onClick="toggleSelection2()" disabled>
+      <input class="w3-check" type="checkbox" id='moh' name="agency" value="MOH" onClick="toggleSelection2()" disabled>
       <label>MOH</label>
-      <input class="w3-check" type="checkbox" id='lta' name="agency" value="lta" onClick="toggleSelection2()" disabled>
+      <input class="w3-check" type="checkbox" id='lta' name="agency" value="LTA" onClick="toggleSelection2()" disabled>
       <label>LTA</label>
-      <input class="w3-check" type="checkbox" id='nea' name="agency" value="nea" onClick="toggleSelection2()" disabled>
+      <input class="w3-check" type="checkbox" id='nea' name="agency" value="NEA" onClick="toggleSelection2()" disabled>
       <label>NEA</label>
     </div>
     <button type="button" class="btn btn-primary" id='submit'>Submit</button>
