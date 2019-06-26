@@ -21,6 +21,7 @@
     <script src="microsoftanalyse.js"></script>
     <script src="govtech.js"></script>
     <script src="tempData.js"></script>
+    <script src="AccessListCall.js"></script>
     <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 
     <!-- Execute the Confirmed Delivery tutorial -->
@@ -36,6 +37,8 @@
         // NOTICE: works only with "solclientjs-debug.js"
         solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
+        // console.log(AccessListCall("NEA", "GETALL"));
+
         // create the producer, specifying name of the subscription topic
         producer = new PubSub({logname : "publishlog", topicName : "MEA/1/temp_data/raw", topicID : "publishtopic", contentmsg : "content", contentfile : "fileimg"});
         // assign buttons to the producer functions
@@ -48,7 +51,7 @@
         document.getElementById("stoppubTemp").addEventListener("click", producer.stoppubTemp);
         document.getElementById("pubTaxi").addEventListener("click", producer.sendTaxiInterval);
         document.getElementById("stoppubTaxi").addEventListener("click", producer.stoptaxidata);
-
+        // create the subscribers
         subscriber = new PubSub({queueName : 'SOLACE_QUEUE', logname : 'subscribelog', tableName : 'table2'});
         subscriber2 = new PubSub({logname : 'subscribelog2', tableName : 'table1', topicID : 'topicname'});
         document.getElementById("subconnect").addEventListener("click", subscriber.connect);

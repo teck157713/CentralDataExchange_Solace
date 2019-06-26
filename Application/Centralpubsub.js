@@ -177,7 +177,7 @@ var PubSub = function (params) {
         }
     };
 
-    // Event-Driven Re-publish Topic
+    // Event-Driven Re-publish processed data to another Topic
     pubsub.EventMsg = function (topicSend, result, addTopic = "") {
         try {
           enumvalue += 1;
@@ -302,6 +302,7 @@ var PubSub = function (params) {
                     // Define message received event listener
                     pubsub.messageConsumer.on(solace.MessageConsumerEventName.MESSAGE, function (message) {
                       var result = message.getBinaryAttachment();
+                      // Process each of the incoming message respectively
                       if (String(message.getDestination()).indexOf('NEA/1/temp_data/raw') >= 0){
                         yTemp += 1;
                         TempEventCall(result, pubsub);

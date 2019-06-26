@@ -41,7 +41,7 @@
         var updateInterval = 1000;
         var dataLength = 20; // number of dataPoints visible at any point
         var chart;
-
+        // function being called frequently every 1 second to collect message flow and update the next node in chart
         var updateChart = function (count) {
 
             count = count || 1;
@@ -80,6 +80,7 @@
             chart.render();
         };
         window.onload = function () {
+            // Creates the chart to simulate dataflow on load
             chart = new CanvasJS.Chart("chartContainer", {
                 title: {
                     text: "Data Flow"
@@ -114,7 +115,6 @@
                 }]
             });
 
-            //setInterval(function(){updateChart()}, updateInterval);
 
             // Initialize factory with the most recent API defaults
             var factoryProps = new solace.SolclientFactoryProperties();
@@ -125,15 +125,18 @@
             // NOTICE: works only with "solclientjs-debug.js"
             solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
+            // create the main broker to receive messages and process data streaming, as well as publishing =
             central = new PubSub({
                 queueName: 'SOLACE_ALL',
                 logname: 'subscribelog',
                 tableName: 'table2'
             });
+            // Buttons to connect and consume messages by main broker
             document.getElementById("subconnect").addEventListener("click", central.connect);
             document.getElementById("subdisconnect").addEventListener("click", central.disconnect);
             document.getElementById("startconsume").addEventListener("click", central.startConsume);
             document.getElementById("stopconsume").addEventListener("click", central.stopConsume);
+            // update the chart to display message flow consistently
             updateChart(dataLength);
 
         };
