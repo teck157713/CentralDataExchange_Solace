@@ -43,95 +43,95 @@
   <script type="text/javascript">
     var publisher = null;
     window.onload = function () {
-      // Initialize factory with the most recent API defaults
-      // var factoryProps = new solace.SolclientFactoryProperties();
-      // factoryProps.profile = solace.SolclientFactoryProfiles.version10;
-      // solace.SolclientFactory.init(factoryProps);
+        // Initialize factory with the most recent API defaults
+        // var factoryProps = new solace.SolclientFactoryProperties();
+        // factoryProps.profile = solace.SolclientFactoryProfiles.version10;
+        // solace.SolclientFactory.init(factoryProps);
 
-      // enable logging to JavaScript console at WARN level
-      // NOTICE: works only with "solclientjs-debug.js"
-      // solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
+        // enable logging to JavaScript console at WARN level
+        // NOTICE: works only with "solclientjs-debug.js"
+        // solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
-      // create the publisher, specifying name of the subscription topic
-      // publisher = new RegPublisher('SOLACE_TOPICREG');
-      // Below function Executes on click of submit button.
-      $("#submit").click(function () {
-        console.debug("Caught send button event");
-        // var a = document.forms["topicreg"]["aname"].value
-        var t = document.forms["topicreg"]["topic"].value
-        // var d = document.forms["topicreg"]["desc"].value
-        if (t === "") {
-          // syntax from sweetalert.js library to create alrets
-          // will output an error alert box with the title and text as the output
-          swal({
-            title: "Missing Topic! ",
-            text: "Please input topic!",
-            icon: "error"
-          })
-        } else {
-          var checkedValue = "";
-          var inputElements = document.getElementsByClassName('w3-check');
-
-          for (var i = 0; i < inputElements.length; ++i) {
-            if (inputElements[i].checked) {
-              console.log(inputElements[i].value)
-              if (inputElements[i].value == "all") {
-                AccessListCall("LTA", "POST", t);
-                console.log('it went in')
-                break;
-              } else {
+        // create the publisher, specifying name of the subscription topic
+        // publisher = new RegPublisher('SOLACE_TOPICREG');
+        // Below function Executes on click of submit button.
+        $("#submit").click(function () {
+          console.debug("Caught send button event");
+          // var a = document.forms["topicreg"]["aname"].value
+          var t = document.forms["topicreg"]["topic"].value
+          // var d = document.forms["topicreg"]["desc"].value
+          if (t === "") {
+            // syntax from sweetalert.js library to create alrets
+            // will output an error alert box with the title and text as the output
+            swal({
+              title: "Missing Topic! ",
+              text: "Please input topic!",
+              icon: "error"
+            })
+          } else {
+            var checkedValue = "";
+            var inputElements = document.getElementsByClassName('w3-check');
+            for (var i = 0; i < inputElements.length; ++i) {
+              if (inputElements[i].checked) {
+                console.log(inputElements[i].value)
+                if (inputElements[i].value == "all") {
+                  // if published topic is open to all agencies to subscribe it will create exceptions in all agencies ACl
+                  AccessListCall("LTA", "POST", t);
+                  console.log('it went in')
+                  break;
+                } else {
                   checkedValue += inputElements[i].value + ","
                 }
               }
             }
+            console.log(checkedValue)
+            if (checkedValue !== "") {
+              // creates subscription exceptions in the ACL of the releveant checked agencies
+              AccessListCall("LTA", "POST", t, checkedValue);
+            }
+            // publisher.publish()
+            // publisher.disconnect()
+            // syntax from sweetalert.js library to create alrets
+            // will output an success alert box with the title and text as the output
+            swal({
+              title: "Thanks for registering! ",
+              text: "Your registration will be confirmed in 3 working days",
+              icon: "success"
+            })
+            // reinitalize form adter submission
+            document.getElementById("topicreg").reset();
+            toggleSelection2();
+            toggleSelection();
           }
-          console.log(checkedValue)
-          if(checkedValue!==""){
-            AccessListCall("LTA", "POST", t, checkedValue);
+        });
+        //function disables all other checkboxes when the all check box is clicked
+        function toggleSelection() {
+          var a = document.getElementById("all");
+          var b = document.getElementById("moh");
+          var c = document.getElementById("lta");
+          var d = document.getElementById("nea");
+          if (a.checked) {
+            b.disabled = true;
+            c.disabled = true;
+            d.disabled = true;
+          } else {
+            b.disabled = false;
+            c.disabled = false;
+            d.disabled = false;
           }
-            
-          // publisher.publish()
-          // publisher.disconnect()
-          // syntax from sweetalert.js library to create alrets
-          // will output an success alert box with the title and text as the output
-          swal({
-            title: "Thanks for registering! ",
-            text: "Your registration will be confirmed in 3 working days",
-            icon: "success"
-          })
-          document.getElementById("topicreg").reset();
-          toggleSelection2();
-          toggleSelection();
-      });
-    };
-    //function disables all other checkboxes when the all check box is clicked
-    function toggleSelection() {
-      var a = document.getElementById("all");
-      var b = document.getElementById("moh");
-      var c = document.getElementById("lta");
-      var d = document.getElementById("nea");
-      if (a.checked) {
-        b.disabled = true;
-        c.disabled = true;
-        d.disabled = true;
-      } else {
-        b.disabled = false;
-        c.disabled = false;
-        d.disabled = false;
-      }
-    }
-    //function disables the all check box if the other checkboxes are clicked
-    function toggleSelection2() {
-      var a = document.getElementById("all");
-      var b = document.getElementById("moh");
-      var c = document.getElementById("lta");
-      var d = document.getElementById("nea");
-      if (b.checked || c.checked || d.checked) {
-        a.disabled = true;
-      } else {
-        a.disabled = false;
-      }
-    }
+        }
+        //function disables the all check box if the other checkboxes are clicked
+        function toggleSelection2() {
+          var a = document.getElementById("all");
+          var b = document.getElementById("moh");
+          var c = document.getElementById("lta");
+          var d = document.getElementById("nea");
+          if (b.checked || c.checked || d.checked) {
+            a.disabled = true;
+          } else {
+            a.disabled = false;
+          }
+        }
   </script>
 </head>
 
