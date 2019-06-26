@@ -1,14 +1,15 @@
     // EXAMPLE
-    // NEED TO assign a ACL Profiles called ALL to handle subscription
-    //   AccessInnerCall("LTA", "POST", "LOL/>"); post to all agent's subscribe list
-    //   AccessInnerCall("LTA", "GET"); returns a list of published topics
-    //   AccessInnerCall("LTA", "GETALL"); returns a list of topics available
+    // Recursive API Calls to handle clients for ACL Admin
+    //   AccessListCall("LTA", "POST", "LOL/>"); post to all agent's subscribe list
+    //   AccessListCall("LTA", "POST", "LOL/>", "NEA, MOE"); post to all listed agent's subscribe list
+    //   AccessListCall("LTA", "GET"); returns a list of published topics
+    //   AccessListCall("LTA", "GETALL"); returns a list of topics available
 
-function AccessListCall(username, type, value = '', counter = 0){
+function AccessListCall(username, type, value = '', filter = '', counter = 0){
     var dict = [];
     var uriSEMP = "";
-    AccessInnerCall(username, type, value, counter);
-    function AccessInnerCall(username, type, value = '', counter = 0) {
+    AccessInnerCall(username, type, value, counter, filter);
+    function AccessInnerCall(username, type, value = '', counter = 0, filter = '') {
         var result;
         insertedtype = "GET";
         insertedvalue = '';
@@ -25,7 +26,11 @@ function AccessListCall(username, type, value = '', counter = 0){
                 break;
         }
         if (counter == 0){
-            uriSEMP = "http://localhost:8080/SEMP/v2/config/msgVpns/default/clientUsernames/" + username;
+            if (!filter){
+                uriSEMP = "http://localhost:8080/SEMP/v2/config/msgVpns/default/clientUsernames/" + username;
+            } else {
+                uriSEMP = "http://localhost:8080/SEMP/v2/config/msgVpns/default/clientUsernames";
+            }
         } else if (counter == 1) {
             uriSEMP = "http://localhost:8080/SEMP/v2/config/msgVpns/default/aclProfiles/" + username + "/publishExceptions";
         } else if (counter == 2){
@@ -58,7 +63,19 @@ function AccessListCall(username, type, value = '', counter = 0){
                     if (type == 'GET'){
                         AccessInnerCall(result, type, value, counter);
                     } else if (type == 'POST'){
-                        AccessInnerCall(result, type, value, counter);
+                        if (filter) {
+                            var acllist = [];
+                            for (var i in data['data']){
+                                if (String(filter).indexOf(data['data'][i]['clientUsername']) >= 0){
+                                    acllist.push(data['data'][i]['aclProfileName']);
+                                } else if (String(username).indexOf(data['data'][i]['clientUsername']) >= 0){
+                                    username = data['data'][i]['aclProfileName'];
+                                }
+                            }
+                            AccessInnerCall(username, type, value, counter, acllist);
+                        } else {
+                            AccessInnerCall(result, type, value, counter);
+                        }
                     } else if (type == 'GETALL'){
                         AccessInnerCall(result, type, value, 2);
                     }
@@ -68,8 +85,13 @@ function AccessListCall(username, type, value = '', counter = 0){
                         dict.push(data['data'][k]['publishExceptionTopic']);
                     }
                     if (type == 'POST'){
-                        counter = 3;
-                        AccessInnerCall(username, type, value, counter);
+                        if (filter) {
+                            for (var i in filter) {
+                                AccessInnerCall(filter[i], type, value, 2);
+                            }
+                        } else {
+                            AccessInnerCall(username, type, value, 3);
+                        }
                     }
                     break;
                 case 2:
