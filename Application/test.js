@@ -48,10 +48,20 @@ var pCentral = pLta.clone()
     .position(100, 250)
     .set('tokens', 0);
 
-var pAnalytics = pLta.clone()
-    .attr('.label/text', 'Analytics')
-    .position(220, 250)
-    .set('tokens', 0);
+var pAnalytics = new pn.Transition({
+    position: { x: 230, y: 250 },
+    attrs: {
+        '.label': {
+            'text': 'Analytics',
+            'fill': '#F37021'
+        },
+        '.root': {
+            'fill': '#F37021',
+            'stroke': '#F37021'
+        }
+    },
+    tokens: 0
+});
 
 var pPublish = new pn.Transition({
     position: { x: 50, y: 50 },
