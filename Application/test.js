@@ -193,23 +193,33 @@ function fireTransition(t, sec) {
 function simulate() {
 
     var transitions = [pSubscribe5, pNea, pLta, pMHA, pMOH, pCentral, pAnalytics, pCentral];
-    transitions.forEach(function(t) {
-        if (Math.random() < 1) {
-                fireTransition(t, 1);
-        }
-    });
+    // transitions.forEach(function(t) {
+    //     if (Math.random() < 1) {
+    //             fireTransition(t, 1);
+    //     }
+    // });
 
-    return setInterval(function() {
+    setInterval(function() {
         transitions.forEach(function(t) {
+
             if (Math.random() < 1) {
                 if (t == pAnalytics){
-                    fireTransition(t, 0.6);
                 } else {
                     fireTransition(t, 1);
                 }
             }
         });
     }, 700);
+    setInterval(function() {
+        transitions.forEach(function(t) {
+            if (Math.random() < 1) {
+                if (t == pAnalytics){
+                    fireTransition(t, 0.3);
+                } else {
+                }
+            }
+        });
+    }, 200);
 }
 
 var simulationId = simulate();
