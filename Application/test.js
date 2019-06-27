@@ -95,6 +95,10 @@ var pSubscribe4 = pPublish.clone()
     .attr('.label/text', 'Subscribe')
     .position(260, 450);
 
+var pSubscribe5 = pPublish.clone()
+    .attr('.label/text', 'Subscribe')
+    .position(30, 250);
+
 function link(a, b) {
 
     return new pn.Link({
@@ -111,7 +115,7 @@ function link(a, b) {
     });
 }
 
-graph.addCell([pPublish, pSubscribe, pPublish2, pSubscribe2, pPublish3, pSubscribe3, pPublish4, pSubscribe4, pLta, pNea, pMHA, pMOH, pCentral, pAnalytics]);
+graph.addCell([pPublish, pSubscribe, pPublish2, pSubscribe2, pPublish3, pSubscribe3, pPublish4, pSubscribe4, pLta, pNea, pMHA, pMOH, pCentral, pSubscribe5, pAnalytics]);
 
 graph.addCell([
     link(pPublish, pLta),
@@ -122,7 +126,9 @@ graph.addCell([
     link(pNea, pCentral),
     link(pMHA, pCentral),
     link(pMOH, pCentral),
+    link(pCentral, pSubscribe5),
     link(pCentral, pAnalytics),
+    link(pAnalytics, pCentral),
     link(pLta, pSubscribe),
     link(pNea, pSubscribe2),
     link(pMHA, pSubscribe3),
@@ -186,7 +192,7 @@ function fireTransition(t, sec) {
 
 function simulate() {
 
-    var transitions = [pPublish, pNea, pLta, pMHA, pMOH, pCentral, pAnalytics];
+    var transitions = [pSubscribe5, pNea, pLta, pMHA, pMOH, pCentral, pAnalytics, pCentral];
     transitions.forEach(function(t) {
         if (Math.random() < 1) {
                 fireTransition(t, 1);
@@ -197,7 +203,7 @@ function simulate() {
         transitions.forEach(function(t) {
             if (Math.random() < 1) {
                 if (t == pAnalytics){
-                    fireTransition(t, 3);
+                    fireTransition(t, 0.6);
                 } else {
                     fireTransition(t, 1);
                 }
