@@ -2,7 +2,7 @@ var graph = new joint.dia.Graph();
 var paper = new joint.dia.Paper({
     el: document.getElementById('paper'),
     width: 450,
-    height: 550,
+    height: 650,
     gridSize: 10,
     defaultAnchor: { name: 'perpendicular' },
     defaultConnectionPoint: { name: 'boundary' },
@@ -33,14 +33,19 @@ var pNea = pLta.clone()
     .position(100, 300)
     .set('tokens', 0);
 
+var pMHA = pLta.clone()
+    .attr('.label/text', 'MHA')
+    .position(100, 500)
+    .set('tokens', 0);
+
 var pCentral = pLta.clone()
     .attr('.label/text', 'Central Broker')
-    .position(170, 200)
+    .position(190, 300)
     .set('tokens', 0);
 
 var pAnalytics = pLta.clone()
     .attr('.label/text', 'Analytics')
-    .position(260, 200)
+    .position(280, 300)
     .set('tokens', 0);
 
 var pPublish = new pn.Transition({
@@ -69,6 +74,14 @@ var pSubscribe2 = pPublish.clone()
     .attr('.label/text', 'Subscribe')
     .position(50, 350);
 
+var pPublish3 = pPublish.clone()
+    .attr('.label/text', 'Publish')
+    .position(50, 450);
+
+var pSubscribe3 = pPublish.clone()
+    .attr('.label/text', 'Subscribe')
+    .position(50, 550);
+
 function link(a, b) {
 
     return new pn.Link({
@@ -85,16 +98,19 @@ function link(a, b) {
     });
 }
 
-graph.addCell([pPublish, pSubscribe, pPublish2, pSubscribe2, pLta, pNea, pCentral, pAnalytics]);
+graph.addCell([pPublish, pSubscribe, pPublish2, pSubscribe2, pPublish3, pSubscribe3, pLta, pNea, pMHA, pCentral, pAnalytics]);
 
 graph.addCell([
     link(pPublish, pLta),
     link(pPublish2, pNea),
+    link(pPublish3, pMHA),
     link(pLta, pCentral),
     link(pNea, pCentral),
+    link(pMHA, pCentral),
     link(pCentral, pAnalytics),
     link(pLta, pSubscribe),
-    link(pNea, pSubscribe2)
+    link(pNea, pSubscribe2),
+    link(pMHA, pSubscribe3)
 ]);
 
 
@@ -154,20 +170,24 @@ function fireTransition(t, sec) {
 
 function simulate() {
 
-    var transitions = [pPublish, pNea, pPublish2, pCentral, pLta];
+    var transitions = [pPublish, pNea, pPublish2, pLta, pMHA, pCentral, pAnalytics];
     transitions.forEach(function(t) {
         if (Math.random() < 1) {
-            fireTransition(t, 1);
+                fireTransition(t, 1);
         }
     });
 
     return setInterval(function() {
         transitions.forEach(function(t) {
             if (Math.random() < 1) {
-                fireTransition(t, 1);
+                if (t == pAnalytics){
+                    fireTransition(t, 3);
+                } else {
+                    fireTransition(t, 1);
+                }
             }
         });
-    }, 2000);
+    }, 700);
 }
 
 var simulationId = simulate();
