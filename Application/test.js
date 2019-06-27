@@ -16,13 +16,13 @@ var pLta = new pn.Place({
     attrs: {
         '.label': {
             'text': 'LTA',
-            'fill': '#7c68fc' },
+            'fill': '#F37021' },
         '.root': {
-            'stroke': '#9586fd',
+            'stroke': '#F37021',
             'stroke-width': 3
         },
         '.tokens > circle': {
-            'fill': '#7a7e9b'
+            'fill': '#F37021'
         }
     },
     tokens: 20
@@ -58,11 +58,11 @@ var pPublish = new pn.Transition({
     attrs: {
         '.label': {
             'text': 'Publish',
-            'fill': '#fe854f'
+            'fill': '#009193'
         },
         '.root': {
-            'fill': '#9586fd',
-            'stroke': '#9586fd'
+            'fill': '#009193',
+            'stroke': '#009193'
         }
     }
 });
@@ -96,7 +96,7 @@ var pSubscribe4 = pPublish.clone()
     .position(260, 450);
 
 var pSubscribe5 = pPublish.clone()
-    .attr('.label/text', 'Subscribe')
+    .attr('.label/text', 'Publish')
     .position(30, 250);
 
 function link(a, b) {
@@ -109,7 +109,7 @@ function link(a, b) {
                 'fill': 'none',
                 'stroke-linejoin': 'round',
                 'stroke-width': '2',
-                'stroke': '#4b4a67'
+                'stroke': '#474747'
             }
         }
     });
@@ -169,7 +169,7 @@ function fireTransition(t, sec) {
             });
 
             links.forEach(function(l) {
-                var token = V('circle', { r: 5, fill: '#feb662' });
+                var token = V('circle', { r: 5, fill: '#009193' });
                 l.findView(paper).sendToken(token, sec * 1000);
             });
         });
@@ -181,7 +181,7 @@ function fireTransition(t, sec) {
             });
 
             links.forEach(function(l) {
-                var token = V('circle', { r: 5, fill: '#feb662' });
+                var token = V('circle', { r: 5, fill: '#F37021' });
                 l.findView(paper).sendToken(token, sec * 1000, function() {
                     p.set('tokens', p.get('tokens') + 1);
                 });
@@ -192,7 +192,7 @@ function fireTransition(t, sec) {
 
 function simulate() {
 
-    var transitions = [pSubscribe5, pNea, pLta, pMHA, pMOH, pCentral, pAnalytics, pCentral];
+    var transitions = [pNea, pLta, pMHA, pMOH, pCentral, pAnalytics, pCentral, pSubscribe5];
     // transitions.forEach(function(t) {
     //     if (Math.random() < 1) {
     //             fireTransition(t, 1);
