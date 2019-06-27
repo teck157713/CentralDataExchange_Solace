@@ -4,11 +4,12 @@
     //   AccessListCall("LTA", "POST", "LOL/>", "NEA, MOE"); post to all listed agent's subscribe list
     //   AccessListCall("LTA", "GET"); returns a list of published topics
     //   AccessListCall("LTA", "GETALL"); returns a list of topics available
+    //   AccessListCall("LTA", "LOGIN", "password"); returns true/false with the right authentication
 
 function AccessListCall(username, type, value = '', filter = ''){
     var dict = [];
     var uriSEMP = "";
-    AccessInnerCall(username, type, value, 0, filter);
+    AccessInnerCall(username, type, value, 0, filter = (('LOGIN' === type) ? 'login' : filter));
     function AccessInnerCall(username, type, value = '', counter = 0, filter = '') {
         var result;
         insertedtype = "GET";
@@ -84,6 +85,15 @@ function AccessListCall(username, type, value = '', filter = ''){
                         }
                     } else if (type == 'GETALL'){
                         AccessInnerCall(result, type, value, 2);
+                    } else if (type == 'LOGIN'){
+                        for (var i in data['data']){
+                            if (username == data['data'][i]['clientUsername']){
+                                dict = "true";
+                            }
+                        }
+                        if (dict.length === 0){
+                            dict = "false";
+                        }
                     }
                     break;
                 // reference to the URI that is being called (counter = 1)
@@ -130,8 +140,8 @@ function AccessListCall(username, type, value = '', filter = ''){
             var errorString = (errorThrown === "") ? "Error. " :
                 errorThrown + " (" + jqXHR.status + "): ";
             errorString += (jqXHR.responseText === "") ? "" :
-                jQuery.parseJSON(jqXHR.responseText).message;
-            alert(errorString);
+            console.log(errorString);
+            
         });
     };
     if (dict[0]){
