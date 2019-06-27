@@ -1,7 +1,7 @@
 var graph = new joint.dia.Graph();
 var paper = new joint.dia.Paper({
     el: document.getElementById('paper'),
-    width: 450,
+    width: 350,
     height: 650,
     gridSize: 10,
     defaultAnchor: { name: 'perpendicular' },
