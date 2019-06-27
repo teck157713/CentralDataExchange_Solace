@@ -1,8 +1,8 @@
 var graph = new joint.dia.Graph();
 var paper = new joint.dia.Paper({
     el: document.getElementById('paper'),
-    width: 450,
-    height: 650,
+    width: 300,
+    height: 550,
     gridSize: 10,
     defaultAnchor: { name: 'perpendicular' },
     defaultConnectionPoint: { name: 'boundary' },
@@ -30,22 +30,27 @@ var pLta = new pn.Place({
 
 var pNea = pLta.clone()
     .attr('.label/text', 'NEA')
-    .position(100, 300)
+    .position(180, 100)
     .set('tokens', 0);
 
 var pMHA = pLta.clone()
     .attr('.label/text', 'MHA')
-    .position(100, 500)
+    .position(100, 400)
+    .set('tokens', 0);
+
+var pMOH = pLta.clone()
+    .attr('.label/text', 'MOH')
+    .position(180, 400)
     .set('tokens', 0);
 
 var pCentral = pLta.clone()
     .attr('.label/text', 'Central Broker')
-    .position(190, 300)
+    .position(100, 250)
     .set('tokens', 0);
 
 var pAnalytics = pLta.clone()
     .attr('.label/text', 'Analytics')
-    .position(280, 300)
+    .position(220, 250)
     .set('tokens', 0);
 
 var pPublish = new pn.Transition({
@@ -68,19 +73,27 @@ var pSubscribe = pPublish.clone()
 
 var pPublish2 = pPublish.clone()
     .attr('.label/text', 'Publish')
-    .position(50, 250);
+    .position(260, 50);
 
 var pSubscribe2 = pPublish.clone()
     .attr('.label/text', 'Subscribe')
-    .position(50, 350);
+    .position(260, 150);
 
 var pPublish3 = pPublish.clone()
     .attr('.label/text', 'Publish')
-    .position(50, 450);
+    .position(50, 350);
 
 var pSubscribe3 = pPublish.clone()
     .attr('.label/text', 'Subscribe')
-    .position(50, 550);
+    .position(50, 450);
+
+var pPublish4 = pPublish.clone()
+    .attr('.label/text', 'Publish')
+    .position(260, 350);
+
+var pSubscribe4 = pPublish.clone()
+    .attr('.label/text', 'Subscribe')
+    .position(260, 450);
 
 function link(a, b) {
 
@@ -98,19 +111,22 @@ function link(a, b) {
     });
 }
 
-graph.addCell([pPublish, pSubscribe, pPublish2, pSubscribe2, pPublish3, pSubscribe3, pLta, pNea, pMHA, pCentral, pAnalytics]);
+graph.addCell([pPublish, pSubscribe, pPublish2, pSubscribe2, pPublish3, pSubscribe3, pPublish4, pSubscribe4, pLta, pNea, pMHA, pMOH, pCentral, pAnalytics]);
 
 graph.addCell([
     link(pPublish, pLta),
     link(pPublish2, pNea),
     link(pPublish3, pMHA),
+    link(pPublish4, pMOH),
     link(pLta, pCentral),
     link(pNea, pCentral),
     link(pMHA, pCentral),
+    link(pMOH, pCentral),
     link(pCentral, pAnalytics),
     link(pLta, pSubscribe),
     link(pNea, pSubscribe2),
-    link(pMHA, pSubscribe3)
+    link(pMHA, pSubscribe3),
+    link(pMOH, pSubscribe4)
 ]);
 
 
@@ -170,7 +186,7 @@ function fireTransition(t, sec) {
 
 function simulate() {
 
-    var transitions = [pPublish, pNea, pPublish2, pLta, pMHA, pCentral, pAnalytics];
+    var transitions = [pPublish, pNea, pLta, pMHA, pMOH, pCentral, pAnalytics];
     transitions.forEach(function(t) {
         if (Math.random() < 1) {
                 fireTransition(t, 1);
