@@ -8,7 +8,9 @@ function validate() {
     // if (username == "NEA" && password == "pass") {
     if (AccessListCall(user, "LOGIN", password)) {
         console.log("Login successfully");
-        document.cookie = "username="+user;
+        setCookie('username',user);
+        var x = getCookie('username')
+        alert(x)
         // syntax from sweetalert.js library to create alrets
         swal({title: "Login successful", text: "Welcome Back!", icon: "success"
             })
