@@ -26,7 +26,7 @@ function selectorTaxi(result){
             infoWindow.setContent('<div style="font-family: Lucida Grande, Arial, sans-serif;">'+'<div id="title">'+ this.getTitle() +'</div><br><div id="h4">' + String(this.getPosition()) + '</div><br></div>');
             infoWindow.open(map, this);
             subscriberMarker.unsubscribe();
-            subscriberMarker.topicName = "LTA/1/img_data/filter/" + (Math.floor(this.getPosition().lat() * 100) / 100).toFixed(2) + '*/' + (Math.floor(this.getPosition().lng() * 100) / 100).toFixed(2) + "*/>";
+            subscriberMarker.topicName = "GOV/LTA/1/img_data/filter/" + (Math.floor(this.getPosition().lat() * 100) / 100).toFixed(2) + '*/' + (Math.floor(this.getPosition().lng() * 100) / 100).toFixed(2) + "*/>";
             // Rectangle (radius of marker) helps to identify the area each marker is subscribed to.
             // The event message only appears if the event happens within its area.) 
             rectangle.setBounds({
@@ -158,14 +158,14 @@ function selectorImage(result){
     });
     setTimeout(function(){
         $('#drop').click();
-    }, 20);
+    }, 50);
 
 }
 
 // Adds each marker the ability to subscribe for event messages when clicked
 function addMarkerEvent(marker){
     subscriberMarker.unsubscribe();
-    subscriberMarker.topicName = "LTA/1/img_data/filter/" + (Math.floor(marker.getPosition().lat() * 100) / 100).toFixed(2) + '*/' + (Math.floor(marker.getPosition().lng() * 100) / 100).toFixed(2) + "*/>";
+    subscriberMarker.topicName = "GOV/LTA/1/img_data/filter/" + (Math.floor(marker.getPosition().lat() * 100) / 100).toFixed(2) + '*/' + (Math.floor(marker.getPosition().lng() * 100) / 100).toFixed(2) + "*/"+ ((FilterInput != '') ? FilterInput : ">");
     // Rectangle (radius of marker) helps to identify the area each marker is subscribed to.
     // The event message only appears if the event happens within its area.) 
     rectangle.setBounds({
