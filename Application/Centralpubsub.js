@@ -22,7 +22,7 @@ var PubSub = function (params) {
         var now = new Date();
         var time = [('0' + now.getHours()).slice(-2), ('0' + now.getMinutes()).slice(-2), ('0' + now.getSeconds()).slice(-2)];
         var timestamp = '[' + time.join(':') + '] ';
-        console.log(timestamp + line);
+        // console.log(timestamp + line);
         var logTextArea = document.getElementById(logname);
         logTextArea.innerHTML += timestamp + line + '<br />';
         logTextArea.scrollTop = logTextArea.scrollHeight;
@@ -316,7 +316,6 @@ var PubSub = function (params) {
                         ImageEventCall(result, pubsub, function(){});
                         message.acknowledge();
                       } else if (String(message.getDestination()).indexOf('LTA/1/taxi_data/raw') >= 0){
-                        console.log("received taxi");
                         yTaxi += 1;
                         message.acknowledge();
                       } else {
