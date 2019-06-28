@@ -33,7 +33,7 @@
             // Retrieve the list of topics that an agency can publish to and is subscribed to
             var user = sessionStorage.getItem('username')
             var published = AccessListCall(user, "GET"); //["LTA/>", "LTA/1/IMD_DATA"]
-            var subscribed = AccessListCall(user, "GETALL") //["NEA/>", "MHA/1/IMD_DATA"]
+            var subscribed = AccessListCall(user, "GETALL"); //["NEA/>", "MHA/1/IMD_DATA"]
             for (var i = 0; i < published.length; i++) {
                 try {
                     // iterates through the published topic list and populates a table
@@ -57,7 +57,16 @@
                 }
             }
         }
+    function getPub(){
+        var user = sessionStorage.getItem('username')
+        var published = AccessListCall(user, "GET");
+    }
+    function getSub(){
+        var user = sessionStorage.getItem('username')
+        var subscribed = AccessListCall(user, "GETALL");
+    }
     </script>
+
 </head>
 
 <body>
@@ -77,9 +86,9 @@
     <div class="w3-bar w3-black">
         <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'info')"> How does it
             Work?</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'Published')">Published
+        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'Published'); getPub()">Published
             Topics</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'AvilTopics')">Topics Available</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'AvilTopics'); getSub()">Topics Available</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'stat')">Current Message
             Statistics</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'RegTopic')">Register a topic</button>
