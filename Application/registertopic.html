@@ -57,7 +57,7 @@
         // Below function Executes on click of submit button.
         $("#submit").click(function () {
           console.debug("Caught send button event");
-          var user = getCookie("username")
+          var user = sessionStorage.getItem('username')
           // var a = document.forms["topicreg"]["aname"].value
           var t = document.forms["topicreg"]["topic"].value
           // var d = document.forms["topicreg"]["desc"].value
@@ -77,7 +77,7 @@
                 console.log(inputElements[i].value)
                 if (inputElements[i].value == "all") {
                   // if published topic is open to all agencies to subscribe it will create exceptions in all agencies ACl
-                  AccessListCall("LTA", "POST", t);
+                  AccessListCall(user, "POST", t);
                   console.log('it went in')
                   break;
                 } else {
@@ -105,12 +105,13 @@
             toggleSelection();
           }
         });
+    }
         //function disables all other checkboxes when the all check box is clicked
-        function toggleSelection() {
+        function toggleSelection(){
           var a = document.getElementById("all");
-          var b = document.getElementById("moh");
-          var c = document.getElementById("lta");
-          var d = document.getElementById("nea");
+          var b = document.getElementById("MOH");
+          var c = document.getElementById("LTA");
+          var d = document.getElementById("NEA");
           if (a.checked) {
             b.disabled = true;
             c.disabled = true;
@@ -122,18 +123,17 @@
           }
         }
         //function disables the all check box if the other checkboxes are clicked
-        function toggleSelection2() {
+        function toggleSelection2(){
           var a = document.getElementById("all");
-          var b = document.getElementById("moh");
-          var c = document.getElementById("lta");
-          var d = document.getElementById("nea");
+          var b = document.getElementById("MOH");
+          var c = document.getElementById("LTA");
+          var d = document.getElementById("NEA");
           if (b.checked || c.checked || d.checked) {
             a.disabled = true;
           } else {
             a.disabled = false;
           }
         }
-    }
   </script>
 </head>
 
@@ -162,14 +162,13 @@
     </div> -->
     <div class="form-group">
       <label class="w3-text-teal" for="desc">Which Agency Can Access this topic?:</label>
-      <input class="w3-check" type="checkbox" checked="checked" id='all' name="agency" value="all"
-        onClick="toggleSelection()">
+      <input class="w3-check" type="checkbox" checked="checked" id='all' name="agency" value="all" onClick="toggleSelection()">
       <label>All Agencies</label>
-      <input class="w3-check" type="checkbox" id='moh' name="agency" value="MOH" onClick="toggleSelection2()" disabled>
+      <input class="w3-check" type="checkbox" id='MOH' name="agency" value="MOH" onClick="toggleSelection2()" disabled>
       <label>MOH</label>
-      <input class="w3-check" type="checkbox" id='lta' name="agency" value="LTA" onClick="toggleSelection2()" disabled>
+      <input class="w3-check" type="checkbox" id='LTA' name="agency" value="LTA" onClick="toggleSelection2()" disabled>
       <label>LTA</label>
-      <input class="w3-check" type="checkbox" id='nea' name="agency" value="NEA" onClick="toggleSelection2()" disabled>
+      <input class="w3-check" type="checkbox" id='NEA' name="agency" value="NEA" onClick="toggleSelection2()" disabled>
       <label>NEA</label>
     </div>
     <button type="button" class="btn btn-primary" id='submit'>Submit</button>
