@@ -40,7 +40,7 @@
         // console.log(AccessListCall("NEA", "GETALL"));
 
         // create the producer, specifying name of the subscription topic
-        producer = new PubSub({logname : "publishlog", topicName : "MEA/1/temp_data/raw", topicID : "publishtopic", contentmsg : "content", contentfile : "fileimg"});
+        producer = new PubSub({logname : "publishlog", topicName : "GOV/MEA/1/temp_data/raw", topicID : "publishtopic", contentmsg : "content", contentfile : "fileimg"});
         // assign buttons to the producer functions
         document.getElementById("pubconnect").addEventListener("click", producer.connect);
         document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
