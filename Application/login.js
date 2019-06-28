@@ -2,12 +2,13 @@
 var attempt = 3; // Variable to count number of attempts.
 // Below function Executes on click of login button.
 function validate() {
-    var username = document.getElementById("uname").value;
+    var user = document.getElementById("uname").value;
     var password = document.getElementById("pwd").value;
     // Hardcoded login details for demo purpose
     // if (username == "NEA" && password == "pass") {
-    if (AccessListCall(username, "LOGIN", password)) {
+    if (AccessListCall(user, "LOGIN", password)) {
         console.log("Login successfully");
+        document.cookie = "username="+user;
         // syntax from sweetalert.js library to create alrets
         swal({title: "Login successful", text: "Welcome Back!", icon: "success"
             })
