@@ -57,6 +57,7 @@
         // Below function Executes on click of submit button.
         $("#submit").click(function () {
           console.debug("Caught send button event");
+          var user = getCookie("username")
           // var a = document.forms["topicreg"]["aname"].value
           var t = document.forms["topicreg"]["topic"].value
           // var d = document.forms["topicreg"]["desc"].value
@@ -87,7 +88,7 @@
             console.log(checkedValue)
             if (checkedValue !== "") {
               // creates subscription exceptions in the ACL of the releveant checked agencies
-              AccessListCall("LTA", "POST", t, checkedValue);
+              AccessListCall(user, "POST", t, checkedValue);
             }
             // publisher.publish()
             // publisher.disconnect()
