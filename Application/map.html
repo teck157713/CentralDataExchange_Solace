@@ -79,9 +79,9 @@
         </select></li>
     </ul>
   </div>
-  <div style="visibility: hidden" id="subscribelog" contentEditable="true"></div>
+  <div id="subscribelog" contentEditable="true"></div>
   <table border="1" , width="400px" , id='table1' type="hidden"></table>
-  <input id="topicname" type="hidden" placeholder="Insert Topic" value="*/>" />
+  <input id="topicname" type="hidden" placeholder="Insert Topic" value="GOV/*/>" />
   <script>
     // In the following example, markers appear when the user clicks on the map.
     // Each marker is labeled with a single alphabetical character.
@@ -232,7 +232,8 @@
       subscriber = new PubSub({
         logname: 'subscribelog',
         tableName: 'table1',
-        topicName: '*/>'
+        topicName: 'GOV/*/>',
+        topicID: 'main'
       });
 
       subscriber.connect(function (callback) {
@@ -242,7 +243,8 @@
       // Initialising subscription functionality for the image based on specified filtering 
       subscriberImage = new PubSub({
         logname: 'subscribelog',
-        tableName: 'table1'
+        tableName: 'table1',
+        topicID: 'subscriberImage'
       });
       subscriberImage.connect(function (callback) {
         subscriberImage.subscribe();
@@ -251,7 +253,8 @@
       // Initialising subscription functionality for the specified hospital marker
       subscriberMarker = new PubSub({
         logname: 'subscribelog',
-        tableName: 'table1'
+        tableName: 'table1',
+        topicID: 'subscriberMarker'
       });
 
       // Initialising subscription functionality for the specified hospital marker
@@ -330,7 +333,7 @@
           case "'@25.":
             FilterInput = "*";
         }
-        subscriberImage.topicName = "LTA/1/img_data/filter/*/*/" + FilterInput;
+        subscriberImage.topicName = "GOV/LTA/1/img_data/filter/*/*/" + FilterInput;
         setTimeout(function () {
           subscriberImage.subscribe();
         }, 500);
@@ -386,7 +389,7 @@
           infoWindow.setContent('<div style="font-family: Lucida Grande, Arial, sans-serif;">'+'<div id="title">'+ this.getTitle() +'</div><br>' + this.getPosition() + '<br></div>');
           infoWindow.open(map, this);
           subscriberMarker.unsubscribe();
-          subscriberMarker.topicName = "LTA/1/img_data/filter/" + (Math.floor(this.getPosition().lat() * 10) / 10).toFixed(1) + '*/' + (Math.floor(this.getPosition().lng() * 10) / 10).toFixed(1) + "*/>";
+          subscriberMarker.topicName = "GOV/LTA/1/img_data/filter/" + (Math.floor(this.getPosition().lat() * 10) / 10).toFixed(1) + '*/' + (Math.floor(this.getPosition().lng() * 10) / 10).toFixed(1) + "*/" + ((FilterInput != '') ? FilterInput : ">") ;
           console.log(JSON.stringify(subscriberMarker.topicName));
           // Shows the area of the event it is subscribed to
           rectangle.setBounds({
@@ -409,6 +412,7 @@
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzHU1Oi7smE91XPeiY43wsRXdPG9RqzV8">
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+  <script src="lib/notify.js"></script>
   <script src='http://github.com/michaelvillar/dynamics.js/releases/download/0.0.8/dynamics.min.js'></script>
 </body>
 
