@@ -17,7 +17,7 @@ function validate() {
         .then((value) => window.location.replace("homepage.html"));
         return false;
      // Hardcoded login details for demo purpose
-    } else if (username == "admin" && password == "pass") {
+    } else if (user == "admin" && password == "pass") {
         console.log("Login successfully");
          // syntax from sweetalert.js library to create alrets
         swal({title: "Login successful", text: "Welcome Back!", icon: "success"
