@@ -31,7 +31,7 @@
     <script>
         window.onload = function () {
             // Retrieve the list of topics that an agency can publish to and is subscribed to
-            var user = getCookie("username")
+            var user = sessionStorage.getItem('username')
             var published = AccessListCall(user, "GET"); //["LTA/>", "LTA/1/IMD_DATA"]
             var subscribed = AccessListCall(user, "GETALL") //["NEA/>", "MHA/1/IMD_DATA"]
             for (var i = 0; i < published.length; i++) {
