@@ -185,7 +185,7 @@ var PubSub = function (params) {
 
     //Initiate govData Sending
     pubsub.sendgovdata = function () {
-      govdataon = setInterval(pubsub.sendGovText, 2000);
+      govdataon = setInterval(pubsub.sendGovText, 5000);
       pubsub.log('Publishing, the interval has been started.');
     }
 
@@ -199,7 +199,7 @@ var PubSub = function (params) {
             processgov("https://api.data.gov.sg/v1/transport/traffic-images", function lambda(resdict){
                 resdict = resdict.items[0].cameras;
                 if (resdict.length > enumvalue){
-                    pubsub.sendtrafficimg("LTA/1/img_data/raw", resdict[enumvalue]);
+                    pubsub.sendtrafficimg("GOV/LTA/1/img_data/raw", resdict[enumvalue]);
                 } else {
                     enumvalue = 0;
                 }
@@ -224,7 +224,7 @@ var PubSub = function (params) {
           if (pubsub.session !== null) {
               processgov("https://api.data.gov.sg/v1/transport/taxi-availability", function(resdict){
                 resdict = resdict.features[0].geometry.coordinates;
-                pubsub.sendtrafficimg("LTA/1/taxi_data/raw", resdict);
+                pubsub.sendtrafficimg("GOV/LTA/1/taxi_data/raw", resdict);
               });
           } else {
               pubsub.log('Cannot send messages because not connected to Solace message router.');
@@ -243,7 +243,7 @@ var PubSub = function (params) {
             if (taxitemp[taxiid]){
                 taxitemp[taxiid][0] += rand_move();
                 taxitemp[taxiid][1] += rand_move();
-                pubsub.sendtrafficimg("LTA/1/taxi_data/raw", {[taxiid] : taxitemp[taxiid]});
+                pubsub.sendtrafficimg("GOV/LTA/1/taxi_data/raw", {[taxiid] : taxitemp[taxiid]});
             } else {
                 processgov("https://api.data.gov.sg/v1/transport/taxi-availability", function(resdict){
                     resdict = resdict.features[0].geometry.coordinates;
@@ -251,7 +251,7 @@ var PubSub = function (params) {
                     var taxi_x = resdict[rand][1];
                     var taxi_y = resdict[rand][0];
                     taxitemp[taxiid] = [taxi_x, taxi_y];
-                    pubsub.sendtrafficimg("LTA/1/taxi_data/raw", {[taxiid] : taxitemp[taxiid]});
+                    pubsub.sendtrafficimg("GOV/LTA/1/taxi_data/raw", {[taxiid] : taxitemp[taxiid]});
                 });
                 // var taxi_x = parseFloat((Math.random() * 0.1 + (1.31)).toFixed(2));
                 // var taxi_y = parseFloat((Math.random() * 0.08 + (103.75)).toFixed(2));
@@ -303,10 +303,10 @@ var PubSub = function (params) {
     pubsub.sendTempData = function () {
         if (pubsub.session !== null) {
             processTemp("https://api.data.gov.sg/v1/environment/air-temperature", function(resdict){
-                pubsub.sendTempMsg("NEA/1/temp_data/raw", resdict);
+                pubsub.sendTempMsg("GOV/NEA/1/temp_data/raw", resdict);
             });
             processTemp("https://api.data.gov.sg/v1/environment/rainfall", function(resrain){
-                pubsub.sendTempMsg("NEA/1/rain_data/raw", resrain);
+                pubsub.sendTempMsg("GOV/NEA/1/rain_data/raw", resrain);
             });
         } else {
             pubsub.log('Cannot send messages because not connected to Solace message router.');
