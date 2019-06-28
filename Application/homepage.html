@@ -57,13 +57,35 @@
                 }
             }
         }
-    function getPub(){
+    function openPub(){
+        openStuff(event, 'Published')
         var user = sessionStorage.getItem('username')
         var published = AccessListCall(user, "GET");
-    }
-    function getSub(){
+        var table = document.getElementById('publishTopic');
+        for(var i = table.rows.length - 1; i > 0; i--){
+            table.deleteRow(i);
+        }
+        for (var i = 0; i < published.length; i++) {
+                    // iterates through the published topic list and populates a table
+                    var row = table.insertRow(i+1);
+                    var cell1 = row.insertCell(0);
+                    cell1.innerHTML = published[i];
+                }
+            }
+    function openSub(){
+        openStuff(event, 'AvilTopics')
         var user = sessionStorage.getItem('username')
         var subscribed = AccessListCall(user, "GETALL");
+        var table = document.getElementById('avilTopic');
+        for(var i = table.rows.length - 1; i > 0; i--){
+            table.deleteRow(i);
+        }
+        for (var x = 0; x < subscribed.length; x++) {
+                    // iterates through the subscribed topic list and populates a table
+                    var row = table.insertRow(i+1);
+                    var cell1 = row.insertCell(0);
+                    cell1.innerHTML = subscribed[x];
+            }
     }
     </script>
 
@@ -86,9 +108,9 @@
     <div class="w3-bar w3-black">
         <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'info')"> How does it
             Work?</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'Published'); getPub()">Published
+        <button class="w3-bar-item w3-button tablink" onclick="openPub()">Published
             Topics</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'AvilTopics'); getSub()">Topics Available</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openSub()">Topics Available</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'stat')">Current Message
             Statistics</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'RegTopic')">Register a topic</button>
