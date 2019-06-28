@@ -15,7 +15,7 @@ function TempEventCall(result, pubsub){
                 if ((Math.abs(dict['value'] - Math.max.apply(null, tempTemp[dict['id']].value)) >= 0.5) || (Math.abs(dict['value'] - Math.min.apply(null, tempTemp[dict['id']].value)) >= 0.5)){
                     dict['change'] = Math.max(Math.abs(dict['value'] - Math.max.apply(null, tempTemp[dict['id']].value)), Math.abs(dict['value'] - Math.min.apply(null, tempTemp[dict['id']].value)));
                     // Publish the message to the specificed topic
-                    pubsub.EventMsg("NEA/1/temp_data/change", dict);
+                    pubsub.EventMsg("GOV/NEA/1/temp_data/change", dict);
                     pubsub.log("SEND SUCCESSFUL");
                     tempTemp[dict['id']].value = [dict['value']];
                     
@@ -44,13 +44,13 @@ function RainEventCall(result, pubsub){
             switch (dict['value'] - tempRain[dict['id']].value[0]){
                 case 1:
                     // Publish the processed message to the specificed topic if the rain starts
-                    pubsub.EventMsg("NEA/1/rain_data/start", dict);
+                    pubsub.EventMsg("GOV/NEA/1/rain_data/start", dict);
                     pubsub.log("SEND SUCCESSFUL");
                     tempRain[dict['id']].value = [dict['value']];
                     break;
                 case -1:
                     // Publish the processed message to the specified topic if the rain stops
-                    pubsub.EventMsg("NEA/1/rain_data/stop", dict);
+                    pubsub.EventMsg("GOV/NEA/1/rain_data/stop", dict);
                     pubsub.log("SEND SUCCESSFUL");
                     tempRain[dict['id']].value = [dict['value']];
                     break;
@@ -97,7 +97,7 @@ function ImageEventCall(result, pubsub, callback){
             temp = "/0";
         }
         // Publish the processed message to the specified topic once the picture is analysed
-        pubsub.EventMsg("LTA/1/img_data/filter", finalres, Topstr);
+        pubsub.EventMsg("GOV/LTA/1/img_data/filter", finalres, Topstr);
         pubsub.log("SEND SUCCESSFUL");
         callback();
     });
