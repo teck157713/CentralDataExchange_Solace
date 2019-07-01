@@ -32,6 +32,7 @@
         window.onload = function () {
             // Retrieve the list of topics that an agency can publish to and is subscribed to
             var user = sessionStorage.getItem('username')
+            // checks to see if user is properly logged in if not redirects from login page
             if(user == null){
                 window.location.replace("login.html")
             } else{
