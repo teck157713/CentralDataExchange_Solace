@@ -57,36 +57,38 @@
                 }
             }
         }
-    function openPub(){
-        openStuff(event, 'Published')
-        var user = sessionStorage.getItem('username')
-        var published = AccessListCall(user, "GET");
-        var table = document.getElementById('publishTopic');
-        for(var i = table.rows.length - 1; i > 0; i--){
-            table.deleteRow(i);
-        }
-        for (var i = 0; i < published.length; i++) {
-                    // iterates through the published topic list and populates a table
-                    var row = table.insertRow(i+1);
-                    var cell1 = row.insertCell(0);
-                    cell1.innerHTML = published[i];
-                }
+
+        function openPub() {
+            openStuff(event, 'Published')
+            var user = sessionStorage.getItem('username')
+            var published = AccessListCall(user, "GET");
+            var table = document.getElementById('publishTopic');
+            for (var i = table.rows.length - 1; i > 0; i--) {
+                table.deleteRow(i);
             }
-    function openSub(){
-        openStuff(event, 'AvilTopics')
-        var user = sessionStorage.getItem('username')
-        var subscribed = AccessListCall(user, "GETALL");
-        var table = document.getElementById('avilTopic');
-        for(var i = table.rows.length - 1; i > 0; i--){
-            table.deleteRow(i);
-        }
-        for (var x = 0; x < subscribed.length; x++) {
-                    // iterates through the subscribed topic list and populates a table
-                    var row = table.insertRow(i+1);
-                    var cell1 = row.insertCell(0);
-                    cell1.innerHTML = subscribed[x];
+            for (var i = 0; i < published.length; i++) {
+                // iterates through the published topic list and populates a table
+                var row = table.insertRow(i + 1);
+                var cell1 = row.insertCell(0);
+                cell1.innerHTML = published[i];
             }
-    }
+        }
+
+        function openSub() {
+            openStuff(event, 'AvilTopics')
+            var user = sessionStorage.getItem('username')
+            var subscribed = AccessListCall(user, "GETALL");
+            var table = document.getElementById('avilTopic');
+            for (var i = table.rows.length - 1; i > 0; i--) {
+                table.deleteRow(i);
+            }
+            for (var x = 0; x < subscribed.length; x++) {
+                // iterates through the subscribed topic list and populates a table
+                var row = table.insertRow(i + 1);
+                var cell1 = row.insertCell(0);
+                cell1.innerHTML = subscribed[x];
+            }
+        }
     </script>
 
 </head>
@@ -100,10 +102,10 @@
                 <img src="image/solace.png" />
             </span>
             <div class="banner-heading">
-                Logged in as: 
-                <script> 
-                var user = sessionStorage.getItem('username')
-                user
+                Logged in as:
+                <script>
+                    var user = sessionStorage.getItem('username')
+                    document.write(user)
                 </script>
             </div>
         </div>
@@ -145,14 +147,18 @@
                     <div class="w3-twothird">
                         <div class="w3-container w3-card w3-white w3-margin-bottom">
                             <h2 class="w3-text-grey w3-padding-16">What is a Central Broker?</h2>
-                            <p align="justify"> The central broker assists in the smooth transfer of data between multiple different agencies.
-                                It is essentially a solace events broker that can be utilised to creates bridges with the solace brokers of other agencies,
-                                and through the use of Client and ACL profiles, different agencies can exchange and share data in a secure and easy manner.
-                                </p>
+                            <p align="justify"> The central broker assists in the smooth transfer of data between
+                                multiple different agencies.
+                                It is essentially a solace events broker that can be utilised to creates bridges with
+                                the solace brokers of other agencies,
+                                and through the use of Client and ACL profiles, different agencies can exchange and
+                                share data in a secure and easy manner.
+                            </p>
                         </div>
                         <div class="w3-container w3-card w3-white w3-margin-bottom">
                             <h2 class="w3-text-grey w3-padding-16">How does the Analytics Work?</h2>
-                            <p align="justify"> This is explanation of the Analytics Lorem ipsum dolor sit amet. Praesentium magnam
+                            <p align="justify"> This is explanation of the Analytics Lorem ipsum dolor sit amet.
+                                Praesentium magnam
                                 consectetur vel in deserunt aspernatur est reprehenderit sunt hic. Nulla tempora soluta
                                 ea et odio, unde doloremque repellendus
                                 iure, iste. </p>
