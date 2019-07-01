@@ -33,55 +33,61 @@
     <script>
         var producer = null;
         window.onload = function () {
-            // Initialize factory with the most recent API defaults
-            var factoryProps = new solace.SolclientFactoryProperties();
-            factoryProps.profile = solace.SolclientFactoryProfiles.version10;
-            solace.SolclientFactory.init(factoryProps);
+            var user = sessionStorage.getItem('username')
+            // checks to see if user is properly logged in if not redirects from login page
+            if (user == null) {
+                window.location.replace("login.html")
+            } else {
+                // Initialize factory with the most recent API defaults
+                var factoryProps = new solace.SolclientFactoryProperties();
+                factoryProps.profile = solace.SolclientFactoryProfiles.version10;
+                solace.SolclientFactory.init(factoryProps);
 
-            // enable logging to JavaScript console at WARN level
-            // NOTICE: works only with "solclientjs-debug.js"
-            solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
-            consumer = new QueueConsumer('SOLACE_QUEUE', 'logtable', 'log');
-            document.getElementById("connect").addEventListener("click", consumer.connect);
-            document.getElementById("disconnect").addEventListener("click", consumer.disconnect);
-            document.getElementById("startconsume").addEventListener("click", consumer.startConsume);
-            document.getElementById("stopconsume").addEventListener("click", consumer.stopConsume);
+                // enable logging to JavaScript console at WARN level
+                // NOTICE: works only with "solclientjs-debug.js"
+                solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
+                consumer = new QueueConsumer('SOLACE_QUEUE', 'logtable', 'log');
+                document.getElementById("connect").addEventListener("click", consumer.connect);
+                document.getElementById("disconnect").addEventListener("click", consumer.disconnect);
+                document.getElementById("startconsume").addEventListener("click", consumer.startConsume);
+                document.getElementById("stopconsume").addEventListener("click", consumer.stopConsume);
 
-            consumer2 = new QueueConsumer('SOLACE_REGISTER', 'regtable', 'log2');
-            document.getElementById("connect2").addEventListener("click", consumer2.connect);
-            document.getElementById("disconnect2").addEventListener("click", consumer2.disconnect);
-            document.getElementById("startconsume2").addEventListener("click", consumer2.startConsume);
-            document.getElementById("stopconsume2").addEventListener("click", consumer2.stopConsume);
+                consumer2 = new QueueConsumer('SOLACE_REGISTER', 'regtable', 'log2');
+                document.getElementById("connect2").addEventListener("click", consumer2.connect);
+                document.getElementById("disconnect2").addEventListener("click", consumer2.disconnect);
+                document.getElementById("startconsume2").addEventListener("click", consumer2.startConsume);
+                document.getElementById("stopconsume2").addEventListener("click", consumer2.stopConsume);
 
-            // consumer3 = new QueueConsumer('SOLACE_TOPICREG', 'toptable', 'log3');
-            // document.getElementById("connect3").addEventListener("click", consumer3.connect);
-            // document.getElementById("disconnect3").addEventListener("click", consumer3.disconnect);
-            // document.getElementById("startconsume3").addEventListener("click", consumer3.startConsume);
-            // document.getElementById("stopconsume3").addEventListener("click", consumer3.stopConsume);
-        };
-        // UI function for search based on topic dropdown
-        function topicChange() {
-        var input, filter, table, tr, td, i, txtValue;
-        var e = document.getElementById("mySelect");
-        input = e.options[e.selectedIndex].value;
-        filter = input.toUpperCase();
-        table = document.getElementById("logtable");
-        tr = table.getElementsByTagName("tr");
+                // consumer3 = new QueueConsumer('SOLACE_TOPICREG', 'toptable', 'log3');
+                // document.getElementById("connect3").addEventListener("click", consumer3.connect);
+                // document.getElementById("disconnect3").addEventListener("click", consumer3.disconnect);
+                // document.getElementById("startconsume3").addEventListener("click", consumer3.startConsume);
+                // document.getElementById("stopconsume3").addEventListener("click", consumer3.stopConsume);
+            };
+            // UI function for search based on topic dropdown
+            function topicChange() {
+                var input, filter, table, tr, td, i, txtValue;
+                var e = document.getElementById("mySelect");
+                input = e.options[e.selectedIndex].value;
+                filter = input.toUpperCase();
+                table = document.getElementById("logtable");
+                tr = table.getElementsByTagName("tr");
 
-        // Loop through all table rows, and hide those who don't match the search query
-        for (i = 0; i < tr.length; i++) { 
-            td=tr[i].getElementsByTagName("td")[0]; 
-            if (td) { 
-                txtValue=td.textContent ||
-                td.innerText; 
-                if (txtValue.toUpperCase().indexOf(filter)> -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
+                // Loop through all table rows, and hide those who don't match the search query
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0];
+                    if (td) {
+                        txtValue = td.textContent ||
+                            td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
                 }
             }
-        }
-    };
+        };
     </script>
 </head>
 
