@@ -100,7 +100,11 @@
                 <img src="image/solace.png" />
             </span>
             <div class="banner-heading">
-                Logged in as: <script>user</script>
+                Logged in as: 
+                <script> 
+                var user = sessionStorage.getItem('username')
+                user
+                </script>
             </div>
         </div>
     </div>
