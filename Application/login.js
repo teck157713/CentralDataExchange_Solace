@@ -9,7 +9,7 @@ function validate() {
     // if (username == "NEA" && password == "pass") {
     if (AccessListCall(user, "LOGIN", password)) {
         console.log("Login successfully");
-        sessionStorage.setItem('username', x)
+        sessionStorage.setItem('username', x);
         // syntax from sweetalert.js library to create alrets
         swal({title: "Login successful", text: "Welcome Back!", icon: "success"
             })
@@ -19,6 +19,7 @@ function validate() {
      // Hardcoded login details for demo purpose
     } else if (user == "admin" && password == "pass") {
         console.log("Login successfully");
+        sessionStorage.setItem('username', x);
          // syntax from sweetalert.js library to create alrets
         swal({title: "Login successful", text: "Welcome Back!", icon: "success"
             })
