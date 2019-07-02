@@ -64,14 +64,14 @@
                 // document.getElementById("startconsume3").addEventListener("click", consumer3.startConsume);
                 // document.getElementById("stopconsume3").addEventListener("click", consumer3.stopConsume);
             };
-            // UI function for search based on topic dropdown
-            function topicChange() {
-                var input, filter, table, tr, td, i, txtValue;
-                var e = document.getElementById("mySelect");
-                input = e.options[e.selectedIndex].value;
-                filter = input.toUpperCase();
-                table = document.getElementById("logtable");
-                tr = table.getElementsByTagName("tr");
+                // UI function for search based on topic dropdown
+                function topicChange() {
+                    var input, filter, table, tr, td, i, txtValue;
+                    var e = document.getElementById("mySelect");
+                    input = e.options[e.selectedIndex].value;
+                    filter = input.toUpperCase();
+                    table = document.getElementById("logtable");
+                    tr = table.getElementsByTagName("tr");
 
                 // Loop through all table rows, and hide those who don't match the search query
                 for (i = 0; i < tr.length; i++) {
