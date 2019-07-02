@@ -34,7 +34,7 @@
         var producer = null;
         window.onload = function () {
             var user = sessionStorage.getItem('username')
-            // checks to see if user is properly logged in if not redirects from login page
+            // checks to see if user is properly logged in if not redirects to the login page
             if (user == null) {
                 window.location.replace("login.html")
             } else {
