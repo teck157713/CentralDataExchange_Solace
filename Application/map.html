@@ -28,6 +28,7 @@
   </style>
   <!-- Load Solace Web Messaging API for JavaScript -->
   <script src="lib/solclient-debug.js"></script>
+  <script src="lib/echarts.min.js"></script>
 
   <!-- Load the Javascript to process the map funtions -->
   <script src="pubsubmap.js"></script>
@@ -41,8 +42,16 @@
 
 <body>
   <div id="map"></div>
+  <div id="clockpage">
+    <div id="date"></div>
+    <div id="clock"></div>
+  </div>
+  <div id="panels">
+    <div id="panel1" class="floating-panel"></div>
+    <div id="panel2" class="floating-panel"></div>
+    <div id="panel3" class="floating-panel"><div id="tempchart"></div></div>
+  </div>
   <div class="header">
-
     <ul class="animations">
       <li><a href="#" id="drop" style="visibility: hidden">Drop</a></li>
       <li><select class="w3-select w3-border w3-hover-border-teal" id="filtertype"
@@ -103,6 +112,7 @@
     var locations3 = [];
     var markers1 = [];
     var FilterInput = "";
+    var myChart;
 
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
@@ -112,6 +122,23 @@
         },
         zoom: 11.5,
       });
+
+      setInterval(function(){
+        var today = new Date();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('clock').innerHTML = h + ":" + m + ":" + s;
+
+        function checkTime(i) {
+          if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+          return i;
+        }
+      }, 1000);
+
+      document.getElementById('date').innerHTML = String(new Date()).slice(0, 15);
 
       // CustomMarker is a library to customize image analysis messages on the map
       CustomMarker.prototype = new google.maps.OverlayView();
@@ -264,6 +291,7 @@
       });
 
       InitializeHospital();
+
     }
     // Show the new coordinates for the rectangle in an info window.
 
@@ -337,6 +365,8 @@
         setTimeout(function () {
           subscriberImage.subscribe();
         }, 500);
+        subscriberMarker.unsubscribe();
+        rectangle.setMap(null);
       }
 
       function clear(lst){
@@ -360,11 +390,10 @@
         var html = infoWindow.getContent();
         var $html = $('<div />', {html: html});
         if ($html.find('#title').html() == marker.getTitle()){
-          $html.find('#h4').html(JSON.stringify(marker.getPosition()));
+          document.getElementById('panel2').innerHTML = '<div>'+'<div id="title">'+ marker.getTitle() +'</div>' + marker.getPosition() + '<br></div>';
           if (((rectangle.getBounds().getNorthEast().lat() <= marker.getPosition().lat() && rectangle.getBounds().getSouthWest().lat() >= marker.getPosition().lat()) && (rectangle.getBounds().getSouthWest().lng() <= marker.getPosition().lng() && rectangle.getBounds().getNorthEast().lng() >= marker.getPosition().lng())) != true){
             addMarkerEvent(marker);
           }
-          infoWindow.setContent($html.html());
           infoWindow.setPosition(marker.getPosition());
         }
     }
@@ -386,10 +415,11 @@
         google.maps.event.addListener(hospitalMarker, 'click', function(){
           map.setZoom(13);
           map.panTo(this.getPosition());
-          infoWindow.setContent('<div style="font-family: Lucida Grande, Arial, sans-serif;">'+'<div id="title">'+ this.getTitle() +'</div><br>' + this.getPosition() + '<br></div>');
+          infoWindow.setContent('<div style="font-family: Lucida Grande, Arial, sans-serif;">'+'<div id="title">'+ this.getTitle() +'</div></div>');
+          document.getElementById('panel2').innerHTML = '<div>'+'<div id="title">'+ this.getTitle() +'</div>' + this.getPosition() + '<br></div>';
           infoWindow.open(map, this);
           subscriberMarker.unsubscribe();
-          subscriberMarker.topicName = "GOV/LTA/1/img_data/filter/" + (Math.floor(this.getPosition().lat() * 10) / 10).toFixed(1) + '*/' + (Math.floor(this.getPosition().lng() * 10) / 10).toFixed(1) + "*/" + ((FilterInput != '') ? FilterInput : ">") ;
+          subscriberMarker.topicName = "GOV/LTA/1/img_data/filter/" + (Math.floor(this.getPosition().lat() * 10) / 10).toFixed(1) + '*/' + (Math.floor(this.getPosition().lng() * 10) / 10).toFixed(1) + "*/" + ((FilterInput != '') ? FilterInput : "*/*/*") ;
           console.log(JSON.stringify(subscriberMarker.topicName));
           // Shows the area of the event it is subscribed to
           rectangle.setBounds({
@@ -404,6 +434,68 @@
           }, 500);
         });
       }
+    }
+
+    function InitialiseTempChart(){
+      myChart = echarts.init(document.getElementById('tempchart'), 'dark'); 
+      // dark, macarons, infographic, green, blue, roma, shine, sakura, macarons2, helianthus, default
+      myChart.setOption({
+          title : {
+              text: 'Average Temperature',
+              subtext: 'Singapore'
+          },
+          tooltip : {
+              trigger: 'axis'
+          },
+          legend: {
+              data:['Highest temperature']
+          },
+          toolbox: {
+              show : true,
+              feature : {
+                  mark : {show: true},
+                  dataView : {show: true, readOnly: false},
+                  magicType : {show: true, type: ['line', 'bar']},
+                  restore : {show: true},
+                  saveAsImage : {show: true}
+              }
+          },
+          calculable : true,
+          xAxis : [
+              {
+                  type : 'category',
+                  boundaryGap : false,
+                  data : ['-4','-3','-2','-1','0']
+              }
+          ],
+          yAxis : [
+              {
+                  type : 'value',
+                  axisLabel : {
+                      formatter: '{value} °C'
+                  },
+                  min : 25.0,
+                  max : 35.0
+              }
+          ],
+          series : [
+              {
+                  type:'line',
+                  data:[0,0,0,0,0],
+                  markPoint : {
+                      data : [
+                          {type : 'max', name: 'Maximum'},
+                          {type : 'min', name: 'Minimum'}
+                      ]
+                  },
+                  markLine : {
+                      data : [
+                          {type : 'average', name: 'Average Value'}
+                      ]
+                  }
+              }
+          ]
+      });
     }
     google.maps.event.addDomListener(window, 'load', initMap);
   </script>
