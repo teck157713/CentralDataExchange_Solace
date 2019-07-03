@@ -16,12 +16,15 @@ body {
 }
 
 .banner-interior {
+  text-align: right;
+  float: right;
+  
 }
 
 .banner-heading {
     font-weight:      bold;
     font-size:        185%;
-    margin:           35px 0px 0px 40px;
+    
     display:          inline-block;
     vertical-align:   top;
     color:            #ffffff;
