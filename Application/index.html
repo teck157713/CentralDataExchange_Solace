@@ -26,7 +26,8 @@
 
     <!-- Execute the Confirmed Delivery tutorial -->
     <script>
-      var producer = null;
+      var producer_lta = null;
+      var producer_nea = null;
       $(document).ready(function(){
         // Initialize factory with the most recent API defaults
         var factoryProps = new solace.SolclientFactoryProperties();
@@ -40,17 +41,20 @@
         // console.log(AccessListCall("NEA", "GETALL"));
 
         // create the producer, specifying name of the subscription topic
-        producer = new PubSub({logname : "publishlog", topicName : "GOV/MEA/1/temp_data/raw", topicID : "publishtopic", contentmsg : "content", contentfile : "fileimg"});
+        producer_lta = new PubSub({logname : "publishlog", topicName : "GOV/NEA/1/temp_data/raw", topicID : "publishtopicLTA", contentmsg : "content", contentfile : "fileimg"});
+        producer_nea = new PubSub({logname : "publishlog", topicName : "GOV/NEA/1/temp_data/raw", topicID : "publishtopicNEA", contentmsg : "content", contentfile : "fileimg"});
         // assign buttons to the producer functions
-        document.getElementById("pubconnect").addEventListener("click", producer.connect);
-        document.getElementById("pubdisconnect").addEventListener("click", producer.disconnect);
-        document.getElementById("publish").addEventListener("click", producer.sendgovdata);
-        document.getElementById("stoppublish").addEventListener("click", producer.stopgovdata);
-        document.getElementById("sendmsg").addEventListener("click", producer.sendMessages);
-        document.getElementById("pubTemp").addEventListener("click", producer.pubTemp);
-        document.getElementById("stoppubTemp").addEventListener("click", producer.stoppubTemp);
-        document.getElementById("pubTaxi").addEventListener("click", producer.sendTaxiInterval);
-        document.getElementById("stoppubTaxi").addEventListener("click", producer.stoptaxidata);
+        document.getElementById("pubconnect").addEventListener("click", producer_lta.connect);
+        document.getElementById("pubconnect").addEventListener("click", producer_nea.connect);
+        document.getElementById("pubdisconnect").addEventListener("click", producer_lta.disconnect);
+        document.getElementById("pubdisconnect").addEventListener("click", producer_nea.disconnect);
+        document.getElementById("publish").addEventListener("click", producer_lta.sendgovdata);
+        document.getElementById("stoppublish").addEventListener("click", producer_lta.stopgovdata);
+        document.getElementById("sendmsg").addEventListener("click", producer_lta.sendMessages);
+        document.getElementById("pubTemp").addEventListener("click", producer_nea.pubTemp);
+        document.getElementById("stoppubTemp").addEventListener("click", producer_nea.stoppubTemp);
+        document.getElementById("pubTaxi").addEventListener("click", producer_lta.sendTaxiInterval);
+        document.getElementById("stoppubTaxi").addEventListener("click", producer_lta.stoptaxidata);
         // create the subscribers
         subscriber = new PubSub({queueName : 'SOLACE_QUEUE', logname : 'subscribelog', tableName : 'table2'});
         subscriber2 = new PubSub({logname : 'subscribelog2', tableName : 'table1', topicID : 'topicname'});
@@ -106,8 +110,8 @@
           </div>
 
           <div class="pure-control-group">
-            <label for="publishtopic">What Topic to Publish Message to?</label>
-            <input id="publishtopic" type="text" placeholder="Insert Topic" value="tutorial/queue/message">
+            <label for="publishtopicLTA">What Topic to Publish Message to?</label>
+            <input id="publishtopicLTA" type="text" placeholder="Insert Topic" value="tutorial/queue/message">
           </div>
 
           <div class="pure-control-group">
@@ -125,8 +129,8 @@
           <button type="button" class="pure-button button-error" id="stoppublish">Stop Publish</button>
           <button type="button" class="pure-button pure-button-primary" id="pubTemp">Publish Temperature</button>
           <button type="button" class="pure-button button-error" id="stoppubTemp">Stop Publish Temperature</button>
-          <button type="button" class="pure-button pure-button-primary" id="pubTaxi">Publish Taxi</button>
-          <button type="button" class="pure-button button-error" id="stoppubTaxi">Stop Publish Taxi</button>
+          <button type="button" class="pure-button pure-button-primary" id="pubTaxi">Publish Traffic Patrol</button>
+          <button type="button" class="pure-button button-error" id="stoppubTaxi">Stop Publish Traffic Patrol</button>
         </p>
         <div class = "input">
           <div class="publishlog" id="publishlog" contentEditable="true"></div>
