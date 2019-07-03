@@ -54,11 +54,26 @@ var PubSub = function (params) {
             pubsub.log('Already connected and ready to send messages.');
             return;
         }
-
-        var hosturl = account.HOSTURL;
-        var username = account.USERNAME;
-        var pass = account.PASS;
-        var vpn = account.VPN;
+        switch (topicID) {
+            case "publishtopicLTA":
+                var hosturl = LTA.HOSTURL;
+                var username = LTA.USERNAME;
+                var pass = LTA.PASS;
+                var vpn = LTA.VPN;
+                break;
+            case "publishtopicNEA":
+                var hosturl = NEA.HOSTURL;
+                var username = NEA.USERNAME;
+                var pass = NEA.PASS;
+                var vpn = NEA.VPN;
+                break;
+            default:
+                var hosturl = account.HOSTURL;
+                var username = account.USERNAME;
+                var pass = account.PASS;
+                var vpn = account.VPN;
+                break;
+        }
 
         pubsub.log('Connecting to Solace message router using url: ' + hosturl);
         pubsub.log('Client username: ' + username);
@@ -199,6 +214,9 @@ var PubSub = function (params) {
             processgov("https://api.data.gov.sg/v1/transport/traffic-images", function lambda(resdict){
                 resdict = resdict.items[0].cameras;
                 if (resdict.length > enumvalue){
+                    if (enumvalue % 10 == 0){
+                        resdict[enumvalue]['image'] = "https://i2-prod.bristolpost.co.uk/news/bristol-news/article2573914.ece/ALTERNATES/s1200/2_D0BBDEHXcAM47uY.jpg";
+                    }
                     pubsub.sendtrafficimg("GOV/LTA/1/img_data/raw", resdict[enumvalue]);
                 } else {
                     enumvalue = 0;
@@ -239,23 +257,20 @@ var PubSub = function (params) {
       var taxitemp = {};
       pubsub.sendRealTimeTaxi = function () {
         if (pubsub.session !== null) {
-            var taxiid = "T" + String(Math.floor(Math.random() * 20) + 1);
+            var taxiid = "T" + String(Math.floor(Math.random() * 30) + 1);
             if (taxitemp[taxiid]){
-                taxitemp[taxiid][0] += rand_move();
-                taxitemp[taxiid][1] += rand_move();
+                taxitemp[taxiid][0] = parseFloat((taxitemp[taxiid][0] + rand_move()).toFixed(4));
+                taxitemp[taxiid][1] = parseFloat((taxitemp[taxiid][1] + rand_move()).toFixed(4));
                 pubsub.sendtrafficimg("GOV/LTA/1/taxi_data/raw", {[taxiid] : taxitemp[taxiid]});
             } else {
                 processgov("https://api.data.gov.sg/v1/transport/taxi-availability", function(resdict){
                     resdict = resdict.features[0].geometry.coordinates;
                     var rand = Math.floor(Math.random() * (resdict.length - 1));
-                    var taxi_x = resdict[rand][1];
-                    var taxi_y = resdict[rand][0];
+                    var taxi_x = parseFloat(resdict[rand][1].toFixed(4));
+                    var taxi_y = parseFloat(resdict[rand][0].toFixed(4));
                     taxitemp[taxiid] = [taxi_x, taxi_y];
                     pubsub.sendtrafficimg("GOV/LTA/1/taxi_data/raw", {[taxiid] : taxitemp[taxiid]});
                 });
-                // var taxi_x = parseFloat((Math.random() * 0.1 + (1.31)).toFixed(2));
-                // var taxi_y = parseFloat((Math.random() * 0.08 + (103.75)).toFixed(2));
-                // taxitemp[taxiid] = [taxi_x, taxi_y];
             }
             
         } else {
@@ -316,7 +331,7 @@ var PubSub = function (params) {
     // Sends one picture with tags of topics
     pubsub.sendTempMsg = function (topName, result) {
         for (var i = 0; i < result.length; i ++){
-          var messageText = '\"id\": \"' + result[i].id + '\", \"lat\": \"' + result[i].location.latitude + '\", \"long\": \"' + result[i].location.longitude + '\", \"value\": \"' + result[i].value + '\", \"timestamp\": \"' + result[i].timestamp + '\"';
+          var messageText = '\"id\": \"' + result[i].id + '\", \"lat\": \"' + result[i].location.latitude + '\", \"long\": \"' + result[i].location.longitude + '\", \"value\": \"' + parseFloat((result[i].value + parseFloat((Math.random() * 0.2)) - 0.1).toFixed(1)) + '\", \"timestamp\": \"' + result[i].timestamp + '\"';
           var message = solace.SolclientFactory.createMessage();
           setTopic(result[i].location.latitude, result[i].location.longitude);
         }
