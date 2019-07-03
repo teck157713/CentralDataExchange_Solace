@@ -33,67 +33,67 @@
             // Retrieve the list of topics that an agency can publish to and is subscribed to
             var user = sessionStorage.getItem('username')
             // checks to see if user is properly logged in if not redirects from login page
-            if(user == null){
+            if (user == null) {
                 window.location.replace("login.html")
-            } else{
-            var published = AccessListCall(user, "GET"); //["LTA/>", "LTA/1/IMD_DATA"]
-            var subscribed = AccessListCall(user, "GETALL"); //["NEA/>", "MHA/1/IMD_DATA"]
-            for (var i = 0; i < published.length; i++) {
-                try {
+            } else {
+                var published = AccessListCall(user, "GET"); //["LTA/>", "LTA/1/IMD_DATA"]
+                var subscribed = AccessListCall(user, "GETALL"); //["NEA/>", "MHA/1/IMD_DATA"]
+                for (var i = 0; i < published.length; i++) {
+                    try {
+                        // iterates through the published topic list and populates a table
+                        var table = document.getElementById('publishTopic');
+                        var row = table.insertRow(-1);
+                        var cell1 = row.insertCell(0);
+                        cell1.innerHTML = published[i];
+                    } catch (error) {
+                        pubsub.log(error.toString());
+                    }
+                }
+                for (var x = 0; x < subscribed.length; x++) {
+                    try {
+                        // iterates through the subscribed topic list and populates a table
+                        var table = document.getElementById('avilTopic');
+                        var row = table.insertRow(-1);
+                        var cell1 = row.insertCell(0);
+                        cell1.innerHTML = subscribed[x];
+                    } catch (error) {
+                        pubsub.log(error.toString());
+                    }
+                }
+            }
+
+            function openPub() {
+                openStuff(event, 'Published')
+                var user = sessionStorage.getItem('username')
+                var published = AccessListCall(user, "GET");
+                var table = document.getElementById('publishTopic');
+                for (var i = table.rows.length - 1; i > 0; i--) {
+                    table.deleteRow(i);
+                }
+                for (var i = 0; i < published.length; i++) {
                     // iterates through the published topic list and populates a table
-                    var table = document.getElementById('publishTopic');
-                    var row = table.insertRow(-1);
+                    var row = table.insertRow(i + 1);
                     var cell1 = row.insertCell(0);
                     cell1.innerHTML = published[i];
-                } catch (error) {
-                    pubsub.log(error.toString());
                 }
             }
-            for (var x = 0; x < subscribed.length; x++) {
-                try {
+
+            function openSub() {
+                openStuff(event, 'AvilTopics')
+                var user = sessionStorage.getItem('username')
+                var subscribed = AccessListCall(user, "GETALL");
+                var table = document.getElementById('avilTopic');
+                for (var i = table.rows.length - 1; i > 0; i--) {
+                    table.deleteRow(i);
+                }
+                for (var x = 0; x < subscribed.length; x++) {
                     // iterates through the subscribed topic list and populates a table
-                    var table = document.getElementById('avilTopic');
-                    var row = table.insertRow(-1);
+                    var row = table.insertRow(i + 1);
                     var cell1 = row.insertCell(0);
                     cell1.innerHTML = subscribed[x];
-                } catch (error) {
-                    pubsub.log(error.toString());
                 }
             }
         }
-
-        function openPub() {
-            openStuff(event, 'Published')
-            var user = sessionStorage.getItem('username')
-            var published = AccessListCall(user, "GET");
-            var table = document.getElementById('publishTopic');
-            for (var i = table.rows.length - 1; i > 0; i--) {
-                table.deleteRow(i);
-            }
-            for (var i = 0; i < published.length; i++) {
-                // iterates through the published topic list and populates a table
-                var row = table.insertRow(i + 1);
-                var cell1 = row.insertCell(0);
-                cell1.innerHTML = published[i];
-            }
-        }
-
-        function openSub() {
-            openStuff(event, 'AvilTopics')
-            var user = sessionStorage.getItem('username')
-            var subscribed = AccessListCall(user, "GETALL");
-            var table = document.getElementById('avilTopic');
-            for (var i = table.rows.length - 1; i > 0; i--) {
-                table.deleteRow(i);
-            }
-            for (var x = 0; x < subscribed.length; x++) {
-                // iterates through the subscribed topic list and populates a table
-                var row = table.insertRow(i + 1);
-                var cell1 = row.insertCell(0);
-                cell1.innerHTML = subscribed[x];
-            }
-        }
-    }
     </script>
 
 </head>
@@ -107,14 +107,13 @@
                 <img src="image/solace.png" />
             </span>
         </div>
-            <div class="banner-interior">
-                Logged in as:
-                <script>
-                    var user = sessionStorage.getItem('username')
-                    document.write(user)
-                </script>
-            </div>
-        
+        <div class="banner-interior">
+            Logged in as:
+            <script>
+                var user = sessionStorage.getItem('username')
+                document.write(user)
+            </script>
+        </div>
     </div>
     <!--Tab bar to toggle between various tabs refer to the openstuff function in ui.js for the js running this ui-->
     <div class="w3-bar w3-black">
@@ -128,7 +127,7 @@
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'RegTopic')">Register a topic</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'mapped')">Analytics and Mapping
             Example</button>
-        </div>
+    </div>
     </div>
     <!-- Tab that showcases all the topics that is being published by the agency-->
     <div id="info" class="w3-container w3-border pubsub">
