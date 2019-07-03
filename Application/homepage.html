@@ -127,6 +127,12 @@
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'RegTopic')">Register a topic</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'mapped')">Analytics and Mapping
             Example</button>
+        <div class="w3-bar-item">Logged in as:
+            <script>
+                var user = sessionStorage.getItem('username')
+                document.write(user)
+            </script>
+        </div>
     </div>
     <!-- Tab that showcases all the topics that is being published by the agency-->
     <div id="info" class="w3-container w3-border pubsub">
