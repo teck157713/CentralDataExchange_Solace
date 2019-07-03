@@ -8,12 +8,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Load Solace Web Messaging API for JavaScript -->
-  <!-- <script src="lib/solclient-debug.js"></script> -->
-
-  <!-- load js to run the ui for this page-->
-  <!-- <script src="processtopicreg.js"></script> -->
-
   <!-- Load js to retrieve the ACL via SEMP API REST call -->
   <script src="AccessListCall.js"></script>
 
@@ -43,17 +37,6 @@
   <script type="text/javascript">
     var publisher = null;
     window.onload = function () {
-        // Initialize factory with the most recent API defaults
-        // var factoryProps = new solace.SolclientFactoryProperties();
-        // factoryProps.profile = solace.SolclientFactoryProfiles.version10;
-        // solace.SolclientFactory.init(factoryProps);
-
-        // enable logging to JavaScript console at WARN level
-        // NOTICE: works only with "solclientjs-debug.js"
-        // solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
-
-        // create the publisher, specifying name of the subscription topic
-        // publisher = new RegPublisher('SOLACE_TOPICREG');
         // Below function Executes on click of submit button.
         $("#submit").click(function () {
           console.debug("Caught send button event");
@@ -90,8 +73,6 @@
               // creates subscription exceptions in the ACL of the releveant checked agencies
               AccessListCall(user, "POST", t, checkedValue);
             }
-            // publisher.publish()
-            // publisher.disconnect()
             // syntax from sweetalert.js library to create alrets
             // will output an success alert box with the title and text as the output
             swal({
@@ -139,13 +120,6 @@
 
 <body>
   <form name='topicreg' id='topicreg' class="w3-panel was-validated">
-    <!-- <div class="form-group">
-      <label class="w3-text-teal" for="aname">Agency Name:</label>
-      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="aname"
-        placeholder="Enter the publishing Agency Name" name="aname" required></input>
-      <div class="valid-feedback">Valid.</div>
-      <div class="invalid-feedback">Please fill out this field.</div>
-    </div> -->
     <div class="form-group">
       <label class="w3-text-teal" for="topic">Topic:</label>
       <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id=" topic"
@@ -153,13 +127,6 @@
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
-    <!-- <div class="form-group">
-      <label class="w3-text-teal" for="desc">Description:</label>
-      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id=" desc"
-        placeholder="Give a brief description about the topic" name="desc" required>
-      <div class="valid-feedback">Valid.</div>
-      <div class="invalid-feedback">Please fill out this field.</div>
-    </div> -->
     <div class="form-group">
       <label class="w3-text-teal" for="desc">Which Agency Can Access this topic?:</label>
       <input class="w3-check" type="checkbox" checked="checked" id='all' name="agency" value="all" onClick="toggleSelection()">
