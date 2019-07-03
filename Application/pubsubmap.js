@@ -121,7 +121,6 @@ var PubSub = function (params) {
             var e = document.getElementById("filtertype");
             e = e.options[e.selectedIndex].value;
             var result = message.getBinaryAttachment();
-            console.log(message.getDestination() + pubsub.topicName + topicID);
             // SELECTOR FILTERING FOR subscribing to Taxi data
             if ((e == 'taxi'|| e == 'default') && String(message.getDestination()).indexOf('LTA/1/taxi_data/raw') >= 0){
                 selectorTaxi(result);
@@ -139,15 +138,23 @@ var PubSub = function (params) {
                 selectorTemperatureChange(result);
             } 
             // SELECTOR FILTERING for image analysis
-            else if ((e == 'event'|| e == 'default') && String(message.getDestination()).indexOf("LTA/1/img_data/filter") >= 0 && (pubsub.topicName.indexOf("filter/*/*") >= 0)){
-                selectorImage(result);
+            else if ((e == 'event'|| e == 'default') && String(message.getDestination()).indexOf("LTA/1/img_data/filter") >= 0 && topicID == 'subscriberImage'){
+                selectorImage(result, message.getDestination());
+                if (validURL(JSON.parse(result)['image'])){
+                    console.log(JSON.parse(result)['image']);
+                    document.getElementById('panel1').innerHTML = 'Traffic Snapshot<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="200px" src=\"' + JSON.parse(result)['image'] + '\" />';
+                }
             }
             else if ((e == 'event'|| e == 'default') && String(message.getDestination()).indexOf("LTA/1/img_data/filter") >= 0 && topicID == 'subscriberMarker'){
                 // Add on to Google Maps InfoWindow that marker that has been selected
                 // to signifiy the receival of event messages.
-                if (infoWindow.getContent() && pubsub.topicName.indexOf("*/*/*") < 0){
+                if (infoWindow.getContent()){
                     // infoWindow.setContent(infoWindow.getContent() + "<br>" + result +  "</br>");
+                    if (validURL(JSON.parse(result)['image'])){
+                        document.getElementById('panel1').innerHTML = 'Traffic Snapshot<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="200px" src=\"' + JSON.parse(result)['image'] + '\" />';
+                    }
                     $.notify(result, "info");
+                    document.getElementById('panel2').innerHTML += "Event detected nearby.";
                 }
             }
         });
