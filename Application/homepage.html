@@ -102,18 +102,19 @@
     <!--Warning for users to enable javascript to run this demo-->
     <noscript>Please enable JavaScript on your browser to continue</noscript>
     <div class="banner">
-        <div class="banner-interior">
+        <div class="banner-heading">
             <span class="logo">
                 <img src="image/solace.png" />
             </span>
-            <div class="banner-heading">
+        </div>
+            <div class="banner-interior">
                 Logged in as:
                 <script>
                     var user = sessionStorage.getItem('username')
                     document.write(user)
                 </script>
             </div>
-        </div>
+        
     </div>
     <!--Tab bar to toggle between various tabs refer to the openstuff function in ui.js for the js running this ui-->
     <div class="w3-bar w3-black">
@@ -127,11 +128,6 @@
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'RegTopic')">Register a topic</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'mapped')">Analytics and Mapping
             Example</button>
-        <div class="w3-bar-item">Logged in as:
-            <script>
-                var user = sessionStorage.getItem('username')
-                document.write(user)
-            </script>
         </div>
     </div>
     <!-- Tab that showcases all the topics that is being published by the agency-->
