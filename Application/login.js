@@ -7,7 +7,7 @@ function validate() {
     var password = document.getElementById("pwd").value;
     // Hardcoded login details for demo purpose
     // if (username == "NEA" && password == "pass") {
-    if (AccessListCall(user, "LOGIN", password)) {
+    if (AccessListCall(user, "LOGIN", password)=='true') {
         console.log("Login successfully");
         sessionStorage.setItem('username', x);
         // syntax from sweetalert.js library to create alrets
