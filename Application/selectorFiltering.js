@@ -23,7 +23,8 @@ function selectorTaxi(result){
         google.maps.event.addListener(markers2, 'click', function(){
             map.setZoom(15);
             map.panTo(this.getPosition());
-            infoWindow.setContent('<div style="font-family: Lucida Grande, Arial, sans-serif;">'+'<div id="title">'+ this.getTitle() +'</div><br><div id="h4">' + String(this.getPosition()) + '</div><br></div>');
+            document.getElementById('panel2').innerHTML = '<div>'+'<div id="title">'+ this.getTitle() +'</div>' + this.getPosition() + '<br></div>';
+            infoWindow.setContent('<div style="font-family: Lucida Grande, Arial, sans-serif;">'+'<div id="title">'+ this.getTitle() +'</div></div>');
             infoWindow.open(map, this);
             subscriberMarker.unsubscribe();
             subscriberMarker.topicName = "GOV/LTA/1/img_data/filter/" + (Math.floor(this.getPosition().lat() * 100) / 100).toFixed(2) + '*/' + (Math.floor(this.getPosition().lng() * 100) / 100).toFixed(2) + "*/>";
@@ -44,6 +45,8 @@ function selectorTaxi(result){
     }
 }
 
+var avgtemp = [0,0,0,0,0];
+var DataCounter = 0;
 function selectorTemperature(result){
     // Converts data into readable Google maps position
     var dict = JSON.parse("{" + result + "}");
@@ -72,6 +75,27 @@ function selectorTemperature(result){
         });
         locations2.push(markers2);
     }
+    if (locations2.length != 0 && DataCounter >= 20){
+        var res = 0;
+        for (var i in locations2){
+            res += parseFloat(locations2[i].getLabel().text);
+        }
+        res = parseFloat((res / locations2.length).toFixed(2));
+        avgtemp.shift();
+        avgtemp.push(res);
+        myChart.setOption({
+            series: [
+                {
+                    data:avgtemp
+                }
+            ]
+        });
+        DataCounter = 0;
+    } else if (locations2.length == 1){
+        document.getElementById('tempchart').setAttribute("style","width:400px;height:200px;padding:2px");
+        InitialiseTempChart();
+    }
+    DataCounter += 1;
 }
 
 function selectorRain(result){
@@ -149,23 +173,40 @@ function selectorTemperatureChange(result){
     }
 }
 
-function selectorImage(result){
+function selectorImage(result, dest){
+    console.log(result);
     var dict = JSON.parse(result);
     // Create the marker to highlight event
     markers1 = new CustomMarker({
         position: new google.maps.LatLng(dict['lat'], dict['long']),
+        title: JSON.parse(result),
         map: map,
+        text: dest,
     });
     setTimeout(function(){
         $('#drop').click();
     }, 50);
+    compare = {'0': 'No amount of accuracy detected.', '11': '> 30% of accuracy predicted.', '111': '> 50% of accuracy predicted.', '1111' : '> 65% of accuracy predicted.', '11111' : '> 80% of accuracy predicted.'};
+    attri = ['Traffic: ', 'Fire: ', 'Smoke: '];
+    google.maps.event.addListener(markers1, 'click', function(){
+        infoWindow.setContent('Event');
+        infoWindow.open(map, this);
+        result = "";
+        map.setZoom(12);
+        var str = String(this.text).replace(']','').split(' ')[1].split('/').slice(-3);
+        for (var i in str){
+            result += attri[i] + ' ' + compare[str[i]] + '<br />';
+        }
+        document.getElementById('panel2').innerHTML = '<div>'+'<div id="title">'+ 'Event Analysis Result' +'</div>' + result + '<br></div>';
+        document.getElementById('panel1').innerHTML = 'Traffic Snapshot<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="200px" src=\"' + this.title['image'] + '\" />';
+    });
 
 }
 
 // Adds each marker the ability to subscribe for event messages when clicked
 function addMarkerEvent(marker){
     subscriberMarker.unsubscribe();
-    subscriberMarker.topicName = "GOV/LTA/1/img_data/filter/" + (Math.floor(marker.getPosition().lat() * 100) / 100).toFixed(2) + '*/' + (Math.floor(marker.getPosition().lng() * 100) / 100).toFixed(2) + "*/"+ ((FilterInput != '') ? FilterInput : ">");
+    subscriberMarker.topicName = "GOV/LTA/1/img_data/filter/" + (Math.floor(marker.getPosition().lat() * 100) / 100).toFixed(2) + '*/' + (Math.floor(marker.getPosition().lng() * 100) / 100).toFixed(2) + "*/"+ ((FilterInput != '') ? FilterInput : "*/*/*");
     // Rectangle (radius of marker) helps to identify the area each marker is subscribed to.
     // The event message only appears if the event happens within its area.) 
     rectangle.setBounds({
@@ -178,4 +219,14 @@ function addMarkerEvent(marker){
     setTimeout(function () {
         subscriberMarker.subscribe();
     }, 500);
+}
+
+function validURL(str) {
+    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    return !!pattern.test(str);
 }
