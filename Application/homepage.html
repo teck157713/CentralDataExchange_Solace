@@ -25,6 +25,7 @@
     <link rel="stylesheet" type="text/css" href="css/samples.css">
     </link>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
     <!-- Load W3.CSS-->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     </link>
@@ -108,11 +109,15 @@
             </span>
         </div>
         <div class="banner-interior">
-            Logged in as:
-            <script>
-                var user = sessionStorage.getItem('username')
-                document.write(user)
-            </script>
+            <p>Logged in as:
+                <script>
+                    var user = sessionStorage.getItem('username')
+                    document.write(user)
+                </script>
+            </p>
+            <a href="login.html" class="btn btn-info btn-lg">
+                <i class='fas fa-sign-in-alt'></i> Logout
+            </a>
         </div>
     </div>
     <!--Tab bar to toggle between various tabs refer to the openstuff function in ui.js for the js running this ui-->
