@@ -64,7 +64,9 @@
                 }
             }
 
-            function openPub() {
+        }
+
+        function openPub() {
                 openStuff(event, 'Published')
                 var user = sessionStorage.getItem('username')
                 var published = AccessListCall(user, "GET");
@@ -95,7 +97,6 @@
                     cell1.innerHTML = subscribed[x];
                 }
             }
-        }
     </script>
 
 </head>
