@@ -25,7 +25,7 @@ function connect() {
 };
 
 //function to search through table for the input entered 
-function mySearch(inputs,tables) {
+function mySearch(inputs, tables) {
   // Declare variables
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById(inputs);
@@ -43,7 +43,7 @@ function mySearch(inputs,tables) {
       } else {
         tr[i].style.display = "none";
       }
-    } 
+    }
   }
 }
 

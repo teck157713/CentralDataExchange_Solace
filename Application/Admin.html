@@ -12,13 +12,13 @@
     <script src="lib/solclient-debug.js"></script>
 
     <!-- Load js to process the various admin functions-->
-    <script src="log.js"></script>
+    <script src="js/log.js"></script>
 
     <!-- Solace cloud login details-->
     <script src="config/config.js" type="text/javascript"></script>
 
     <!-- load js to run the ui for this page-->
-    <script src="ui.js"></script>
+    <script src="js/ui.js"></script>
 
     <!-- Load CSS-->
     <link rel="stylesheet" type="text/css" href="css/pure.css">
@@ -26,8 +26,10 @@
     <link rel="stylesheet" type="text/css" href="css/samples.css">
     </link>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css'
+        integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous' />
     <!-- Load W3.CSS-->
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
 
     <!-- run script to initalize solclient and listners for buttons-->
     <script>
@@ -64,14 +66,14 @@
                 // document.getElementById("startconsume3").addEventListener("click", consumer3.startConsume);
                 // document.getElementById("stopconsume3").addEventListener("click", consumer3.stopConsume);
             };
-            // UI function for search based on topic dropdown
-            function topicChange() {
-                var input, filter, table, tr, td, i, txtValue;
-                var e = document.getElementById("mySelect");
-                input = e.options[e.selectedIndex].value;
-                filter = input.toUpperCase();
-                table = document.getElementById("logtable");
-                tr = table.getElementsByTagName("tr");
+                // UI function for search based on topic dropdown
+                function topicChange() {
+                    var input, filter, table, tr, td, i, txtValue;
+                    var e = document.getElementById("mySelect");
+                    input = e.options[e.selectedIndex].value;
+                    filter = input.toUpperCase();
+                    table = document.getElementById("logtable");
+                    tr = table.getElementsByTagName("tr");
 
                 // Loop through all table rows, and hide those who don't match the search query
                 for (i = 0; i < tr.length; i++) {
@@ -95,13 +97,21 @@
     <!--Warning for users to enable javascript to run this demo-->
     <noscript>Please enable JavaScript on your browser to continue</noscript>
     <div class="banner">
-        <div class="banner-interior">
+        <div class="banner-header">
             <span class="logo">
                 <img src="image/solace.png" />
             </span>
-            <div class="banner-heading">
-                Demo (Iter 1)
-            </div>
+            <div class="banner-interior">
+                    <p>Logged in as:
+                        <script>
+                            var user = sessionStorage.getItem('username')
+                            document.write(user)
+                        </script>
+                    </p>
+                    <a href="login.html" class="btn btn-info btn-lg">
+                        <i class='fas fa-sign-in-alt'></i> Logout
+                    </a>
+                </div>
         </div>
     </div>
     <div class="w3-bar w3-black">
@@ -154,7 +164,7 @@
                 <button type="button" class="pure-button button-error" id="disconnect2">Disconnect</button>
                 <button type="button" class="pure-button pure-button-primary" id="startconsume2">Consume message log
                 </button>
-                <button type="button" class="pure-button button-error" id="stopconsume2">Stop consuming</button>
+                <button type="button" class="pure-button button-error" id="stopconsume2">Stop Consuming</button>
             </p>
         </div>
         <p>

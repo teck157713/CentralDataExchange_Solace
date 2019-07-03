@@ -12,9 +12,9 @@
   <script src="lib/solclient-debug.js"></script>
 
   <!-- Load js to process login attempts-->
-  <script src="login.js"></script>
+  <script src="js/login.js"></script>
 
-  <script src="ui.js"></script>
+  <script src="js/ui.js"></script>
 
   <!-- Solace cloud login details-->
   <script src="config/config.js" type="text/javascript"></script>
@@ -39,6 +39,12 @@
 
   <!-- Load js to retrieve the ACL via SEMP API REST call -->
   <script src="AccessListCall.js"></script>
+  <!-- Clearing session storage of old usernames -->
+  <script>
+      window.onload = function () {
+        sessionStorage.removeItem('username');
+      }
+  </script>
   
 </head>
 

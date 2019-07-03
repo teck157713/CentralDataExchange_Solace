@@ -13,7 +13,7 @@
     <script src="lib/solclient-debug.js"></script>
 
     <!-- load js to run the ui for this page-->
-    <script src="ui.js"></script>
+    <script src="js/ui.js"></script>
 
     <!-- Load js to retrieve the ACL via SEMP API REST call -->
     <script src="AccessListCall.js"></script>
@@ -25,6 +25,8 @@
     <link rel="stylesheet" type="text/css" href="css/samples.css">
     </link>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css'
+        integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
     <!-- Load W3.CSS-->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     </link>
@@ -33,67 +35,67 @@
             // Retrieve the list of topics that an agency can publish to and is subscribed to
             var user = sessionStorage.getItem('username')
             // checks to see if user is properly logged in if not redirects from login page
-            if(user == null){
+            if (user == null) {
                 window.location.replace("login.html")
-            } else{
-            var published = AccessListCall(user, "GET"); //["LTA/>", "LTA/1/IMD_DATA"]
-            var subscribed = AccessListCall(user, "GETALL"); //["NEA/>", "MHA/1/IMD_DATA"]
-            for (var i = 0; i < published.length; i++) {
-                try {
+            } else {
+                var published = AccessListCall(user, "GET"); //["LTA/>", "LTA/1/IMD_DATA"]
+                var subscribed = AccessListCall(user, "GETALL"); //["NEA/>", "MHA/1/IMD_DATA"]
+                for (var i = 0; i < published.length; i++) {
+                    try {
+                        // iterates through the published topic list and populates a table
+                        var table = document.getElementById('publishTopic');
+                        var row = table.insertRow(-1);
+                        var cell1 = row.insertCell(0);
+                        cell1.innerHTML = published[i];
+                    } catch (error) {
+                        pubsub.log(error.toString());
+                    }
+                }
+                for (var x = 0; x < subscribed.length; x++) {
+                    try {
+                        // iterates through the subscribed topic list and populates a table
+                        var table = document.getElementById('avilTopic');
+                        var row = table.insertRow(-1);
+                        var cell1 = row.insertCell(0);
+                        cell1.innerHTML = subscribed[x];
+                    } catch (error) {
+                        pubsub.log(error.toString());
+                    }
+                }
+            }
+
+            function openPub() {
+                openStuff(event, 'Published')
+                var user = sessionStorage.getItem('username')
+                var published = AccessListCall(user, "GET");
+                var table = document.getElementById('publishTopic');
+                for (var i = table.rows.length - 1; i > 0; i--) {
+                    table.deleteRow(i);
+                }
+                for (var i = 0; i < published.length; i++) {
                     // iterates through the published topic list and populates a table
-                    var table = document.getElementById('publishTopic');
-                    var row = table.insertRow(-1);
+                    var row = table.insertRow(i + 1);
                     var cell1 = row.insertCell(0);
                     cell1.innerHTML = published[i];
-                } catch (error) {
-                    pubsub.log(error.toString());
                 }
             }
-            for (var x = 0; x < subscribed.length; x++) {
-                try {
+
+            function openSub() {
+                openStuff(event, 'AvilTopics')
+                var user = sessionStorage.getItem('username')
+                var subscribed = AccessListCall(user, "GETALL");
+                var table = document.getElementById('avilTopic');
+                for (var i = table.rows.length - 1; i > 0; i--) {
+                    table.deleteRow(i);
+                }
+                for (var x = 0; x < subscribed.length; x++) {
                     // iterates through the subscribed topic list and populates a table
-                    var table = document.getElementById('avilTopic');
-                    var row = table.insertRow(-1);
+                    var row = table.insertRow(i + 1);
                     var cell1 = row.insertCell(0);
                     cell1.innerHTML = subscribed[x];
-                } catch (error) {
-                    pubsub.log(error.toString());
                 }
             }
         }
-
-        function openPub() {
-            openStuff(event, 'Published')
-            var user = sessionStorage.getItem('username')
-            var published = AccessListCall(user, "GET");
-            var table = document.getElementById('publishTopic');
-            for (var i = table.rows.length - 1; i > 0; i--) {
-                table.deleteRow(i);
-            }
-            for (var i = 0; i < published.length; i++) {
-                // iterates through the published topic list and populates a table
-                var row = table.insertRow(i + 1);
-                var cell1 = row.insertCell(0);
-                cell1.innerHTML = published[i];
-            }
-        }
-
-        function openSub() {
-            openStuff(event, 'AvilTopics')
-            var user = sessionStorage.getItem('username')
-            var subscribed = AccessListCall(user, "GETALL");
-            var table = document.getElementById('avilTopic');
-            for (var i = table.rows.length - 1; i > 0; i--) {
-                table.deleteRow(i);
-            }
-            for (var x = 0; x < subscribed.length; x++) {
-                // iterates through the subscribed topic list and populates a table
-                var row = table.insertRow(i + 1);
-                var cell1 = row.insertCell(0);
-                cell1.innerHTML = subscribed[x];
-            }
-        }
-    }
     </script>
 
 </head>
@@ -102,17 +104,21 @@
     <!--Warning for users to enable javascript to run this demo-->
     <noscript>Please enable JavaScript on your browser to continue</noscript>
     <div class="banner">
-        <div class="banner-interior">
+        <div class="banner-heading">
             <span class="logo">
                 <img src="image/solace.png" />
             </span>
-            <div class="banner-heading">
-                Logged in as:
+        </div>
+        <div class="banner-interior">
+            <p>Logged in as:
                 <script>
                     var user = sessionStorage.getItem('username')
                     document.write(user)
                 </script>
-            </div>
+            </p>
+            <a href="login.html" class="btn btn-info btn-lg">
+                <i class='fas fa-sign-in-alt'></i> Logout
+            </a>
         </div>
     </div>
     <!--Tab bar to toggle between various tabs refer to the openstuff function in ui.js for the js running this ui-->
@@ -127,6 +133,7 @@
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'RegTopic')">Register a topic</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'mapped')">Analytics and Mapping
             Example</button>
+    </div>
     </div>
     <!-- Tab that showcases all the topics that is being published by the agency-->
     <div id="info" class="w3-container w3-border pubsub">

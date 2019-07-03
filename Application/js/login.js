@@ -5,9 +5,8 @@ function validate() {
     var user = document.getElementById("uname").value;
     x= String(user)
     var password = document.getElementById("pwd").value;
-    // Hardcoded login details for demo purpose
-    // if (username == "NEA" && password == "pass") {
-    if (AccessListCall(user, "LOGIN", password)) {
+    // maked a SEMP REST API call to see if user exists and returns "true" if exists and "false" if dont exist
+    if (AccessListCall(user, "LOGIN", password)=='true') {
         console.log("Login successfully");
         sessionStorage.setItem('username', x);
         // syntax from sweetalert.js library to create alrets
@@ -16,7 +15,7 @@ function validate() {
         // Redirecting to other page.
         .then((value) => window.location.replace("homepage.html"));
         return false;
-     // Hardcoded login details for demo purpose
+     // Hardcoded login details of admin for demo purpose
     } else if (user == "admin" && password == "pass") {
         console.log("Login successfully");
         sessionStorage.setItem('username', x);
