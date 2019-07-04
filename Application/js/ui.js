@@ -47,11 +47,34 @@ function mySearch(inputs, tables) {
   }
 }
 
-function getCookie(name) {
-  var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-  return v ? v[2] : null;
+function openPub() {
+  openStuff(event, 'Published')
+  var user = sessionStorage.getItem('username')
+  var published = AccessListCall(user, "GET");
+  var table = document.getElementById('publishTopic');
+  for (var i = table.rows.length - 1; i > 0; i--) {
+      table.deleteRow(i);
+  }
+  for (var i = 0; i < published.length; i++) {
+      // iterates through the published topic list and populates a table
+      var row = table.insertRow(i + 1);
+      var cell1 = row.insertCell(0);
+      cell1.innerHTML = published[i];
+  }
 }
 
-function setCookie(name, value) {
-  document.cookie = name + "=" + value;
+function openSub() {
+  openStuff(event, 'AvilTopics')
+  var user = sessionStorage.getItem('username')
+  var subscribed = AccessListCall(user, "GETALL");
+  var table = document.getElementById('avilTopic');
+  for (var i = table.rows.length - 1; i > 0; i--) {
+      table.deleteRow(i);
+  }
+  for (var x = 0; x < subscribed.length; x++) {
+      // iterates through the subscribed topic list and populates a table
+      var row = table.insertRow(i + 1);
+      var cell1 = row.insertCell(0);
+      cell1.innerHTML = subscribed[x];
+  }
 }
