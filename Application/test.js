@@ -138,6 +138,9 @@ graph.addCell([
     link(pMOH, pCentral),
     link(pCentral, pSubscribe5),
     link(pCentral, pAnalytics),
+    link(pCentral, pLta),
+    link(pCentral, pMHA),
+    link(pCentral, pMOH),
     link(pAnalytics, pCentral),
     link(pLta, pSubscribe),
     link(pNea, pSubscribe2),
@@ -202,7 +205,7 @@ function fireTransition(t, sec) {
 
 function simulate() {
 
-    var transitions = [pNea, pLta, pMHA, pMOH, pCentral, pAnalytics, pCentral, pSubscribe5];
+    var transitions = [pCentral, pLta, pNea, pMHA, pMOH, pAnalytics, pCentral, pSubscribe5];
     // transitions.forEach(function(t) {
     //     if (Math.random() < 1) {
     //             fireTransition(t, 1);
@@ -224,12 +227,12 @@ function simulate() {
         transitions.forEach(function(t) {
             if (Math.random() < 1) {
                 if (t == pAnalytics){
-                    fireTransition(t, 0.3);
+                    fireTransition(t, 0.4);
                 } else {
                 }
             }
         });
-    }, 200);
+    }, 300);
 }
 
 var simulationId = simulate();
