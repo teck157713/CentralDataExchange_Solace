@@ -93,14 +93,20 @@
           var b = document.getElementById("MOH");
           var c = document.getElementById("LTA");
           var d = document.getElementById("NEA");
+          var e = document.getElementById("MHA");
+          var f = document.getElementById("MOH");
           if (a.checked) {
             b.disabled = true;
             c.disabled = true;
             d.disabled = true;
+            e.disabled = true;
+            f.disabled = true;
           } else {
             b.disabled = false;
             c.disabled = false;
             d.disabled = false;
+            e.disabled = false;
+            f.disabled = false;
           }
         }
         //function disables the all check box if the other checkboxes are clicked
@@ -109,7 +115,9 @@
           var b = document.getElementById("MOH");
           var c = document.getElementById("LTA");
           var d = document.getElementById("NEA");
-          if (b.checked || c.checked || d.checked) {
+          var e = document.getElementById("MHA");
+          var f = document.getElementById("MOH");
+          if (b.checked || c.checked || d.checked|| e.checked|| f.checked) {
             a.disabled = true;
           } else {
             a.disabled = false;
@@ -137,6 +145,10 @@
       <label>LTA</label>
       <input class="w3-check" type="checkbox" id='NEA' name="agency" value="NEA" onClick="toggleSelection2()" disabled>
       <label>NEA</label>
+      <input class="w3-check" type="checkbox" id='MOH' name="agency" value="MOH" onClick="toggleSelection2()" disabled>
+      <label>MOH</label>
+      <input class="w3-check" type="checkbox" id='MHA' name="agency" value="MHA" onClick="toggleSelection2()" disabled>
+      <label>MHA</label>
     </div>
     <button type="button" class="btn btn-primary" id='submit'>Submit</button>
   </form>
