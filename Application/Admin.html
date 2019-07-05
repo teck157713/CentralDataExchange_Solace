@@ -66,14 +66,14 @@
                 // document.getElementById("startconsume3").addEventListener("click", consumer3.startConsume);
                 // document.getElementById("stopconsume3").addEventListener("click", consumer3.stopConsume);
             };
-                // UI function for search based on topic dropdown
-                function topicChange() {
-                    var input, filter, table, tr, td, i, txtValue;
-                    var e = document.getElementById("mySelect");
-                    input = e.options[e.selectedIndex].value;
-                    filter = input.toUpperCase();
-                    table = document.getElementById("logtable");
-                    tr = table.getElementsByTagName("tr");
+            // UI function for search based on topic dropdown
+            function topicChange() {
+                var input, filter, table, tr, td, i, txtValue;
+                var e = document.getElementById("mySelect");
+                input = e.options[e.selectedIndex].value;
+                filter = input.toUpperCase();
+                table = document.getElementById("logtable");
+                tr = table.getElementsByTagName("tr");
 
                 // Loop through all table rows, and hide those who don't match the search query
                 for (i = 0; i < tr.length; i++) {
@@ -102,16 +102,16 @@
                 <img src="image/solace.png" />
             </span>
             <div class="banner-interior">
-                    <p>Logged in as:
-                        <script>
-                            var user = sessionStorage.getItem('username')
-                            document.write(user)
-                        </script>
-                    </p>
-                    <a href="login.html" class="btn btn-info btn-lg">
-                        <i class='fas fa-sign-in-alt'></i> Logout
-                    </a>
-                </div>
+                <p>Logged in as:
+                    <script>
+                        var user = sessionStorage.getItem('username')
+                        document.write(user)
+                    </script>
+                </p>
+                <a href="login.html" class="btn btn-info btn-lg">
+                    <i class='fas fa-sign-in-alt'></i> Logout
+                </a>
+            </div>
         </div>
     </div>
     <div class="w3-bar w3-black">
@@ -139,14 +139,15 @@
         </p>
         <input class="w3-bar w3-input w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" type="text"
             id="input1" onkeyup="mySearch('input1','logtable')" placeholder="Search (e.g. NEA)">
-            <br>
-            <form>
-                <!-- This is a drop down that will be dynamically poupulated as the message log is consumed -->
-                <select class="w3-select w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" id="mySelect" onchange="topicChange()" >
-                 <option value="" disabled selected>Search by Topic</option>
-                 <option value="">Show All Topics</option>
-                </select>
-              </form>
+        <br>
+        <form>
+            <!-- This is a drop down that will be dynamically poupulated as the message log is consumed -->
+            <select class="w3-select w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" id="mySelect"
+                onchange="topicChange()">
+                <option value="" disabled selected>Search by Topic</option>
+                <option value="">Show All Topics</option>
+            </select>
+        </form>
         <br>
         <table class="w3-table-all w3-hoverable w3-card-4" , id="logtable">
             <tr class='w3-teal'>
