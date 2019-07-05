@@ -40,28 +40,6 @@
             } else {
                 var published = AccessListCall(user, "GET"); //["LTA/>", "LTA/1/IMD_DATA"]
                 var subscribed = AccessListCall(user, "GETALL"); //["NEA/>", "MHA/1/IMD_DATA"]
-                // for (var i = 0; i < published.length; i++) {
-                //     try {
-                //         // iterates through the published topic list and populates a table
-                //         var table = document.getElementById('publishTopic');
-                //         var row = table.insertRow(-1);
-                //         var cell1 = row.insertCell(0);
-                //         cell1.innerHTML = published[i];
-                //     } catch (error) {
-                //         pubsub.log(error.toString());
-                //     }
-                // }
-                // for (var x = 0; x < subscribed.length; x++) {
-                //     try {
-                //         // iterates through the subscribed topic list and populates a table
-                //         var table = document.getElementById('avilTopic');
-                //         var row = table.insertRow(-1);
-                //         var cell1 = row.insertCell(0);
-                //         cell1.innerHTML = subscribed[x];
-                //     } catch (error) {
-                //         pubsub.log(error.toString());
-                //     }
-                // }
             }
 
         }
