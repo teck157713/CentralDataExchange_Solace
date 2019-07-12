@@ -118,7 +118,7 @@
         <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'messageLog')">Message
             Log</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'regAgency')">Register Agency</button>
-        <!-- <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'regTopic')">Register New Topic</button> -->
+        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'regTopic')">Topic Requests</button>
     </div>
 
     <!-- Tab to populate and view message log of all messages sent-->
@@ -183,6 +183,13 @@
                 <th>Password</th>
             </tr>
         </table>
+    </div>
+
+    <div id='regTopic' class="w3-container w3-border pubsub" style="display:none">
+        <h3>Under Development</h3>
+        <p>This page should show a list of all new topic requests from the agencies, 
+            so that the central broker admin, can select or reject topics to be used on the broker.
+        </p>
     </div>
 
 </body>
