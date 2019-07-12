@@ -26,6 +26,7 @@
   <!-- Load W3.CSS-->
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <!-- jQuery library -->
@@ -86,36 +87,71 @@
 
 <body>
   <header class="w3-container w3-theme w3-padding" id="myHeader">
-      <i onclick="w3_open()" class="fa fa-bars w3-xlarge w3-button w3-theme"></i> 
-      <div class="w3-center">
+    <!-- <i onclick="w3_open()" class="fa fa-bars w3-xlarge w3-button w3-theme"></i> -->
+    <div class="w3-center">
       <h1 class="w3-xxxlarge w3-animate-bottom">
-          <span class="logo">
-              <img src="image/solace_white.png" />
-            </span>
+        <span class="logo">
+          <img src="image/solace_white.png" />
+        </span>
       </h1>
-        <div class="w3-padding-32">
-          <button class="w3-btn w3-xlarge w3-dark-grey w3-hover-light-grey" onclick="document.getElementById('id01').style.display='block'" style="font-weight:900;">Get Started With a Solace Broker</button>
-        </div>
+      <div class="w3-padding-32">
+        <button class="w3-btn w3-xlarge w3-dark-grey w3-hover-light-grey" onclick="location.href='https://solace.com/';"
+          style="font-weight:900;">Get Started With a
+          Solace Broker</button>
       </div>
-   </header>
-  <form name="register" class="w3-panel was-validated">
+    </div>
+  </header>
+  <div class="w3-row-padding w3-center w3-margin-top">
+    <div class="w3-third">
+      <div class="w3-card w3-container" style="min-height:260px">
+        <br>
+        <img src="image/pubsubcloud.svg" alt="pubsub" style="width:100%">
+        <h5>Solace Cloud Broker</h5> <br>
+        <p>Desc 1</p>
+        <p>Desc 2</p>
+        <p>Desc 3</p>
+      </div>
+    </div>
+    <div class="w3-third">
+      <br><br><br><br>
+      <h1>Or</h1><br>
+    </div>
+    <div class="w3-third">
+      <div class="w3-card w3-container" style="min-height:260px">
+        <br>
+        <img src="image/pubsub.svg" alt="pubsub" style="width:100%">
+        <h5>Solace Software Broker</h5> <br>
+        <p>Desc 1</p>
+        <p>Desc 2</p>
+        <p>Desc 3</p>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="w3-container w3-card-4 w3-teal">
+      <br>
+      <p align="center" style="font-weight:1000;"><strong>To register to make use of the Central Broker Service, please provide your solace cloud credentials
+          (Username and Password), used to log in to the Solace Cloud Console</strong></p>
+    </div>
+  <form name="register" class="w3-container w3-card-4 w3-panel was-validated">
+    <br>
     <div class="form-group">
       <label class="w3-text-teal" for="aname">Agency Name:</label>
-      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="aname"
+      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id=" aname"
         placeholder="Enter Agency Name" name="aname" required>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="form-group">
       <label class="w3-text-teal" for="uname">Username:</label>
-      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="uname"
+      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id=" uname"
         placeholder="Enter Solace Cloud Username" name="uname" required>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="form-group">
       <label class="w3-text-teal" for="pwd">Password:</label>
-      <input type="password" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="pwd"
+      <input type="password" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id=" pwd"
         placeholder="Enter Solace Cloud Password" name="pwd" required>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
@@ -129,6 +165,8 @@
       </label>
     </div> -->
     <button type="button" class="btn btn-primary" id='submit'>Submit</button>
+    <br><br>
   </form>
 </body>
+
 </html>
