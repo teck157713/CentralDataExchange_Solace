@@ -66,14 +66,14 @@
                 // document.getElementById("startconsume3").addEventListener("click", consumer3.startConsume);
                 // document.getElementById("stopconsume3").addEventListener("click", consumer3.stopConsume);
             };
-                // UI function for search based on topic dropdown
-                function topicChange() {
-                    var input, filter, table, tr, td, i, txtValue;
-                    var e = document.getElementById("mySelect");
-                    input = e.options[e.selectedIndex].value;
-                    filter = input.toUpperCase();
-                    table = document.getElementById("logtable");
-                    tr = table.getElementsByTagName("tr");
+            // UI function for search based on topic dropdown
+            function topicChange() {
+                var input, filter, table, tr, td, i, txtValue;
+                var e = document.getElementById("mySelect");
+                input = e.options[e.selectedIndex].value;
+                filter = input.toUpperCase();
+                table = document.getElementById("logtable");
+                tr = table.getElementsByTagName("tr");
 
                 // Loop through all table rows, and hide those who don't match the search query
                 for (i = 0; i < tr.length; i++) {
@@ -102,34 +102,34 @@
                 <img src="image/solace.png" />
             </span>
             <div class="banner-interior">
-                    <p>Logged in as:
-                        <script>
-                            var user = sessionStorage.getItem('username')
-                            document.write(user)
-                        </script>
-                    </p>
-                    <a href="login.html" class="btn btn-info btn-lg">
-                        <i class='fas fa-sign-in-alt'></i> Logout
-                    </a>
-                </div>
+                <p>Logged in as:
+                    <script>
+                        var user = sessionStorage.getItem('username')
+                        document.write(user)
+                    </script>
+                </p>
+                <a href="login.html" class="btn btn-info btn-lg">
+                    <i class='fas fa-sign-in-alt'></i> Logout
+                </a>
+            </div>
         </div>
     </div>
     <div class="w3-bar w3-black">
         <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'messageLog')">Message
             Log</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'regAgency')">Register Agency</button>
-        <!-- <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'regTopic')">Register New Topic</button> -->
+        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'regTopic')">Topic Requests</button>
     </div>
 
     <!-- Tab to populate and view message log of all messages sent-->
     <div id="messageLog" class="w3-container w3-border pubsub">
         <div class="w3-bar">
             <p>
-                <button type="button" class="pure-button pure-button-primary" id="connect">Connect</button>
-                <button type="button" class="pure-button button-error" id="disconnect">Disconnect</button>
-                <button type="button" class="pure-button pure-button-primary" id="startconsume">Consume message log
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="connect">Connect</button>
+                <button type="button" class="w3-bar-item w3-button w3-red" id="disconnect">Disconnect</button>
+                <button type="button" class="w3-bar-item w3-button w3-teal"  id="startconsume">Consume message log
                 </button>
-                <button type="button" class="pure-button button-error" id="stopconsume">Stop consuming</button>
+                <button type="button" class="w3-bar-item w3-button w3-red"  id="stopconsume">Stop consuming</button>
             </p>
         </div>
         <p>
@@ -139,14 +139,15 @@
         </p>
         <input class="w3-bar w3-input w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" type="text"
             id="input1" onkeyup="mySearch('input1','logtable')" placeholder="Search (e.g. NEA)">
-            <br>
-            <form>
-                <!-- This is a drop down that will be dynamically poupulated as the message log is consumed -->
-                <select class="w3-select w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" id="mySelect" onchange="topicChange()" >
-                 <option value="" disabled selected>Search by Topic</option>
-                 <option value="">Show All Topics</option>
-                </select>
-              </form>
+        <br>
+        <form>
+            <!-- This is a drop down that will be dynamically poupulated as the message log is consumed -->
+            <select class="w3-select w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" id="mySelect"
+                onchange="topicChange()">
+                <option value="" disabled selected>Search by Topic</option>
+                <option value="">Show All Topics</option>
+            </select>
+        </form>
         <br>
         <table class="w3-table-all w3-hoverable w3-card-4" , id="logtable">
             <tr class='w3-teal'>
@@ -160,11 +161,11 @@
     <div id="regAgency" class="w3-container w3-border pubsub" style="display:none">
         <div class="w3-bar">
             <p>
-                <button type="button" class="pure-button pure-button-primary" id="connect2">Connect</button>
-                <button type="button" class="pure-button button-error" id="disconnect2">Disconnect</button>
-                <button type="button" class="pure-button pure-button-primary" id="startconsume2">Consume message log
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="connect2">Connect</button>
+                <button type="button" class="w3-bar-item w3-button w3-red" id="disconnect2">Disconnect</button>
+                <button type="button" class="w3-bar-item w3-button w3-teal"id="startconsume2">Consume message log
                 </button>
-                <button type="button" class="pure-button button-error" id="stopconsume2">Stop Consuming</button>
+                <button type="button" class="w3-bar-item w3-button w3-red"  id="stopconsume2">Stop Consuming</button>
             </p>
         </div>
         <p>
@@ -184,32 +185,11 @@
         </table>
     </div>
 
-    <!-- Tab to populate and view requests to register new topics requests from agencies -->
-    <!-- <div id="regTopic" class="w3-container w3-border pubsub" style="display:none">
-        <div class="w3-bar">
-            <p>
-                <button type="button" class="pure-button pure-button-primary" id="connect3">Connect</button>
-                <button type="button" class="pure-button button-error" id="disconnect3">Disconnect</button>
-                <button type="button" class="pure-button pure-button-primary" id="startconsume3">Consume message log
-                </button>
-                <button type="button" class="pure-button button-error" id="stopconsume3">Stop consuming</button>
-            </p>
-        </div>
-        <p>
-            <div class="input">
-                <div class="publishlog" id="log3" contentEditable="true"></div>
-            </div>
+    <div id='regTopic' class="w3-container w3-border pubsub" style="display:none">
+        <h3>Under Development</h3>
+        <p>This page should show a list of all new topic requests from the agencies, 
+            so that the central broker admin, can select or reject topics to be used on the broker.
         </p>
-        <input class="w3-bar w3-input w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" type="text"
-            id="input3" onkeyup="mySearch('input3','toptable')" placeholder="Search (e.g. NEA)">
-        <br>
-        <table class="w3-table-all w3-hoverable w3-card-4" , id="toptable">
-            <tr class='w3-teal'>
-                <th>Agency Name</th>
-                <th>Topic</th>
-                <th>Description</th>
-            </tr>
-        </table>
-    </div> -->
+    </div>
 
 </body>

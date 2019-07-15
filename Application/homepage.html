@@ -16,7 +16,7 @@
     <script src="js/ui.js"></script>
 
     <!-- Load js to retrieve the ACL via SEMP API REST call -->
-    <script src="AccessListCall.js"></script>
+    <script src="js/AccessListCall.js"></script>
 
     <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
     <!-- Load CSS-->
@@ -40,30 +40,7 @@
             } else {
                 var published = AccessListCall(user, "GET"); //["LTA/>", "LTA/1/IMD_DATA"]
                 var subscribed = AccessListCall(user, "GETALL"); //["NEA/>", "MHA/1/IMD_DATA"]
-                // for (var i = 0; i < published.length; i++) {
-                //     try {
-                //         // iterates through the published topic list and populates a table
-                //         var table = document.getElementById('publishTopic');
-                //         var row = table.insertRow(-1);
-                //         var cell1 = row.insertCell(0);
-                //         cell1.innerHTML = published[i];
-                //     } catch (error) {
-                //         pubsub.log(error.toString());
-                //     }
-                // }
-                // for (var x = 0; x < subscribed.length; x++) {
-                //     try {
-                //         // iterates through the subscribed topic list and populates a table
-                //         var table = document.getElementById('avilTopic');
-                //         var row = table.insertRow(-1);
-                //         var cell1 = row.insertCell(0);
-                //         cell1.innerHTML = subscribed[x];
-                //     } catch (error) {
-                //         pubsub.log(error.toString());
-                //     }
-                // }
             }
-
         }
     </script>
 
@@ -99,7 +76,7 @@
         <button class="w3-bar-item w3-button tablink" onclick="openSub()">Topics Available</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'stat')">Current Message
             Statistics</button>
-        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'RegTopic')">Register a topic</button>
+        <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'RegTopic')">Manage Topics</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'mapped')">Analytics and Mapping
             Example</button>
     </div>
@@ -137,6 +114,13 @@
                             </p>
                         </div>
                         <div class="w3-container w3-card w3-white w3-margin-bottom">
+                            <h2 class="w3-text-grey w3-padding-16">The Agency Broker</h2>
+                            <p align="justify"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis
+                                dictum odio, a cursus enim. Proin vitae est sem. Phasellus sollicitudin at tellus sed
+                                elementum. Suspendisse mattis dolor eget mattis convallis. Ut ante sem, maximus nec
+                                blandit tempor </p>
+                        </div>
+                        <div class="w3-container w3-card w3-white w3-margin-bottom">
                             <h2 class="w3-text-grey w3-padding-16">How does the Analytics Work?</h2>
                             <p align="justify"> By utilising a central broker, analytics, such as image analysis can be
                                 conducted on the data that is published to the broker. Based on the output of the
@@ -157,40 +141,7 @@
         <table class="w3-table-all w3-hoverable w3-card-4" , id='publishTopic'>
             <tr class='w3-teal'>
                 <th>Published Topics</th>
-                <!-- <th>Description</th> -->
             </tr>
-            <!-- <tr>
-                <td>NEA/1/temp_data/raw</td>
-                <td>Provides a stream of raw temperature data from various weather sensors in singapore<br>
-                    Example Message Content :"id": "S109", "lat": "1.3764", "long": "103.8492", "value": "31.1",
-                    "timestamp":
-                    "2019-05-29T16:40:00+08:00"
-                </td>
-            </tr>
-            <tr>
-                <td>NEA/1/rain_data/raw</td>
-                <td>Provides a stream of raw rain data from various weather sensors in singapore<br>
-                    Example Message Content :"id": "S109", "lat": "1.3764", "long": "103.8492", "value": "1",
-                    "timestamp":
-                    "2019-05-29T16:40:00+08:00"
-                </td>
-            </tr>
-            <tr>
-                <td>NEA/1/temp_data/change</td>
-                <td>Streams a message indicating the location of a temperature change of more than 0.5 degrees celsius
-                    based on analysis of raw data<br>
-                </td>
-            </tr>
-            <tr>
-                <td>NEA/1/rain_data/start</td>
-                <td>Streams a message indicating the location of where rain has started based on analysis of raw data
-                </td>
-            </tr>
-            <tr>
-                <td>NEA/1/rain_data/stop</td>
-                <td>Streams a message indicating the location of where rain has stopped based on analysis of raw data
-                </td>
-            </tr> -->
         </table>
         <br>
     </div>
@@ -202,18 +153,7 @@
         <table class="w3-table-all w3-hoverable w3-card-4" , id='avilTopic'>
             <tr class='w3-teal'>
                 <th>Available Topics</th>
-                <!-- <th>Description</th> -->
             </tr>
-            <!-- <tr>
-                <td>LTA/1/img_data/raw</td>
-                <td>Provides a stream of raw images of expressways in singapore<br>
-                </td>
-            </tr>
-            <tr>
-                <td>LTA/1/taxi_data/raw</td>
-                <td>Provides a stream of raw location data on the available taxis in singapre<br>
-                </td>
-            </tr> -->
         </table>
         <br>
     </div>
@@ -243,6 +183,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.js"></script>
-<script type="text/javascript" src="test.js"></script>
+<script type="text/javascript" src="js/test.js"></script>
 
 </html>
