@@ -119,6 +119,16 @@
             a.disabled = false;
           }
         }
+
+        $("input").keydown(function(e) {
+        var oldvalue=$(this).val();
+        var field=this;
+        setTimeout(function () {
+        if(field.value.indexOf('Govt/') !== 0) {
+          $(field).val(oldvalue);
+          }
+        }, 1);
+        });
   </script>
 </head>
 
@@ -126,7 +136,7 @@
   <form name='topicreg' id='topicreg' class="w3-panel was-validated">
     <div class="form-group">
       <label class="w3-text-teal" for="topic">Topic:</label>
-      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id=" topic"
+      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="topic"
         placeholder="Enter Topic to be Published" name="topic" required></input>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
