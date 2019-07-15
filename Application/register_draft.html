@@ -95,7 +95,7 @@
         </span>
       </div>
       <div class="w3-padding-32">
-        <button class="w3-btn w3-xlarge w3-dark-grey w3-hover-light-grey" onclick="location.href='https://solace.com/';"
+        <button class="w3-btn w3-xlarge w3-dark-grey w3-hover-light-grey" onclick="window.open('https://solace.com/', '_blank');"
           style="font-weight:900;">Get Started With a
           Solace Broker</button>
       </div>
@@ -103,14 +103,18 @@
   </header>
   <div class="w3-row-padding w3-center w3-margin-top">
     <div class="w3-col" style="width:45%">
-      <div class="w3-card w3-container" style="min-height:260px">
+      <div class="w3-card w3-container w3-hover-shadow" style="min-height:260px">
         <br>
-        <img src="image/pubsubcloud.svg" alt="pubsub" style="width:100%">
-        <h5>Solace Cloud Broker</h5> <br>
+        <div class="w3-border-bottom w3-border-teal">
+          <img src="image/pubsubcloud.svg" alt="pubsub" style="width:100%">
+        </div>
+        <br>  
+        <h5><Strong>Solace Cloud Broker</Strong></h5><br>
         <p>Basic Version Free</p>
         <p>Available on Multiple Clouds and Regions</p>
         <p>Up to 200K Connections</p>
-        <p><button class="w3-btn w3-dark-grey w3-hover-light-grey" onclick="location.href='https://solace.com/cloud/';"
+        <br>
+        <p><button class="w3-btn w3-dark-grey w3-hover-light-grey" onclick="window.open('https://solace.com/cloud/', '_blank');"
             style="font-weight:900;">More Information</button></p>
       </div>
     </div>
@@ -121,15 +125,19 @@
       </div>
     </div>
     <div class="w3-col" style="width:45%">
-      <div class="w3-card w3-container" style="min-height:260px">
+      <div class="w3-card w3-container w3-hover-shadow " style="min-height:260px">
         <br>
-        <img src="image/pubsub.svg" alt="pubsub" style="width:100%">
-        <h5>Solace Standard Edition Software Broker </h5> <br>
+        <div class="w3-border-bottom w3-border-teal">
+          <img src="image/pubsub.svg" alt="pubsub" style="width:100%">
+        </div>
+        <br>
+        <h5><Strong>Solace Standard Edition Software Broker</Strong></h5> <br>
         <p>Free to use</p>
         <p>10,000 messages/second</p>
         <p>1,000 concurrent connections</p>
+        <br>
         <p><button class="w3-btn w3-dark-grey w3-hover-light-grey"
-            onclick="location.href='https://solace.com/software/';" style="font-weight:900;">More Information</button>
+            onclick="window.open('https://solace.com/software/', '_blank');" style="font-weight:900;">More Information</button>
         </p>
       </div>
     </div>
@@ -141,9 +149,9 @@
         provide your solace cloud credentials
         (Username and Password), used to log in to the Solace Cloud Console</strong></p>
   </div>
-  <div class="w3-row-padding w3-container  ">
+  <div class="w3-row-padding w3-container w3-hover-shadow ">
     <form name="register" class="w3-card-4 w3-panel was-validated">
-      <br>
+      <br>  
       <div class="form-group">
         <label class="w3-text-teal" for="aname">Agency Name:</label>
         <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="aname"
