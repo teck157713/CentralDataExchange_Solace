@@ -1,3 +1,5 @@
+// CONFIG FILE refers to all the required data that is needed for the application system. This includes the access to PubSub + Cloud for Solace, as well as required credential for
+// local docker.
 var account = {
     HOSTURL:    'ws://localhost',
     VPN:        'default',
@@ -18,3 +20,4 @@ var NEA = {
     USERNAME:   'solace-cloud-client',
     PASS:       'croo89sd2pkbmk49a325m21q1v'
 }
+
