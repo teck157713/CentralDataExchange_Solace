@@ -5,10 +5,11 @@
     //   AccessListCall("LTA", "GET"); returns a list of published topics
     //   AccessListCall("LTA", "GETALL"); returns a list of topics available
     //   AccessListCall("LTA", "LOGIN", "password"); returns true/false with the right authentication
-
+var dict;
+var UriSEMP;
 function AccessListCall(username, type, value = '', filter = ''){
-    var dict = [];
-    var uriSEMP = "";
+    dict = [];
+    UriSEMP = "";
     AccessInnerCall(username, type, value, 0, filter = (('LOGIN' === type) ? 'login' : filter));
 
     if (dict[0]){
@@ -37,7 +38,7 @@ function AccessInnerCall(username, type, value = '', counter = 0, filter = '') {
     var data = '';
     // Make the REST API call.
     $.ajax({
-        url: uriSEMP,
+        url: UriSEMP,
         // Request headers.
         beforeSend: function(xhrObj){
             xhrObj.setRequestHeader("Content-Type","application/json");
