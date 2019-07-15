@@ -38,9 +38,11 @@
     var publisher = null;
     window.onload = function () {
         // Below function Executes on click of submit button.
+        var user = sessionStorage.getItem('username')
+        var input = document.getElementById("topic");
+        input.setAttribute('value',"govt/"+user+"/1/")
         $("#submit").click(function () {
           console.debug("Caught send button event");
-          var user = sessionStorage.getItem('username')
           // var a = document.forms["topicreg"]["aname"].value
           var t = document.forms["topicreg"]["topic"].value
           // var d = document.forms["topicreg"]["desc"].value
@@ -119,15 +121,45 @@
             a.disabled = false;
           }
         }
+
+        var pass_func = function  (val){
+            var user = sessionStorage.getItem('username')
+            var input = document.getElementById("topic");
+            input.value = "govt/"+user+"/"+val+"/";
+            input.setAttribute('value',"govt/"+user+"/"+val+"/")
+        }
+
+        function isNumberKey(evt){
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode> 57))
+          return false;
+          return true;
+          }
+
+        $(document).ready(function(){
+        // $("#topic").focus(function(){
+        // // $(this).val("Govt/");
+        // });
+        $("#topic").keyup(function(){
+          var x = document.getElementById("topic").getAttribute("value")
+
+        if ($(this).val().length <x.length) $(this).val(x); }); });
   </script>
 </head>
 
 <body>
   <form name='topicreg' id='topicreg' class="w3-panel was-validated">
+      <div class="form-group">
+          <label class="w3-text-teal" for="version">What is the Version:</label>
+          <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="version"
+            placeholder="What is the Version? (Only Numerical Values)" name="version" value="1" onkeypress="return isNumberKey(event)" onkeyup='pass_func(this.value);' required></input>
+          <div class="valid-feedback">Valid.</div>
+          <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
     <div class="form-group">
-      <label class="w3-text-teal" for="topic">Topic:</label>
-      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id=" topic"
-        placeholder="Enter Topic to be Published" name="topic" required></input>
+      <label class="w3-text-teal" for="topic">Enter Topic to be Published:</label>
+      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="topic"
+        placeholder="Enter Topic to be Published" name="topic" value="Govt/1/" required></input>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
