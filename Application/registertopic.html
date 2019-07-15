@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Load js to retrieve the ACL via SEMP API REST call -->
-  <script src="AccessListCall.js"></script>
+  <script src="js/AccessListCall.js"></script>
 
   <!-- Solace cloud login details-->
   <script src="config/config.js" type="text/javascript"></script>
@@ -94,19 +94,16 @@
           var c = document.getElementById("LTA");
           var d = document.getElementById("NEA");
           var e = document.getElementById("MHA");
-          var f = document.getElementById("MOH");
           if (a.checked) {
             b.disabled = true;
             c.disabled = true;
             d.disabled = true;
             e.disabled = true;
-            f.disabled = true;
           } else {
             b.disabled = false;
             c.disabled = false;
             d.disabled = false;
             e.disabled = false;
-            f.disabled = false;
           }
         }
         //function disables the all check box if the other checkboxes are clicked
@@ -116,8 +113,7 @@
           var c = document.getElementById("LTA");
           var d = document.getElementById("NEA");
           var e = document.getElementById("MHA");
-          var f = document.getElementById("MOH");
-          if (b.checked || c.checked || d.checked|| e.checked|| f.checked) {
+          if (b.checked || c.checked || d.checked|| e.checked) {
             a.disabled = true;
           } else {
             a.disabled = false;
