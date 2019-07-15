@@ -37,9 +37,9 @@
         window.onload = function () {
             var user = sessionStorage.getItem('username')
             // checks to see if user is properly logged in if not redirects to the login page
-            if (user == null) {
-                window.location.replace("login.html")
-            } else {
+            // if (user == null) {
+            //     window.location.replace("login.html")
+            // } else {
                 // Initialize factory with the most recent API defaults
                 var factoryProps = new solace.SolclientFactoryProperties();
                 factoryProps.profile = solace.SolclientFactoryProfiles.version10;
@@ -86,7 +86,7 @@
                         } else {
                             tr[i].style.display = "none";
                         }
-                    }
+                    // }
                 }
             }
         };
