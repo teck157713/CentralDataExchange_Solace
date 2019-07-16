@@ -18,6 +18,7 @@
     <script src="js/EventMsg.js"></script>
     <script src="js/microsoftanalyse.js"></script>
     <script src="js/Centralpubsub.js"></script>
+    <script src="js/ui.js"></script>
     <script src="config/config.js" type="text/javascript"></script>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
@@ -146,14 +147,19 @@
 <body>
     <br>
     <div class="w3-bar">
-            <p>
-                <button type="button" class="w3-bar-item w3-button w3-teal" id="subconnect">Connect</button>
-                <button type="button" class="w3-bar-item w3-button w3-red" id="subdisconnect">Disconnect</button>
-                <button type="button" class="w3-bar-item w3-button w3-teal" id="startconsume">Consume Messages
-                </button>
-                <button type="button" class="w3-bar-item w3-button w3-red" id="stopconsume">Stop Consuming</button>
-            </p>
-        </div>
+        <p>
+            <button type="button" class="w3-bar-item w3-button w3-teal" id="subconnect"
+                onclick="hiderMain('subconnect','subdisconnect','startconsume','stopconsume')">Connect</button>
+            <button type="button" class="w3-bar-item w3-button w3-teal" id="subdisconnect"
+                onclick="hiderMain('subdisconnect','subconnect','startconsume','stopconsume')"
+                style="display:none">Disconnect</button>
+            <button type="button" class="w3-bar-item w3-button w3-teal" onclick="hiderSub('startconsume','stopconsume')"
+                id="startconsume" style="display:none">Consume Messages
+            </button>
+            <button type="button" class="w3-bar-item w3-button w3-teal" onclick="hiderSub('stopconsume','startconsume')"
+                id="stopconsume" style="display:none">Stop Consuming</button>
+        </p>
+    </div>
     <br>
     <div id="chartContainer" style="height: 300px; width: 100%;"></div>
     <p>
