@@ -55,7 +55,7 @@ var QueueConsumer = function (queueName, table, logs) {
                 cell1.innerHTML = arr[0];
                 cell2.innerHTML = arr[1];
                 cell3.innerHTML = arr[2];
-                cell4.innerHTML = <input type="button" name="del" value="NO" id=arr />;
+                cell4.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-teal' value='Yes' id="+arr[0]+" />Yes</button><button type='button' class='w3-bar-item w3-button w3-red' value='NO' id="+arr[0]+" />No </button>";
             } catch (error) {
                 consumer.log(error.toString());
             }
