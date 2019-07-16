@@ -9,12 +9,28 @@ function openStuff(evt, name) {
   }
   tablinks = document.getElementsByClassName("tablink");
   for (i = 0; i < x.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+    tablinks[i].className = tablinks[i].className.replace(" w3-theme", "");
   }
   document.getElementById(name).style.display = "block";
-  evt.currentTarget.className += " w3-red";
+  evt.currentTarget.className += " w3-theme";
 };
 
+function hiderMain(hide,show,sub1,sub2) {
+  document.getElementById(show).style.display = "block"
+  document.getElementById(hide).style.display = "none"
+  if(document.getElementById(sub1).style.display == "none" && document.getElementById(sub2).style.display == "block" ){
+    document.getElementById(sub2).style.display = "none"
+  } else if (document.getElementById(sub1).style.display == "none" && document.getElementById(sub2).style.display == "none" ){
+    document.getElementById(sub1).style.display = "block"
+  } else (
+    document.getElementById(sub1).style.display = "none"
+  )
+}
+
+function hiderSub(hide,show,){
+  document.getElementById(show).style.display = "block"
+  document.getElementById(hide).style.display = "none"
+}
 
 function connect() {
   var hosturl = account.HOSTURL;
