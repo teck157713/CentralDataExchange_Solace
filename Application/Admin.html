@@ -115,7 +115,7 @@
         </div>
     </div>
     <div class="w3-bar w3-black">
-        <button class="w3-bar-item w3-button tablink w3-red" onclick="openStuff(event, 'messageLog')">Message
+        <button class="w3-bar-item w3-button tablink w3-theme" onclick="openStuff(event, 'messageLog')">Message
             Log</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'regAgency')">Register Agency</button>
         <button class="w3-bar-item w3-button tablink" onclick="openStuff(event, 'regTopic')">Topic Requests</button>
@@ -125,11 +125,15 @@
     <div id="messageLog" class="w3-container w3-border pubsub">
         <div class="w3-bar">
             <p>
-                <button type="button" class="w3-bar-item w3-button w3-teal" id="connect">Connect</button>
-                <button type="button" class="w3-bar-item w3-button w3-red" id="disconnect">Disconnect</button>
-                <button type="button" class="w3-bar-item w3-button w3-teal"  id="startconsume">Consume message log
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="connect"
+                    onclick="hiderMain('connect','disconnect','startconsume','stopconsume')">Connect</button>
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="disconnect"
+                    onclick="hiderMain('disconnect','connect','startconsume','stopconsume')" style="display:none">Disconnect</button>
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="startconsume"
+                    onclick="hiderSub('startconsume','stopconsume')" style="display:none">Consume message log
                 </button>
-                <button type="button" class="w3-bar-item w3-button w3-red"  id="stopconsume">Stop consuming</button>
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="stopconsume"
+                    onclick="hiderSub('stopconsume','startconsume')" style="display:none">Stop consuming</button>
             </p>
         </div>
         <p>
@@ -161,11 +165,16 @@
     <div id="regAgency" class="w3-container w3-border pubsub" style="display:none">
         <div class="w3-bar">
             <p>
-                <button type="button" class="w3-bar-item w3-button w3-teal" id="connect2">Connect</button>
-                <button type="button" class="w3-bar-item w3-button w3-red" id="disconnect2">Disconnect</button>
-                <button type="button" class="w3-bar-item w3-button w3-teal"id="startconsume2">Consume message log
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="connect2"
+                    onclick="hiderMain('connect2','disconnect2','startconsume2','stopconsume2')">Connect</button>
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="disconnect2"
+                    onclick="hiderMain('disconnect2','connect2','startconsume2', 'stopconsume2')"
+                    style="display:none">Disconnect</button>
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="startconsume2"
+                    onclick="hiderSub('startconsume2','stopconsume2')" style="display:none">Consume message log
                 </button>
-                <button type="button" class="w3-bar-item w3-button w3-red"  id="stopconsume2">Stop Consuming</button>
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="stopconsume2"
+                    onclick="hiderSub('stopconsume2','startconsume2')" style="display:none">Stop consuming</button>
             </p>
         </div>
         <p>
@@ -188,7 +197,7 @@
 
     <div id='regTopic' class="w3-container w3-border pubsub" style="display:none">
         <h3>Under Development</h3>
-        <p>This page should show a list of all new topic requests from the agencies, 
+        <p>This page should show a list of all new topic requests from the agencies,
             so that the central broker admin, can select or reject topics to be used on the broker.
         </p>
     </div>
