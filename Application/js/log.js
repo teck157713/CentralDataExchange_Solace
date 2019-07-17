@@ -41,6 +41,24 @@ var QueueConsumer = function (queueName, table, logs) {
             } catch (error) {
                 consumer.log(error.toString());
             }
+        } else if(table === 'toptable'){
+            try {
+                var text = String(messagee)
+                var arr = text.split(",")
+                // alert(arr)
+                var table = document.getElementById(table);
+                var row = table.insertRow(-1);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+                cell1.innerHTML = arr[0];
+                cell2.innerHTML = arr[1];
+                cell3.innerHTML = arr[2];
+                cell4.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value='Yes' id="+arr[0]+" style='width:50%'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id="+arr[0]+" style='width:50%'/>No </button>";
+            } catch (error) {
+                consumer.log(error.toString());
+            }
         } else {
             try {
                 var text = String(messagee)
