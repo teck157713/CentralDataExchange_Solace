@@ -26,11 +26,12 @@
 /*jslint es6 browser devel:true*/
 /*global solace*/
 
-var RegPublisher = function (queueName) {
+var RegPublisher = function (queueName,agency) {
     'use strict';
     var publisher = {};
     publisher.session = null;
     publisher.queueName = queueName;
+    publisher.agency = agency;
 
     // Logger
     publisher.log = function (line) {
@@ -118,7 +119,7 @@ var RegPublisher = function (queueName) {
             var aname = sessionStorage.getItem('username')
             var desc = document.getElementById('topicDesc').value;
             var topic = document.getElementById('topic').value;
-            var messageText = aname+","+topic+","+desc;
+            var messageText = aname+","+topic+","+desc+","+publisher.agency;
             var message = solace.SolclientFactory.createMessage();
             publisher.log('Sending message "' + messageText + '" to queue "' + publisher.queueName + '"...');
             message.setDestination(solace.SolclientFactory.createDurableQueueDestination(publisher.queueName));
