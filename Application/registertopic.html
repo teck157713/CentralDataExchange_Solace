@@ -7,12 +7,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Load Solace Web Messaging API for JavaScript -->
+  <script src="lib/solclient-debug.js"></script>
 
   <!-- Load js to retrieve the ACL via SEMP API REST call -->
   <script src="js/AccessListCall.js"></script>
 
   <!-- Solace cloud login details-->
   <script src="config/config.js" type="text/javascript"></script>
+
+  <!-- load js to run the ui for this page-->
+  <script src="js/processtopicreg.js"></script>
 
   <!-- Load CSS-->
   <link rel="stylesheet" type="text/css" href="css/pure.css">
@@ -37,6 +42,15 @@
   <script type="text/javascript">
     var publisher = null;
     window.onload = function () {
+        // Initialize factory with the most recent API defaults
+        var factoryProps = new solace.SolclientFactoryProperties();
+        factoryProps.profile = solace.SolclientFactoryProfiles.version10;
+        solace.SolclientFactory.init(factoryProps);
+
+        // enable logging to JavaScript console at WARN level
+        // NOTICE: works only with "solclientjs-debug.js"
+        solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
+
         // Below function Executes on click of submit button.
         var user = sessionStorage.getItem('username')
         var input = document.getElementById("topic");
@@ -62,7 +76,8 @@
                 console.log(inputElements[i].value)
                 if (inputElements[i].value == "all") {
                   // if published topic is open to all agencies to subscribe it will create exceptions in all agencies ACl
-                  AccessListCall(user, "POST", t);
+                  // AccessListCall(user, "POST", t);
+                  publisher = new RegPublisher('SOLACE_TOPICREG',"all");
                   console.log('it went in')
                   break;
                 } else {
@@ -73,10 +88,14 @@
             console.log(checkedValue)
             if (checkedValue !== "") {
               // creates subscription exceptions in the ACL of the releveant checked agencies
-              AccessListCall(user, "POST", t, checkedValue);
+              // AccessListCall(user, "POST", t, checkedValue);
+              // create the publisher, specifying name of the subscription topic
+              publisher = new RegPublisher('SOLACE_TOPICREG',checkedValue );
             }
             // syntax from sweetalert.js library to create alrets
             // will output an success alert box with the title and text as the output
+            publisher.publish()
+            publisher.disconnect()
             swal({
               title: "Thanks for registering! ",
               text: "Your registration will be confirmed in 3 working days",
