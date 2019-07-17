@@ -12,8 +12,9 @@
 
 // ** EXECUTE EXAMPLE **
 // BrokerRegistration(newReg);
+// BrokerBridgingConnection(newReg);
 
-// ** MAIN FUNCTION **
+// ** MAIN FUNCTION 1 **
 BrokerRegistration = function (credentials) {
     SempAPIRegistration(
         "http://localhost:8080/SEMP/v2/config/msgVpns/" + account.VPN + "/aclProfiles", 
@@ -32,16 +33,27 @@ BrokerRegistration = function (credentials) {
             account
         ))
         .then(res => SempAPIRegistration(
-            "https://" + credentials.SEMPURL + "/SEMP/v2/config/msgVpns/" + credentials.VPN + "/queues", 
-            "POST", 
-            {
-                "queueName" : account.VPN + "_" + credentials.VPN,
-                "egressEnabled": true,
-                "ingressEnabled": true,
-                "permission" : "modify-topic"
-            }, 
+            "http://localhost:8080/SEMP/v2/config/msgVpns/" + account.VPN + "/aclProfiles/ALL/subscribeExceptions", 
+            "GET", 
+            "", 
+            account,
             credentials
-        ))
+        ));
+}
+
+// ** MAIN FUNCTION 2 **
+BrokerBridgingConnection = function (credentials) {
+    SempAPIRegistration(
+        "https://" + credentials.SEMPURL + "/SEMP/v2/config/msgVpns/" + credentials.VPN + "/queues", 
+        "POST", 
+        {
+            "queueName" : account.VPN + "_" + credentials.VPN,
+            "egressEnabled": true,
+            "ingressEnabled": true,
+            "permission" : "modify-topic"
+        }, 
+        credentials
+    )
         .then(res => SempAPIRegistration(
             "http://localhost:8080/SEMP/v2/config/msgVpns/" + account.VPN + "/queues", 
             "POST", 
@@ -122,13 +134,6 @@ BrokerRegistration = function (credentials) {
                 "remoteSubscriptionTopic": "*/>"
             }, 
             account
-        ))
-        .then(res => SempAPIRegistration(
-            "http://localhost:8080/SEMP/v2/config/msgVpns/" + account.VPN + "/aclProfiles/ALL/subscribeExceptions", 
-            "GET", 
-            "", 
-            account,
-            credentials
         ));
 }
 
