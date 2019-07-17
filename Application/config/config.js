@@ -2,19 +2,26 @@ var account = {
     HOSTURL:    'ws://localhost',
     VPN:        'default',
     USERNAME:   'admin',
-    PASS:       'admin'
+    PASS:       'admin',
+    PUBLICURL:  'v:4b427c610209'
 }
 
 var LTA = {
     HOSTURL:    'ws://mr8ksiwsp23vv.messaging.solace.cloud:20483',
     VPN:        'msgvpn-jfgwkefwydv',
     USERNAME:   'solace-cloud-client',
-    PASS:       '9bsjj5sg7al2rj1ne5tkack131'
+    PASS:       '9bsjj5sg7al2rj1ne5tkack131',
+    SEMPURL:    'mr8ksiwsp23vv.messaging.solace.cloud:20494',
+    SEMPNAME:   'msgvpn-jfgwkefwydv-admin',
+    SEMPPASS:   '5ugnmo24ab72hd2fu5a84r1nfc'
 }
 
 var NEA = {
     HOSTURL:    'ws://mr8ksiwsp23vv.messaging.solace.cloud:20451',
     VPN:        'msgvpn-jfgwkeg1ahl',
     USERNAME:   'solace-cloud-client',
-    PASS:       'croo89sd2pkbmk49a325m21q1v'
+    PASS:       'croo89sd2pkbmk49a325m21q1v',
+    SEMPURL:    'mr8ksiwsp23vv.messaging.solace.cloud:20462',
+    SEMPNAME:   'msgvpn-jfgwkeg1ahl-admin',
+    SEMPPASS:   'j2h5k373182c86h1nsa1quismk'
 }
