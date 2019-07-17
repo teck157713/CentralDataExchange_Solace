@@ -52,10 +52,12 @@ var QueueConsumer = function (queueName, table, logs) {
                 var cell2 = row.insertCell(1);
                 var cell3 = row.insertCell(2);
                 var cell4 = row.insertCell(3);
+                var cell5 = row.insertCell(4);
                 cell1.innerHTML = arr[0];
                 cell2.innerHTML = arr[1];
                 cell3.innerHTML = arr[2];
-                cell4.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value='Yes' id="+arr[0]+" style='width:50%'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id="+arr[0]+" style='width:50%'/>No </button>";
+                cell3.innerHTML = arr[3];
+                cell5.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value='Yes' id="+arr[0]+" style='width:50%'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id="+arr[0]+" style='width:50%'/>No </button>";
             } catch (error) {
                 consumer.log(error.toString());
             }
