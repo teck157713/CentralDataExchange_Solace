@@ -60,11 +60,11 @@
                 document.getElementById("startconsume2").addEventListener("click", consumer2.startConsume);
                 document.getElementById("stopconsume2").addEventListener("click", consumer2.stopConsume);
 
-                // consumer3 = new QueueConsumer('SOLACE_TOPICREG', 'toptable', 'log3');
-                // document.getElementById("connect3").addEventListener("click", consumer3.connect);
-                // document.getElementById("disconnect3").addEventListener("click", consumer3.disconnect);
-                // document.getElementById("startconsume3").addEventListener("click", consumer3.startConsume);
-                // document.getElementById("stopconsume3").addEventListener("click", consumer3.stopConsume);
+                consumer3 = new QueueConsumer('SOLACE_TOPICREG', 'toptable', 'log3');
+                document.getElementById("connect3").addEventListener("click", consumer3.connect);
+                document.getElementById("disconnect3").addEventListener("click", consumer3.disconnect);
+                document.getElementById("startconsume3").addEventListener("click", consumer3.startConsume);
+                document.getElementById("stopconsume3").addEventListener("click", consumer3.stopConsume);
             };
             // UI function for search based on topic dropdown
             function topicChange() {
@@ -200,6 +200,36 @@
         <p>This page should show a list of all new topic requests from the agencies,
             so that the central broker admin, can select or reject topics to be used on the broker.
         </p>
+        <div class="w3-bar">
+            <p>
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="connect3"
+                    onclick="hiderMain('connect3','disconnect3','startconsume3','stopconsume2')">Connect</button>
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="disconnect2"
+                    onclick="hiderMain('disconnect3','connect3','startconsume3', 'stopconsume3')"
+                    style="display:none">Disconnect</button>
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="startconsume3"
+                    onclick="hiderSub('startconsume3','stopconsume3')" style="display:none">Consume message log
+                </button>
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="stopconsume3"
+                    onclick="hiderSub('stopconsume3','startconsume3')" style="display:none">Stop consuming</button>
+            </p>
+        </div>
+        <p>
+            <div class="input">
+                <div class="publishlog" id="log3" contentEditable="true"></div>
+            </div>
+        </p>
+        <input class="w3-bar w3-input w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" type="text"
+            id="input2" onkeyup="mySearch('input2','toptable')" placeholder="Search (e.g. NEA)">
+        <br>
+        <table class="w3-table-all w3-hoverable w3-card-4" , id="toptable">
+            <tr class='w3-teal'>
+                <th>Agency Name</th>
+                <th>Topic</th>
+                <th>Description</th>
+                <th>Approved?</th>
+            </tr>
+        </table>
     </div>
 
 </body>
