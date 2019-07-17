@@ -196,15 +196,15 @@
     </div>
 
     <div id='regTopic' class="w3-container w3-border pubsub" style="display:none">
-        <h3>Under Development</h3>
+        <!-- <h3>Under Development</h3>
         <p>This page should show a list of all new topic requests from the agencies,
             so that the central broker admin, can select or reject topics to be used on the broker.
-        </p>
+        </p> -->
         <div class="w3-bar">
             <p>
                 <button type="button" class="w3-bar-item w3-button w3-teal" id="connect3"
                     onclick="hiderMain('connect3','disconnect3','startconsume3','stopconsume2')">Connect</button>
-                <button type="button" class="w3-bar-item w3-button w3-teal" id="disconnect2"
+                <button type="button" class="w3-bar-item w3-button w3-teal" id="disconnect3"
                     onclick="hiderMain('disconnect3','connect3','startconsume3', 'stopconsume3')"
                     style="display:none">Disconnect</button>
                 <button type="button" class="w3-bar-item w3-button w3-teal" id="startconsume3"
@@ -227,6 +227,7 @@
                 <th>Agency Name</th>
                 <th>Topic</th>
                 <th>Description</th>
+                <th>Agency Control</th>
                 <th>Approved?</th>
             </tr>
         </table>
