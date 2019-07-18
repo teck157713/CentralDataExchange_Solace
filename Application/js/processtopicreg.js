@@ -26,12 +26,11 @@
 /*jslint es6 browser devel:true*/
 /*global solace*/
 
-var RegPublisher = function (queueName,agency) {
+var RegPublisher = function (queueName) {
     'use strict';
     var publisher = {};
     publisher.session = null;
     publisher.queueName = queueName;
-    publisher.agency = agency;
 
     // Logger
     publisher.log = function (line) {
@@ -119,6 +118,29 @@ var RegPublisher = function (queueName,agency) {
             var aname = sessionStorage.getItem('username')
             var desc = document.getElementById('topicDesc').value;
             var topic = document.getElementById('topic').value;
+            var checkedValue = "";
+            var inputElements = document.getElementsByClassName('w3-check');
+            for (var i = 0; i < inputElements.length; ++i) {
+              if (inputElements[i].checked) {
+                console.log(inputElements[i].value)
+                if (inputElements[i].value == "all") {
+                  // if published topic is open to all agencies to subscribe it will create exceptions in all agencies ACl
+                  // AccessListCall(user, "POST", t);
+                  publisher.agency = "all"
+                  console.log('it went in')
+                  break;
+                } else {
+                  checkedValue += inputElements[i].value + ","
+                }
+              }
+            }
+            console.log(checkedValue)
+            if (checkedValue !== "") {
+                publisher.agency = checkedValue
+              // creates subscription exceptions in the ACL of the releveant checked agencies
+              // AccessListCall(user, "POST", t, checkedValue);
+              // create the publisher, specifying name of the subscription topic
+            }
             var messageText = aname+","+topic+","+desc+","+publisher.agency;
             var message = solace.SolclientFactory.createMessage();
             publisher.log('Sending message "' + messageText + '" to queue "' + publisher.queueName + '"...');
@@ -126,8 +148,7 @@ var RegPublisher = function (queueName,agency) {
             message.setBinaryAttachment(messageText);
             message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
             publisher.log('Publishing message "' + messageText + '" to topic "' + publisher.queueName + '"...');
-            try {
-                // Delivery not yet confirmed. See ConfirmedPublish.js
+            try {  
                 publisher.session.send(message);
                 publisher.log('Message sent.');
             } catch (error) {
