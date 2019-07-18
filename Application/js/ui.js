@@ -94,3 +94,22 @@ function openSub() {
       cell1.innerHTML = subscribed[x];
   }
 }
+
+function DeleteRowFunction() {
+  // event.target will be the input element.
+  var td = event.target.parentNode; 
+  var tr = td.parentNode; // the row to be removed
+  tr.parentNode.removeChild(tr);
+}
+
+function CreateTopic(clicked) {
+  var text = document.getElementById(clicked).value
+  var arr = text.split("-")
+  if (arr[3] == "all"){
+    AccessListCall(arr[0], "POST", arr[1]);
+  } else {
+    alert(arr[3])
+    AccessListCall(user, "POST", arr[1], arr[3])
+  }
+  DeleteRowFunction()
+}
