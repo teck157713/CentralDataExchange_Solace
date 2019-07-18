@@ -45,7 +45,7 @@ var QueueConsumer = function (queueName, table, logs) {
             try {
                 // alert(table)
                 var text = String(messagee)
-                var arr = text.split(",")
+                var arr = text.split("-")
                 // alert(arr)
                 var table = document.getElementById(table);
                 var row = table.insertRow(-1);
@@ -58,7 +58,7 @@ var QueueConsumer = function (queueName, table, logs) {
                 cell2.innerHTML = arr[1];
                 cell3.innerHTML = arr[2];
                 cell4.innerHTML = arr[3];
-                cell5.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value='Yes' id="+arr[0]+" style='width:50%'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id="+arr[0]+" style='width:50%'/>No </button>";
+                cell5.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value="+text+" id='Yes' style='width:50%' onclick='CreateTopic(this.id)'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id="+arr[0]+" style='width:50%' onclick='DeleteRowFunction()'/>No </button>";
             } catch (error) {
                 consumer.log(error.toString());
             }
