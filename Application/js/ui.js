@@ -109,7 +109,7 @@ function CreateTopic(clicked) {
     AccessListCall(arr[0], "POST", arr[1]);
   } else {
     // alert(arr[3])
-    AccessListCall(user, "POST", arr[1], arr[3])
+    AccessListCall(arr[0], "POST", arr[1], arr[3])
   }
   DeleteRowFunction()
 }
