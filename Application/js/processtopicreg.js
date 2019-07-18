@@ -141,7 +141,7 @@ var RegPublisher = function (queueName) {
               // AccessListCall(user, "POST", t, checkedValue);
               // create the publisher, specifying name of the subscription topic
             }
-            var messageText = aname+","+topic+","+desc+","+publisher.agency;
+            var messageText = aname+"-"+topic+"-"+desc+"-"+'"'+publisher.agency+'"';
             var message = solace.SolclientFactory.createMessage();
             publisher.log('Sending message "' + messageText + '" to queue "' + publisher.queueName + '"...');
             message.setDestination(solace.SolclientFactory.createDurableQueueDestination(publisher.queueName));
