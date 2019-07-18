@@ -1,4 +1,4 @@
-/*
+ /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -126,7 +126,6 @@ var RegPublisher = function (queueName) {
             message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
             publisher.log('Publishing message "' + messageText + '" to topic "' + publisher.queueName + '"...');
             try {
-                // Delivery not yet confirmed. See ConfirmedPublish.js
                 publisher.session.send(message);
                 publisher.log('Message sent.');
             } catch (error) {
