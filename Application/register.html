@@ -105,27 +105,53 @@
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="form-group">
-      <label class="w3-text-teal" for="uname">Username:</label>
+      <label class="w3-text-teal" for="HOSTURL">Cloud Host URL:</label>
+      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="HOSTURL"
+        placeholder="Enter Solace Cloud Host URL" name="HOSTURL" required>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div> <div class="form-group">
+      <label class="w3-text-teal" for="vpn">VPN Name:</label>
+      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="vpn"
+        placeholder="Enter Solace Cloud VPN" name="vpn" required>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="form-group">
+      <label class="w3-text-teal" for="uname">Cloud Username:</label>
       <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="uname"
         placeholder="Enter Solace Cloud Username" name="uname" required>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="form-group">
-      <label class="w3-text-teal" for="pwd">Password:</label>
+      <label class="w3-text-teal" for="pwd">Cloud Password:</label>
       <input type="password" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="pwd"
         placeholder="Enter Solace Cloud Password" name="pwd" required>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
-    <!-- <div class="form-group form-check">
-      <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" name="remember" required> I agree to authorize connection of my
-        broker to a central broker.
-        <div class="valid-feedback">Valid.</div>
-        <div class="invalid-feedback">Check this checkbox to continue.</div>
-      </label>
-    </div> -->
+    <div class="form-group">
+      <label class="w3-text-teal" for="SEMPHOSTURL">SEMP URL:</label>
+      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="SEMPHOSTURL"
+        placeholder="Enter Solace Cloud Host URL" name="SEMPHOSTURL" required>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div> <div class="form-group">
+    <div class="form-group">
+      <label class="w3-text-teal" for="sempuname">SEMP Name:</label>
+      <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="sempuname"
+        placeholder="Enter Solace Cloud Username" name="sempuname" required>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
+    <div class="form-group">
+      <label class="w3-text-teal" for="semppwd">SEMP Password:</label>
+      <input type="password" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow"" id="semppwd"
+        placeholder="Enter Solace Cloud Password" name="semppwd" required>
+      <div class="valid-feedback">Valid.</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
+    </div>
     <button type="button" class="btn btn-primary" id='submit'>Submit</button>
   </form>
 </body>
