@@ -113,3 +113,10 @@ function CreateTopic(clicked) {
   }
   DeleteRowFunction()
 }
+
+function CreateAgency(clicked) {
+  var text = document.getElementById(clicked).value
+  var arr = text.split("-")
+  // function call to SEMP to create the agency here
+  DeleteRowFunction()
+}
