@@ -76,7 +76,7 @@ var QueueConsumer = function (queueName, table, logs) {
                 cell1.innerHTML = arr[0];
                 cell2.innerHTML = arr[1];
                 cell3.innerHTML = arr[2];
-                cell4.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value='Yes' id="+arr[0]+" style='width:50%'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id="+arr[0]+" style='width:50%'/>No </button>";
+                cell4.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value="+text+" id='Yes' style='width:50%' onclick='CreateAgency(this.id)'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id="+arr[0]+" style='width:50%' onclick='DeleteRowFunction()'/>No </button>";
             } catch (error) {
                 consumer.log(error.toString());
             }
