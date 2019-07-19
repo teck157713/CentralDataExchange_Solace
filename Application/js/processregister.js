@@ -116,8 +116,13 @@ var RegPublisher = function (queueName) {
      publisher.publish = function () {
         if (publisher.session !== null) {
             var aname = document.getElementById('aname').value;
+            var hosturl = document.getElementById('HOSTURL').value;
+            var vpn = document.getElementById('vpn').value;
             var uname = document.getElementById('uname').value;
             var pwd = document.getElementById('pwd').value;
+            var sempurl = document.getElementById('SEMPHOSTURL').value;
+            var sempuname = document.getElementById('sempuname').value;
+            var semppwd = document.getElementById('semppwd').value;
             var messageText = aname+","+uname+","+pwd;
             var message = solace.SolclientFactory.createMessage();
             publisher.log('Sending message "' + messageText + '" to queue "' + publisher.queueName + '"...');
