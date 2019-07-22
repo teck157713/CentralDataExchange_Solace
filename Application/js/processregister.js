@@ -124,7 +124,7 @@
              var sempurl = document.getElementById('SEMPHOSTURL').value;
              var sempuname = document.getElementById('sempuname').value;
              var semppwd = document.getElementById('semppwd').value;
-             var messageText = aname + "," + hosturl+ "," +vpn+ "," +uname + "," + pwd+ "," +sempurl+ "," +sempuname+ "," +semppwd;
+             var messageText = aname + "," + hosturl + "," + vpn + "," + uname + "," + pwd + "," + sempurl + "," + sempuname + "," + semppwd;
              var message = solace.SolclientFactory.createMessage();
              publisher.log('Sending message "' + messageText + '" to queue "' + publisher.queueName + '"...');
              message.setDestination(solace.SolclientFactory.createDurableQueueDestination(publisher.queueName));
