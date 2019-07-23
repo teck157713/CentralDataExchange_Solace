@@ -111,7 +111,7 @@
          } else {
              publisher.log('Not connected to Solace message router.');
          }
-     };
+     }; 
 
      // Publishes one message
      publisher.publish = function () {
