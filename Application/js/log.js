@@ -44,7 +44,7 @@ var QueueConsumer = function (queueName, table, logs) {
         } else if(table === 'toptable'){
             try {
                 // alert(table)
-                var text = String(messagee) //aname+"-"+topic+"-"+desc+"-"+allowed agency;
+                var text = String(messagee) //aname+"-"+topic+"-"+desc+"-"+allowed_agency;
                 var arr = text.split("-")
                 // alert(arr)
                 var table = document.getElementById(table);
