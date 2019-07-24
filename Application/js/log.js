@@ -44,7 +44,7 @@ var QueueConsumer = function (queueName, table, logs) {
         } else if(table === 'toptable'){
             try {
                 // alert(table)
-                var text = String(messagee)
+                var text = String(messagee) //aname+"-"+topic+"-"+desc+"-"+allowed agency;
                 var arr = text.split("-")
                 // alert(arr)
                 var table = document.getElementById(table);
@@ -64,7 +64,7 @@ var QueueConsumer = function (queueName, table, logs) {
             }
         } else {
             try {
-                var text = String(messagee)
+                var text = String(messagee) //aname + "," + hosturl + "," + vpn + "," + uname + "," + pwd + "," + sempurl + "," + sempuname + "," + semppwd;
                 var arr = text.split(",")
                 // alert(arr)
                 var table = document.getElementById(table);
