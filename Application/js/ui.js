@@ -116,7 +116,18 @@ function CreateTopic(clicked) {
 
 function CreateAgency(clicked) {
   var text = document.getElementById(clicked).value
-  var arr = text.split("-")
+  var arr = text.split(",")
+  var newReg = {
+        NAME:        arr[0],
+        HOSTURL:    arr[1],
+        VPN:        arr[2],
+        USERNAME:   arr[3],
+        PASS:       arr[4],
+        SEMPURL:    arr[5],
+        SEMPNAME:   arr[6],
+        SEMPPASS:  arr[7]
+    }
+  BrokerBridgingConnection(newReg);
   // function call to SEMP to create the agency here
   DeleteRowFunction()
 }
