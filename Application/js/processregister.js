@@ -108,7 +108,8 @@
              } catch (error) {
                  publisher.log(error.toString());
              }
-         } else {vvvvvvvv
+         } else {
+             vvvvvvvv
              publisher.log('Not connected to Solace message router.');
          }
      };
@@ -135,16 +136,16 @@
                  publisher.session.send(message);
                  publisher.log('Message sent.');
                  var newReg = {
-                    NAME:        aname,
-                    HOSTURL:    hosturl,
-                    VPN:        vpn,
-                    USERNAME:   uname,
-                    PASS:       pwd,
-                    SEMPURL:    sempurl,
-                    SEMPNAME:   sempuname,
-                    SEMPPASS:   semppwd
-                }
-                BrokerRegistration(newReg);
+                     NAME: aname,
+                     HOSTURL: hosturl,
+                     VPN: vpn,
+                     USERNAME: uname,
+                     PASS: pwd,
+                     SEMPURL: sempurl,
+                     SEMPNAME: sempuname,
+                     SEMPPASS: semppwd
+                 }
+                 BrokerRegistration(newReg);
              } catch (error) {
                  publisher.log(error.toString());
              }
