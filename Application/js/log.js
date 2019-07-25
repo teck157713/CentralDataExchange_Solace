@@ -41,7 +41,7 @@ var QueueConsumer = function (queueName, table, logs) {
             } catch (error) {
                 consumer.log(error.toString());
             }
-        } else if(table === 'toptable'){
+        } else if (table === 'toptable') {
             try {
                 // alert(table)
                 var text = String(messagee) //aname+"-"+topic+"-"+desc+"-"+allowed_agency;
@@ -58,7 +58,7 @@ var QueueConsumer = function (queueName, table, logs) {
                 cell2.innerHTML = arr[1];
                 cell3.innerHTML = arr[2];
                 cell4.innerHTML = arr[3];
-                cell5.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value="+text+" id='Yes' style='width:50%' onclick='CreateTopic(this.id)'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id="+arr[0]+" style='width:50%' onclick='DeleteRowFunction()'/>No </button>";
+                cell5.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value=" + text + " id='Yes' style='width:50%' onclick='CreateTopic(this.id)'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id=" + arr[0] + " style='width:50%' onclick='DeleteRowFunction()'/>No </button>";
             } catch (error) {
                 consumer.log(error.toString());
             }
@@ -86,7 +86,7 @@ var QueueConsumer = function (queueName, table, logs) {
                 cell6.innerHTML = arr[5];
                 cell7.innerHTML = arr[6];
                 cell8.innerHTML = arr[7];
-                cell9.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value="+text+" id='Yes' style='width:50%' onclick='CreateAgency(this.id)'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id="+arr[0]+" style='width:50%' onclick='DeleteRowFunction()'/>No </button>";
+                cell9.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value=" + text + " id='Yes' style='width:50%' onclick='CreateAgency(this.id)'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id=" + arr[0] + " style='width:50%' onclick='DeleteRowFunction()'/>No </button>";
             } catch (error) {
                 consumer.log(error.toString());
             }
@@ -192,10 +192,10 @@ var QueueConsumer = function (queueName, table, logs) {
                             // Need to explicitly ack otherwise it will not be deleted from the message router
                             var topic = String(message.getDestination())
                             // populates the dropdown list for the search based on topic
-                            if(consumer.queueName==="SOLACE_QUEUE"){
-                                if(topics.includes(topic)){
+                            if (consumer.queueName === "SOLACE_QUEUE") {
+                                if (topics.includes(topic)) {
                                     console.log(topics)
-                                }else{
+                                } else {
                                     topics.push(topic)
                                     var x = document.getElementById("mySelect");
                                     var option = document.createElement("option");
@@ -218,10 +218,10 @@ var QueueConsumer = function (queueName, table, logs) {
                             consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
                             var topic = String(message.getDestination())
                             // populates the dropdown list for the search based on topic
-                            if(consumer.queueName==="SOLACE_QUEUE"){
-                                if(topics.includes(topic)){
+                            if (consumer.queueName === "SOLACE_QUEUE") {
+                                if (topics.includes(topic)) {
                                     console.log(topics)
-                                }else{
+                                } else {
                                     topics.push(topic)
                                     var x = document.getElementById("mySelect");
                                     var option = document.createElement("option");
