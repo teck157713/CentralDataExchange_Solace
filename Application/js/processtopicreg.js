@@ -36,7 +36,8 @@ var RegPublisher = function (queueName) {
     publisher.log = function (line) {
         var now = new Date();
         var time = [('0' + now.getHours()).slice(-2), ('0' + now.getMinutes()).slice(-2),
-            ('0' + now.getSeconds()).slice(-2)];
+            ('0' + now.getSeconds()).slice(-2)
+        ];
         var timestamp = '[' + time.join(':') + '] ';
         console.log(timestamp + line);
     };
@@ -62,8 +63,8 @@ var RegPublisher = function (queueName) {
         try {
             publisher.session = solace.SolclientFactory.createSession({
                 // solace.SessionProperties
-                url:      hosturl,
-                vpnName:  vpn,
+                url: hosturl,
+                vpnName: vpn,
                 userName: username,
                 password: pass,
             });
@@ -112,8 +113,8 @@ var RegPublisher = function (queueName) {
         }
     };
 
-     // Publishes one message
-     publisher.publish = function () {
+    // Publishes one message
+    publisher.publish = function () {
         if (publisher.session !== null) {
             var aname = sessionStorage.getItem('username')
             var desc = document.getElementById('topicDesc').value;
@@ -121,34 +122,34 @@ var RegPublisher = function (queueName) {
             var checkedValue = "";
             var inputElements = document.getElementsByClassName('w3-check');
             for (var i = 0; i < inputElements.length; ++i) {
-              if (inputElements[i].checked) {
-                console.log(inputElements[i].value)
-                if (inputElements[i].value == "all") {
-                  // if published topic is open to all agencies to subscribe it will create exceptions in all agencies ACl
-                  // AccessListCall(user, "POST", t);
-                  publisher.agency = "all"
-                  console.log('it went in')
-                  break;
-                } else {
-                  checkedValue += inputElements[i].value + ","
+                if (inputElements[i].checked) {
+                    console.log(inputElements[i].value)
+                    if (inputElements[i].value == "all") {
+                        // if published topic is open to all agencies to subscribe it will create exceptions in all agencies ACl
+                        // AccessListCall(user, "POST", t);
+                        publisher.agency = "all"
+                        console.log('it went in')
+                        break;
+                    } else {
+                        checkedValue += inputElements[i].value + ","
+                    }
                 }
-              }
             }
             console.log(checkedValue)
             if (checkedValue !== "") {
                 publisher.agency = checkedValue
-              // creates subscription exceptions in the ACL of the releveant checked agencies
-              // AccessListCall(user, "POST", t, checkedValue);
-              // create the publisher, specifying name of the subscription topic
+                // creates subscription exceptions in the ACL of the releveant checked agencies
+                // AccessListCall(user, "POST", t, checkedValue);
+                // create the publisher, specifying name of the subscription topic
             }
-            var messageText = aname+"-"+topic+"-"+desc+"-"+publisher.agency;
+            var messageText = aname + "-" + topic + "-" + desc + "-" + publisher.agency;
             var message = solace.SolclientFactory.createMessage();
             publisher.log('Sending message "' + messageText + '" to queue "' + publisher.queueName + '"...');
             message.setDestination(solace.SolclientFactory.createDurableQueueDestination(publisher.queueName));
             message.setBinaryAttachment(messageText);
             message.setDeliveryMode(solace.MessageDeliveryModeType.PERSISTENT);
             publisher.log('Publishing message "' + messageText + '" to topic "' + publisher.queueName + '"...');
-            try {  
+            try {
                 publisher.session.send(message);
                 publisher.log('Message sent.');
             } catch (error) {
