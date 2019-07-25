@@ -23,6 +23,9 @@
     <!-- Load js to retrieve the ACL via SEMP API REST call -->
     <script src="js/AccessListCall.js"></script>
 
+    <!-- Load js to register new broker via SEMP API REST call -->
+    <script src="js/BrokerRegistration.js"></script>
+
     <!-- Load jquery  -->
     <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 
@@ -192,6 +195,7 @@
         <input class="w3-bar w3-input w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" type="text"
             id="input2" onkeyup="mySearch('input2','regtable')" placeholder="Search (e.g. NEA)">
         <br>
+        <div class="w3-responsive">
         <table class="w3-table-all w3-hoverable w3-card-4" , id="regtable">
             <tr class='w3-teal'>
                 <th>Agency Name</th>
@@ -205,6 +209,7 @@
                 <th>Approved?</th>
             </tr>
         </table>
+        </div>
     </div>
 
     <div id='regTopic' class="w3-container w3-border pubsub" style="display:none">
@@ -234,6 +239,7 @@
         <input class="w3-bar w3-input w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" type="text"
             id="input3" onkeyup="mySearch('input3','toptable')" placeholder="Search (e.g. NEA)">
         <br>
+        <div class="w3-responsive">
         <table class="w3-table-all w3-hoverable w3-card-4" , id="toptable">
             <tr class='w3-teal'>
                 <th>Agency Name</th>
@@ -243,6 +249,7 @@
                 <th>Approved?</th>
             </tr>
         </table>
+        </div>
     </div>
 
 </body>
