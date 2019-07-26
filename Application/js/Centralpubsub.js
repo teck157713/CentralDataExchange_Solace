@@ -134,6 +134,7 @@ var PubSub = function (params) {
         // define message event listener
         pubsub.session.on(solace.SessionEventCode.MESSAGE, function (message) {
             var result = message.getBinaryAttachment();
+            updateDataFlow(String(message.getDestination()));
             // assuming message is not an image if less than 255 character, instead it's a msg
             if (validURL(JSON.parse("{" + result + "}").imageurl)){
               pubsub.log('Received Image: <br /><img id=\"ItemView\" src=\"' + JSON.parse("{" + result + "}").imageurl + '\" />' + ', message: ' + result + ', details:\n' + message.dump());
@@ -196,6 +197,7 @@ var PubSub = function (params) {
           message.setCorrelationKey(correlationKey);
           try {
               pubsub.session.send(message);
+              updateDataFlow(statictopicName);
               pubsub.log('Message #' + sequenceNr + ' sent to queue "' + statictopicName + '", correlation key = ' + JSON.stringify(correlationKey));
           } catch (error) {
               pubsub.log(error.toString());
@@ -222,6 +224,10 @@ var PubSub = function (params) {
                         placeholder, // use topic name as correlation key
                         10000 // 10 seconds timeout for this operation
                     );
+                    try{
+                        clearInterval(govdataon);
+                    }catch(exception){}
+                    govdataon = setInterval(function(){updateChart()}, updateInterval);
                 } catch (error) {
                     pubsub.log(error.toString());
                 }
@@ -302,22 +308,20 @@ var PubSub = function (params) {
                     // Define message received event listener
                     pubsub.messageConsumer.on(solace.MessageConsumerEventName.MESSAGE, function (message) {
                       var result = message.getBinaryAttachment();
+                      updateDataFlow(String(message.getDestination()).replace("]", "").split(" ")[1]);
                       // Process each of the incoming message respectively
                       if (String(message.getDestination()).indexOf('NEA/1/temp_data/raw') >= 0){
-                        yTemp += 1;
                         TempEventCall(result, pubsub);
                         message.acknowledge();
                       } else if (String(message.getDestination()).indexOf('NEA/1/rain_data/raw') >= 0){
-                        yRain += 1;
                         RainEventCall(result, pubsub);
                         message.acknowledge();
                       } else if (String(message.getDestination()).indexOf('LTA/1/img_data/raw') >= 0){
-                        yImg += 1;
                         ImageEventCall(result, pubsub, function(){});
                         message.acknowledge();
                       } else if (String(message.getDestination()).indexOf('LTA/1/taxi_data/raw') >= 0){
-                        yTaxi += 1;
                         message.acknowledge();
+                        JSON.stringify(chart.data);
                       } else {
                         // assuming if message is a message if less than 255, else image
                         if (result.length < 555) {
