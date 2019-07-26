@@ -67,6 +67,12 @@ var PubSub = function (params) {
                 var pass = NEA.PASS;
                 var vpn = NEA.VPN;
                 break;
+            case "newReg":
+                var hosturl = newReg.HOSTURL;
+                var username = newReg.USERNAME;
+                var pass = newReg.PASS;
+                var vpn = newReg.VPN;
+                break;
             default:
                 var hosturl = account.HOSTURL;
                 var username = account.USERNAME;
