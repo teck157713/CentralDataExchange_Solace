@@ -95,8 +95,8 @@
         </span>
       </div>
       <div class="w3-padding-32">
-        <button class="w3-btn w3-xlarge w3-dark-grey w3-hover-light-grey" onclick="window.open('https://solace.com/', '_blank');"
-          style="font-weight:900;">Get Started With a
+        <button class="w3-btn w3-xlarge w3-dark-grey w3-hover-light-grey"
+          onclick="window.open('https://solace.com/', '_blank');" style="font-weight:900;">Get Started With a
           Solace Broker</button>
       </div>
     </div>
@@ -108,14 +108,15 @@
         <div class="w3-border-bottom w3-border-teal">
           <img src="image/pubsubcloud.svg" alt="pubsub" style="width:100%">
         </div>
-        <br>  
+        <br>
         <h5><Strong>Solace Cloud Broker</Strong></h5><br>
         <p>Basic Version Free</p>
         <p>Available on Multiple Clouds and Regions</p>
         <p>Up to 200K Connections</p>
         <br>
-        <p><button class="w3-btn w3-dark-grey w3-hover-light-grey" onclick="window.open('https://solace.com/cloud/', '_blank');"
-            style="font-weight:900;">More Information</button></p>
+        <p><button class="w3-btn w3-dark-grey w3-hover-light-grey"
+            onclick="window.open('https://solace.com/cloud/', '_blank');" style="font-weight:900;">More
+            Information</button></p>
       </div>
     </div>
     <div class="w3-col" style="width:10%">
@@ -137,7 +138,8 @@
         <p>1,000 concurrent connections</p>
         <br>
         <p><button class="w3-btn w3-dark-grey w3-hover-light-grey"
-            onclick="window.open('https://solace.com/software/', '_blank');" style="font-weight:900;">More Information</button>
+            onclick="window.open('https://solace.com/software/', '_blank');" style="font-weight:900;">More
+            Information</button>
         </p>
       </div>
     </div>
@@ -146,13 +148,12 @@
   <div class="w3-container w3-card-4 w3-teal ">
     <br>
     <h4 align="center">To register to make use of the Central Broker Service, please
-        provide your solace cloud credentials,<br>
-        (Username and Password), used to log in to the Solace Cloud Console</h4>
-        <br>
+      provide your solace cloud broker credentials,<br> used to log in to the Solace Cloud Console</h4>
+    <br>
   </div>
   <div class="w3-row-padding w3-container w3-hover-shadow ">
     <form name="register" class="w3-card-4 w3-panel was-validated">
-      <br> 
+      <br>
       <div class="form-group">
         <label class="w3-text-teal" for="aname">Agency Name:</label>
         <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="aname"
@@ -161,29 +162,56 @@
         <div class="invalid-feedback">Please fill out this field.</div>
       </div>
       <div class="form-group">
-        <label class="w3-text-teal" for="uname">Username:</label>
+        <label class="w3-text-teal" for="HOSTURL">Cloud Host URL:</label>
+        <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="HOSTURL"
+          placeholder="Enter Solace Cloud Host URL" name="HOSTURL" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+      <div class="form-group">
+        <label class="w3-text-teal" for="vpn">VPN Name:</label>
+        <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="vpn"
+          placeholder="Enter Solace Cloud VPN" name="vpn" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+      <div class="form-group">
+        <label class="w3-text-teal" for="uname">Cloud Username:</label>
         <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="uname"
           placeholder="Enter Solace Cloud Username" name="uname" required>
         <div class="valid-feedback">Valid.</div>
         <div class="invalid-feedback">Please fill out this field.</div>
       </div>
       <div class="form-group">
-        <label class="w3-text-teal" for="pwd">Password:</label>
+        <label class="w3-text-teal" for="pwd">Cloud Password:</label>
         <input type="password" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="pwd"
           placeholder="Enter Solace Cloud Password" name="pwd" required>
         <div class="valid-feedback">Valid.</div>
         <div class="invalid-feedback">Please fill out this field.</div>
       </div>
-      <!-- <div class="form-group form-check">
-            <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" name="remember" required> I agree to authorize connection of my
-              broker to a central broker.
-              <div class="valid-feedback">Valid.</div>
-              <div class="invalid-feedback">Check this checkbox to continue.</div>
-            </label>
-          </div> -->
-      <button type="button" class="btn btn-primary" id='submit'>Submit</button>
-      <br><br>
+      <div class="form-group">
+        <label class="w3-text-teal" for="SEMPHOSTURL">SEMP URL:</label>
+        <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="SEMPHOSTURL"
+          placeholder="Enter Solace Cloud Host URL" name="SEMPHOSTURL" required>
+        <div class="valid-feedback">Valid.</div>
+        <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+      <div class="form-group">
+        <div class="form-group">
+          <label class="w3-text-teal" for="sempuname">SEMP Name:</label>
+          <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="sempuname"
+            placeholder="Enter Solace Cloud Username" name="sempuname" required>
+          <div class="valid-feedback">Valid.</div>
+          <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+        <div class="form-group">
+          <label class="w3-text-teal" for="semppwd">SEMP Password:</label>
+          <input type="password" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="semppwd"
+            placeholder="Enter Solace Cloud Password" name="semppwd" required>
+          <div class="valid-feedback">Valid.</div>
+          <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+        <button type="button" class="btn btn-primary" id='submit'>Submit</button>
     </form>
   </div>
 

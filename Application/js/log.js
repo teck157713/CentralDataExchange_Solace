@@ -41,10 +41,11 @@ var QueueConsumer = function (queueName, table, logs) {
             } catch (error) {
                 consumer.log(error.toString());
             }
-        } else if(table === 'toptable'){
+        } else if (table === 'toptable') {
             try {
-                var text = String(messagee)
-                var arr = text.split(",")
+                // alert(table)
+                var text = String(messagee) //aname+"-"+topic+"-"+desc+"-"+allowed_agency;
+                var arr = text.split("-")
                 // alert(arr)
                 var table = document.getElementById(table);
                 var row = table.insertRow(-1);
@@ -56,14 +57,14 @@ var QueueConsumer = function (queueName, table, logs) {
                 cell1.innerHTML = arr[0];
                 cell2.innerHTML = arr[1];
                 cell3.innerHTML = arr[2];
-                cell3.innerHTML = arr[3];
-                cell5.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value='Yes' id="+arr[0]+" style='width:50%'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id="+arr[0]+" style='width:50%'/>No </button>";
+                cell4.innerHTML = arr[3];
+                cell5.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value=" + text + " id='Yes' style='width:50%' onclick='CreateTopic(this.id)'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id=" + arr[0] + " style='width:50%' onclick='DeleteRowFunction()'/>No </button>";
             } catch (error) {
                 consumer.log(error.toString());
             }
         } else {
             try {
-                var text = String(messagee)
+                var text = String(messagee) //aname + "," + hosturl + "," + vpn + "," + uname + "," + pwd + "," + sempurl + "," + sempuname + "," + semppwd;
                 var arr = text.split(",")
                 // alert(arr)
                 var table = document.getElementById(table);
@@ -72,10 +73,20 @@ var QueueConsumer = function (queueName, table, logs) {
                 var cell2 = row.insertCell(1);
                 var cell3 = row.insertCell(2);
                 var cell4 = row.insertCell(3);
+                var cell5 = row.insertCell(4);
+                var cell6 = row.insertCell(5);
+                var cell7 = row.insertCell(6);
+                var cell8 = row.insertCell(7);
+                var cell9 = row.insertCell(8);
                 cell1.innerHTML = arr[0];
                 cell2.innerHTML = arr[1];
                 cell3.innerHTML = arr[2];
-                cell4.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value='Yes' id="+arr[0]+" style='width:50%'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id="+arr[0]+" style='width:50%'/>No </button>";
+                cell4.innerHTML = arr[3];
+                cell5.innerHTML = arr[4];
+                cell6.innerHTML = arr[5];
+                cell7.innerHTML = arr[6];
+                cell8.innerHTML = arr[7];
+                cell9.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value=" + text + " id='Yes' style='width:50%' onclick='CreateAgency(this.id)'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id=" + arr[0] + " style='width:50%' onclick='DeleteRowFunction()'/>No </button>";
             } catch (error) {
                 consumer.log(error.toString());
             }
@@ -181,10 +192,10 @@ var QueueConsumer = function (queueName, table, logs) {
                             // Need to explicitly ack otherwise it will not be deleted from the message router
                             var topic = String(message.getDestination())
                             // populates the dropdown list for the search based on topic
-                            if(consumer.queueName==="SOLACE_QUEUE"){
-                                if(topics.includes(topic)){
+                            if (consumer.queueName === "SOLACE_QUEUE") {
+                                if (topics.includes(topic)) {
                                     console.log(topics)
-                                }else{
+                                } else {
                                     topics.push(topic)
                                     var x = document.getElementById("mySelect");
                                     var option = document.createElement("option");
@@ -207,10 +218,10 @@ var QueueConsumer = function (queueName, table, logs) {
                             consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
                             var topic = String(message.getDestination())
                             // populates the dropdown list for the search based on topic
-                            if(consumer.queueName==="SOLACE_QUEUE"){
-                                if(topics.includes(topic)){
+                            if (consumer.queueName === "SOLACE_QUEUE") {
+                                if (topics.includes(topic)) {
                                     console.log(topics)
-                                }else{
+                                } else {
                                     topics.push(topic)
                                     var x = document.getElementById("mySelect");
                                     var option = document.createElement("option");

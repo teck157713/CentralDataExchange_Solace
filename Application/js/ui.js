@@ -15,19 +15,19 @@ function openStuff(evt, name) {
   evt.currentTarget.className += " w3-theme";
 };
 
-function hiderMain(hide,show,sub1,sub2) {
+function hiderMain(hide, show, sub1, sub2) {
   document.getElementById(show).style.display = "block"
   document.getElementById(hide).style.display = "none"
-  if(document.getElementById(sub1).style.display == "none" && document.getElementById(sub2).style.display == "block" ){
+  if (document.getElementById(sub1).style.display == "none" && document.getElementById(sub2).style.display == "block") {
     document.getElementById(sub2).style.display = "none"
-  } else if (document.getElementById(sub1).style.display == "none" && document.getElementById(sub2).style.display == "none" ){
+  } else if (document.getElementById(sub1).style.display == "none" && document.getElementById(sub2).style.display == "none") {
     document.getElementById(sub1).style.display = "block"
-  } else (
+  } else(
     document.getElementById(sub1).style.display = "none"
   )
 }
 
-function hiderSub(hide,show,){
+function hiderSub(hide, show, ) {
   document.getElementById(show).style.display = "block"
   document.getElementById(hide).style.display = "none"
 }
@@ -69,13 +69,13 @@ function openPub() {
   var published = AccessListCall(user, "GET");
   var table = document.getElementById('publishTopic');
   for (var i = table.rows.length - 1; i > 0; i--) {
-      table.deleteRow(i);
+    table.deleteRow(i);
   }
   for (var i = 0; i < published.length; i++) {
-      // iterates through the published topic list and populates a table
-      var row = table.insertRow(i + 1);
-      var cell1 = row.insertCell(0);
-      cell1.innerHTML = published[i];
+    // iterates through the published topic list and populates a table
+    var row = table.insertRow(i + 1);
+    var cell1 = row.insertCell(0);
+    cell1.innerHTML = published[i];
   }
 }
 
@@ -85,12 +85,49 @@ function openSub() {
   var subscribed = AccessListCall(user, "GETALL");
   var table = document.getElementById('avilTopic');
   for (var i = table.rows.length - 1; i > 0; i--) {
-      table.deleteRow(i);
+    table.deleteRow(i);
   }
   for (var x = 0; x < subscribed.length; x++) {
-      // iterates through the subscribed topic list and populates a table
-      var row = table.insertRow(i + 1);
-      var cell1 = row.insertCell(0);
-      cell1.innerHTML = subscribed[x];
+    // iterates through the subscribed topic list and populates a table
+    var row = table.insertRow(i + 1);
+    var cell1 = row.insertCell(0);
+    cell1.innerHTML = subscribed[x];
   }
+}
+
+function DeleteRowFunction() {
+  // event.target will be the input element.
+  var td = event.target.parentNode;
+  var tr = td.parentNode; // the row to be removed
+  tr.parentNode.removeChild(tr);
+}
+
+function CreateTopic(clicked) {
+  var text = document.getElementById(clicked).value
+  var arr = text.split("-")
+  if (arr[3] == "all") {
+    AccessListCall(arr[0], "POST", arr[1]);
+  } else {
+    // alert(arr[3])
+    AccessListCall(arr[0], "POST", arr[1], arr[3])
+  }
+  DeleteRowFunction()
+}
+
+function CreateAgency(clicked) {
+  var text = document.getElementById(clicked).value
+  var arr = text.split(",")
+  var newReg = {
+    NAME: arr[0],
+    HOSTURL: arr[1],
+    VPN: arr[2],
+    USERNAME: arr[3],
+    PASS: arr[4],
+    SEMPURL: arr[5],
+    SEMPNAME: arr[6],
+    SEMPPASS: arr[7]
+  }
+  BrokerBridgingConnection(newReg);
+  // function call to SEMP to create the agency here
+  DeleteRowFunction()
 }

@@ -20,6 +20,15 @@
     <!-- load js to run the ui for this page-->
     <script src="js/ui.js"></script>
 
+    <!-- Load js to retrieve the ACL via SEMP API REST call -->
+    <script src="js/AccessListCall.js"></script>
+
+    <!-- Load js to register new broker via SEMP API REST call -->
+    <script src="js/BrokerRegistration.js"></script>
+
+    <!-- Load jquery  -->
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+
     <!-- Load CSS-->
     <link rel="stylesheet" type="text/css" href="css/pure.css">
     </link>
@@ -128,7 +137,8 @@
                 <button type="button" class="w3-bar-item w3-button w3-teal" id="connect"
                     onclick="hiderMain('connect','disconnect','startconsume','stopconsume')">Connect</button>
                 <button type="button" class="w3-bar-item w3-button w3-teal" id="disconnect"
-                    onclick="hiderMain('disconnect','connect','startconsume','stopconsume')" style="display:none">Disconnect</button>
+                    onclick="hiderMain('disconnect','connect','startconsume','stopconsume')"
+                    style="display:none">Disconnect</button>
                 <button type="button" class="w3-bar-item w3-button w3-teal" id="startconsume"
                     onclick="hiderSub('startconsume','stopconsume')" style="display:none">Consume message log
                 </button>
@@ -185,21 +195,24 @@
         <input class="w3-bar w3-input w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" type="text"
             id="input2" onkeyup="mySearch('input2','regtable')" placeholder="Search (e.g. NEA)">
         <br>
-        <table class="w3-table-all w3-hoverable w3-card-4" , id="regtable">
-            <tr class='w3-teal'>
-                <th>Agency Name</th>
-                <th>Username</th>
-                <th>Password</th>
-                <th>Approved?</th>
-            </tr>
-        </table>
+        <div class="w3-responsive">
+            <table class="w3-table-all w3-hoverable w3-card-4" , id="regtable">
+                <tr class='w3-teal'>
+                    <th>Agency Name</th>
+                    <th>Host URL</th>
+                    <th>VPN</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>SEMP Host URL</th>
+                    <th>SEMP Username</th>
+                    <th>SEMP Password</th>
+                    <th>Approved?</th>
+                </tr>
+            </table>
+        </div>
     </div>
 
     <div id='regTopic' class="w3-container w3-border pubsub" style="display:none">
-        <!-- <h3>Under Development</h3>
-        <p>This page should show a list of all new topic requests from the agencies,
-            so that the central broker admin, can select or reject topics to be used on the broker.
-        </p> -->
         <div class="w3-bar">
             <p>
                 <button type="button" class="w3-bar-item w3-button w3-teal" id="connect3"
@@ -220,17 +233,24 @@
             </div>
         </p>
         <input class="w3-bar w3-input w3-border w3-light-grey w3-hover-shadow w3-hover-border-teal" type="text"
-            id="input2" onkeyup="mySearch('input2','toptable')" placeholder="Search (e.g. NEA)">
+            id="input3" onkeyup="mySearch('input3','toptable')" placeholder="Search (e.g. NEA)">
         <br>
-        <table class="w3-table-all w3-hoverable w3-card-4" , id="toptable">
-            <tr class='w3-teal'>
-                <th>Agency Name</th>
-                <th>Topic</th>
-                <th>Description</th>
-                <th>Agency Control</th>
-                <th>Approved?</th>
-            </tr>
-        </table>
+        <div class="w3-responsive">
+            <table class="w3-table-all w3-hoverable w3-card-4" , id="toptable">
+                <tr class='w3-teal'>
+                    <th>Agency Name</th>
+                    <th>Topic</th>
+                    <th>Description</th>
+                    <th>Agency Control</th>
+                    <th>Approved?</th>
+                </tr>
+            </table>
+        </div>
     </div>
 
 </body>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.js"></script> -->
+
+</html>
