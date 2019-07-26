@@ -1,7 +1,8 @@
 // ** NEW BROKER: DATA EXAMPLE **
 // var newReg = {
 //     NAME:       'new',
-//     HOSTURL:    'mrzpfs1b9gh81.messaging.solace.cloud:20288',
+//     HOSTURL:    'ws://mrzpfs1b9gh81.messaging.solace.cloud:20291',
+//     remoteMsgVpnLocation:   'mrzpfs1b9gh81.messaging.solace.cloud:20288',
 //     VPN:        'msgvpn-zpfs1b9w8wz',
 //     USERNAME:   'solace-cloud-client',
 //     PASS:       '4j4tmhhldn6kklhlvnq4ldsvmm',
