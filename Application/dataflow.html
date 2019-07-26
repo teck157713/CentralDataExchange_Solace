@@ -26,60 +26,100 @@
 
     <!-- Execute the Confirmed Delivery tutorial -->
     <script>
+        var ChartData = [];
         var producer = null;
-        var yTemp = 0;
-        var yRain = 0;
-        var yImg = 0;
-        var yTaxi = 0;
-
-
-        var Tempps = []; // dataPoints
-        var Rainps = [];
-        var Imgps = [];
-        var Taxips = [];
 
         var xVal = 0;
         var updateInterval = 1000;
         var dataLength = 20; // number of dataPoints visible at any point
         var chart;
+        
+        addY = ChartData => ChartData.y += 1;
+        getTopicSub = x => x.subscribeExceptionTopic;
+        getTopicPub = x => x.publishExceptionTopic;
+        setEach = x => ({ name : x, y: 0, dp: [] });
+        addData = x => ChartData.push(x);
+
+        function SempAPI(url, type, accountCredentials) {
+            return new Promise(function(resolve, reject) {
+                // Make the REST API call.
+                $.ajax({
+                    url: url,
+
+                    // Request headers.
+                    beforeSend: function(xhrObj){
+                        xhrObj.setRequestHeader("Content-Type","application/json");
+                        xhrObj.setRequestHeader('Authorization', 'Basic ' + btoa( String(accountCredentials.SEMPNAME ? accountCredentials.SEMPNAME : accountCredentials.USERNAME) + ':' + String(accountCredentials.SEMPPASS ? accountCredentials.SEMPPASS : accountCredentials.PASS) ));
+                    },
+
+                    type: type,
+                })
+
+                .done(function(data) {
+                    // Additional querying on result
+                    result = JSON.parse(JSON.stringify(data, null, 2));
+                    resolve(result);
+                })
+
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    // Display error message.
+                    var errorString = (errorThrown === "") ? "Error. " :
+                        errorThrown + " (" + jqXHR.status + "): ";
+                    errorString += (jqXHR.responseText === "") ? "" :
+                        jQuery.parseJSON(jqXHR.responseText).message;
+                    alert(errorString);
+                    reject(errorString);
+                });
+            });
+
+        };
+        
+        var updateDataFlow = function(TopicName) {
+            ifMatch = ChartData => ChartData.name == TopicName;
+            filterTopic = x => x == TopicName;
+            createSubData = function() {
+                SempAPI(
+                    "http://localhost:8080/SEMP/v2/monitor/msgVpns/" + account.VPN + "/aclProfiles/" + "new"+ "/subscribeExceptions", "GET", account
+                ).then(res => 
+                    res.data.map(getTopicSub).filter(filterTopic).map(setEach).map(addData)
+                );
+                SempAPI(
+                    "http://localhost:8080/SEMP/v2/monitor/msgVpns/" + account.VPN + "/aclProfiles/" + "new"+ "/publishExceptions", "GET", account
+                ).then(res => 
+                    res.data.map(getTopicPub).filter(filterTopic).map(setEach).map(addData)
+                );
+            }
+            ChartData.map(a=>a.name).includes(TopicName) ? 
+            (ChartData.filter(ifMatch).map(addY)) :
+            createSubData();
+
+            
+            
+        }
+        
+
+        pushXY = data => (data.dp.push({x: xVal, y: data.y}));
+        resetY = data => (data.y = 0);
+        dataGraph = data => ({ type: "line", dataPoints: data.dp, showInLegend: true, legendText: data.name });
+        dataLimitshift = data => (data.dp.length > dataLength) ? data.dp.shift() : undefined;
+
         // function being called frequently every 1 second to collect message flow and update the next node in chart
         var updateChart = function (count) {
 
-            count = count || 1;
-
+            // Processes the ChartData
+            
+            count = 1;
             for (var j = 0; j < count; j++) {
-                Tempps.push({
-                    x: xVal,
-                    y: yTemp
-                });
-                Rainps.push({
-                    x: xVal,
-                    y: yRain
-                });
-                Imgps.push({
-                    x: xVal,
-                    y: yImg
-                });
-                Taxips.push({
-                    x: xVal,
-                    y: yTaxi
-                });
+                ChartData.map(pushXY);
+                ChartData.map(resetY);
                 xVal++;
-                yRain = 0;
-                yTemp = 0;
-                yImg = 0;
-                yTaxi = 0;
             }
 
-            if (Tempps.length > dataLength) {
-                Tempps.shift();
-                Rainps.shift();
-                Imgps.shift();
-                Taxips.shift();
-            }
-
+            ChartData.map(dataLimitshift);
+            chart.options.data = ChartData.map(dataGraph);
             chart.render();
         };
+        
         window.onload = function () {
             // Creates the chart to simulate dataflow on load
             chart = new CanvasJS.Chart("chartContainer", {
@@ -93,27 +133,7 @@
                 axisX: {
                     title: "Time elapsed"
                 },
-                data: [{
-                    type: "line",
-                    dataPoints: Tempps,
-                    showInLegend: true,
-                    legendText: "Temperature"
-                }, {
-                    type: "line",
-                    dataPoints: Rainps,
-                    showInLegend: true,
-                    legendText: "Rain"
-                }, {
-                    type: "line",
-                    dataPoints: Imgps,
-                    showInLegend: true,
-                    legendText: "Traffic Image"
-                }, {
-                    type: "line",
-                    dataPoints: Taxips,
-                    showInLegend: true,
-                    legendText: "Taxi"
-                }]
+                data: ChartData.map(dataGraph)
             });
 
 
@@ -127,16 +147,15 @@
             solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
             // create the main broker to receive messages and process data streaming, as well as publishing =
-            central = new PubSub({
-                queueName: 'SOLACE_ALL',
-                logname: 'subscribelog',
-                tableName: 'table2'
-            });
-            // Buttons to connect and consume messages by main broker
-            document.getElementById("subconnect").addEventListener("click", central.connect);
-            document.getElementById("subdisconnect").addEventListener("click", central.disconnect);
-            document.getElementById("startconsume").addEventListener("click", central.startConsume);
-            document.getElementById("stopconsume").addEventListener("click", central.stopConsume);
+            // Main Broker to connect to Queue
+            var graph = new PubSub({
+                        queueName: 'SOLACE_ALL',
+                        logname: 'subscribelog',
+                        tableName: 'table2'});
+            document.getElementById("subconnect").addEventListener("click", graph.connect);
+            document.getElementById("subdisconnect").addEventListener("click", graph.disconnect);
+            document.getElementById("startconsume").addEventListener("click", graph.startConsume);
+            document.getElementById("stopconsume").addEventListener("click", graph.stopConsume);
             // update the chart to display message flow consistently
             updateChart(dataLength);
 
