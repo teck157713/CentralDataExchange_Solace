@@ -99,7 +99,6 @@
                 }
             }
         };
-
     </script>
 </head>
 
@@ -138,7 +137,8 @@
                 <button type="button" class="w3-bar-item w3-button w3-teal" id="connect"
                     onclick="hiderMain('connect','disconnect','startconsume','stopconsume')">Connect</button>
                 <button type="button" class="w3-bar-item w3-button w3-teal" id="disconnect"
-                    onclick="hiderMain('disconnect','connect','startconsume','stopconsume')" style="display:none">Disconnect</button>
+                    onclick="hiderMain('disconnect','connect','startconsume','stopconsume')"
+                    style="display:none">Disconnect</button>
                 <button type="button" class="w3-bar-item w3-button w3-teal" id="startconsume"
                     onclick="hiderSub('startconsume','stopconsume')" style="display:none">Consume message log
                 </button>
@@ -196,19 +196,19 @@
             id="input2" onkeyup="mySearch('input2','regtable')" placeholder="Search (e.g. NEA)">
         <br>
         <div class="w3-responsive">
-        <table class="w3-table-all w3-hoverable w3-card-4" , id="regtable">
-            <tr class='w3-teal'>
-                <th>Agency Name</th>
-                <th>Host URL</th>
-                <th>VPN</th>
-                <th>Username</th>
-                <th>Password</th>
-                <th>SEMP Host URL</th>
-                <th>SEMP Username</th>
-                <th>SEMP Password</th>
-                <th>Approved?</th>
-            </tr>
-        </table>
+            <table class="w3-table-all w3-hoverable w3-card-4" , id="regtable">
+                <tr class='w3-teal'>
+                    <th>Agency Name</th>
+                    <th>Host URL</th>
+                    <th>VPN</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>SEMP Host URL</th>
+                    <th>SEMP Username</th>
+                    <th>SEMP Password</th>
+                    <th>Approved?</th>
+                </tr>
+            </table>
         </div>
     </div>
 
@@ -236,15 +236,15 @@
             id="input3" onkeyup="mySearch('input3','toptable')" placeholder="Search (e.g. NEA)">
         <br>
         <div class="w3-responsive">
-        <table class="w3-table-all w3-hoverable w3-card-4" , id="toptable">
-            <tr class='w3-teal'>
-                <th>Agency Name</th>
-                <th>Topic</th>
-                <th>Description</th>
-                <th>Agency Control</th>
-                <th>Approved?</th>
-            </tr>
-        </table>
+            <table class="w3-table-all w3-hoverable w3-card-4" , id="toptable">
+                <tr class='w3-teal'>
+                    <th>Agency Name</th>
+                    <th>Topic</th>
+                    <th>Description</th>
+                    <th>Agency Control</th>
+                    <th>Approved?</th>
+                </tr>
+            </table>
         </div>
     </div>
 
