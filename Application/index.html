@@ -23,6 +23,7 @@
     <script src="js/tempData.js"></script>
     <script src="js/AccessListCall.js"></script>
     <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="js/BrokerRegistration.js"></script>
 
     <!-- Execute the Confirmed Delivery tutorial -->
     <script>
@@ -38,7 +39,35 @@
         // NOTICE: works only with "solclientjs-debug.js"
         solace.SolclientFactory.setLogLevel(solace.LogLevel.WARN);
 
-        // console.log(AccessListCall("NEA", "GETALL"));
+        // console.log(AccessListCall("MHA", "POST", "testingthat/>", "NEA"));
+
+        // var newBoi = {
+        //     NAME:       'new',
+        //     HOSTURL:    'ws://mrzpfs1b9gh81.messaging.solace.cloud:20291',
+        //     remoteMsgVpnLocation:   'mrzpfs1b9gh81.messaging.solace.cloud:20288',
+        //     VPN:        'msgvpn-zpfs1b9w8wz',
+        //     USERNAME:   'solace-cloud-client',
+        //     PASS:       '4j4tmhhldn6kklhlvnq4ldsvmm',
+        //     SEMPURL:    'mrzpfs1b9gh81.messaging.solace.cloud:20302',
+        //     SEMPNAME:   'msgvpn-zpfs1b9w8wz-admin',
+        //     SEMPPASS:   'jd1hu487v6he5hotnr1hanl2ab'
+        // }
+        // BrokerRegistration(newBoi);
+        // BrokerBridgingConnection(newBoi);
+
+        // var newGurl = {
+        //   NAME:       'anotherlta',
+        //   HOSTURL:    'ws://mr8ksiwsp23vv.messaging.solace.cloud:20483',
+        //   remoteMsgVpnLocation:     'mr8ksiwsp23vv.messaging.solace.cloud:20480',
+        //   VPN:        'msgvpn-jfgwkefwydv',
+        //   USERNAME:   'solace-cloud-client',
+        //   PASS:       '9bsjj5sg7al2rj1ne5tkack131',
+        //   SEMPURL:    'mr8ksiwsp23vv.messaging.solace.cloud:20494',
+        //   SEMPNAME:   'msgvpn-jfgwkefwydv-admin',
+        //   SEMPPASS:   '5ugnmo24ab72hd2fu5a84r1nfc'
+        // }
+        // BrokerRegistration(newGurl);
+        // BrokerBridgingConnection(newGurl);
 
         // create the producer, specifying name of the subscription topic
         producer_lta = new PubSub({logname : "publishlog", topicName : "GOV/NEA/1/temp_data/raw", topicID : "publishtopicLTA", contentmsg : "content", contentfile : "fileimg"});
