@@ -9,6 +9,7 @@ var account = {
 var LTA = {
     HOSTURL:    'ws://mr8ksiwsp23vv.messaging.solace.cloud:20483',
     VPN:        'msgvpn-jfgwkefwydv',
+    remoteMsgVpnLocation:     'mr8ksiwsp23vv.messaging.solace.cloud:20480',
     USERNAME:   'solace-cloud-client',
     PASS:       '9bsjj5sg7al2rj1ne5tkack131',
     SEMPURL:    'mr8ksiwsp23vv.messaging.solace.cloud:20494',
@@ -24,4 +25,15 @@ var NEA = {
     SEMPURL:    'mr8ksiwsp23vv.messaging.solace.cloud:20462',
     SEMPNAME:   'msgvpn-jfgwkeg1ahl-admin',
     SEMPPASS:   'j2h5k373182c86h1nsa1quismk'
+}
+var newReg = {
+    NAME:       'new',
+    HOSTURL:    'ws://mrzpfs1b9gh81.messaging.solace.cloud:20291',
+    remoteMsgVpnLocation:   'mrzpfs1b9gh81.messaging.solace.cloud:20288',
+    VPN:        'msgvpn-zpfs1b9w8wz',
+    USERNAME:   'solace-cloud-client',
+    PASS:       '4j4tmhhldn6kklhlvnq4ldsvmm',
+    SEMPURL:    'mrzpfs1b9gh81.messaging.solace.cloud:20302',
+    SEMPNAME:   'msgvpn-zpfs1b9w8wz-admin',
+    SEMPPASS:   'jd1hu487v6he5hotnr1hanl2ab'
 }
