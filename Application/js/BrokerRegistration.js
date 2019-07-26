@@ -19,7 +19,8 @@ BrokerRegistration = function (credentials) {
     SempAPIRegistration(
         "http://localhost:8080/SEMP/v2/config/msgVpns/" + account.VPN + "/aclProfiles", 
         "POST", 
-        {"aclProfileName" : credentials.NAME}, 
+        {"aclProfileName" : credentials.NAME,
+        "clientConnectDefaultAction" : "allow"}, 
         account
     )
         .then(res => SempAPIRegistration(
@@ -27,6 +28,7 @@ BrokerRegistration = function (credentials) {
             "POST", 
             {
                 "clientUsername" : credentials.NAME,
+                "password" : credentials.NAME,
                 "aclProfileName" : credentials.NAME,
                 "enabled" : true
             }, 
@@ -83,8 +85,8 @@ BrokerBridgingConnection = function (credentials) {
                 "enabled" : true,
                 "msgVpnName" : credentials.VPN,
                 "remoteAuthenticationScheme" : "basic",
-                "remoteAuthenticationBasicClientUsername" : credentials.USERNAME,
-                "remoteAuthenticationBasicPassword" : credentials.PASS
+                "remoteAuthenticationBasicClientUsername" : credentials.NAME,
+                "remoteAuthenticationBasicPassword" : credentials.NAME
             }, 
             credentials
         ))
@@ -117,7 +119,7 @@ BrokerBridgingConnection = function (credentials) {
             "http://localhost:8080/SEMP/v2/config/msgVpns/" + account.VPN + "/bridges/bridge_" + account.VPN + "_" + credentials.VPN + ",auto/remoteMsgVpns", 
             "POST", 
             {
-                "remoteMsgVpnLocation": credentials.HOSTURL,
+                "remoteMsgVpnLocation": credentials.remoteMsgVpnLocation,
                 "remoteMsgVpnName" : credentials.VPN,
                 "enabled" : true,
                 "queueBinding" : account.VPN + "_" + credentials.VPN
@@ -164,7 +166,12 @@ function SempAPIRegistration(url, type, data, accountCredentials, add = "") {
             (
                 result = result.data,
                 addSubTopic = (a) => 
-                    SempAPIRegistration("http://localhost:8080/SEMP/v2/config/msgVpns/" + accountCredentials.VPN + "/aclProfiles/" + add.NAME + "/subscribeExceptions", "POST", {"subscribeExceptionTopic" : a, "topicSyntax" : "smf"}, account),
+                    SempAPIRegistration(
+                        "http://localhost:8080/SEMP/v2/config/msgVpns/" + accountCredentials.VPN + "/aclProfiles/" + add.NAME + "/subscribeExceptions", 
+                        "POST", 
+                        {"subscribeExceptionTopic" : a, "topicSyntax" : "smf"}, 
+                        account
+                    ),
                 result
                     .map(result => result.subscribeExceptionTopic)
                     .map(addSubTopic)
