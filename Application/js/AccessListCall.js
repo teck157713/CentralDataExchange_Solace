@@ -26,6 +26,10 @@ function AccessListCall(username, type, value = '', filter = ''){
                     insertedtype = "POST";
                     insertedvalue = '{"subscribeExceptionTopic": "' + value + '", "topicSyntax" : "smf" }';
                 }
+                if (counter == 4){
+                    insertedtype = "POST";
+                    insertedvalue = '{"subscriptionTopic": "' + value + '"}';
+                }
                 break;
         }
         // Assign the right URI based on subsequent API calls
@@ -41,6 +45,8 @@ function AccessListCall(username, type, value = '', filter = ''){
             uriSEMP = "http://localhost:8080/SEMP/v2/config/msgVpns/default/aclProfiles/" + username + "/subscribeExceptions";
         } else if (counter == 3){
             uriSEMP = "http://localhost:8080/SEMP/v2/config/msgVpns/default/aclProfiles";
+        } else if (counter == 4){
+            uriSEMP = "http://localhost:8080/SEMP/v2/config/msgVpns/default/queues/SOLACE_ALL/subscriptions";
         }
         var data = '';
         // Make the REST API call.
@@ -104,6 +110,7 @@ function AccessListCall(username, type, value = '', filter = ''){
                         dict.push(data['data'][k]['publishExceptionTopic']);
                     }
                     if (type == 'POST'){
+                        AccessInnerCall(username, type, value, 4);
                         // Add topic to subscribe list to each of the broker
                         if (filter) {
                             for (var i in filter) {
