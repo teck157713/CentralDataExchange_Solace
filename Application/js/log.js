@@ -78,6 +78,7 @@ var QueueConsumer = function (queueName, table, logs) {
                 var cell7 = row.insertCell(6);
                 var cell8 = row.insertCell(7);
                 var cell9 = row.insertCell(8);
+                var cell10 = row.insertCell(9);
                 cell1.innerHTML = arr[0];
                 cell2.innerHTML = arr[1];
                 cell3.innerHTML = arr[2];
@@ -86,7 +87,8 @@ var QueueConsumer = function (queueName, table, logs) {
                 cell6.innerHTML = arr[5];
                 cell7.innerHTML = arr[6];
                 cell8.innerHTML = arr[7];
-                cell9.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value=" + text + " id='Yes' style='width:50%' onclick='CreateAgency(this.id)'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id=" + arr[0] + " style='width:50%' onclick='DeleteRowFunction()'/>No </button>";
+                cell9.innerHTML = arr[8];
+                cell10.innerHTML = "<button type='button' class='w3-bar-item w3-button w3-small w3-teal' value=" + text + " id='Yes' style='width:50%' onclick='CreateAgency(this.id)'/>Yes</button><button type='button' class='w3-bar-item w3-button w3-small w3-red' value='NO' id=" + arr[0] + " style='width:50%' onclick='DeleteRowFunction()'/>No </button>";
             } catch (error) {
                 consumer.log(error.toString());
             }
@@ -186,6 +188,32 @@ var QueueConsumer = function (queueName, table, logs) {
                     consumer.messageConsumer.on(solace.MessageConsumerEventName.MESSAGE, function (message) {
                         var result = message.getBinaryAttachment();
                         // assuming if message is a message if less than 255, else image
+                        if (consumer.queueName === "SOLACE_REGISTER"){
+                            consumer.log('Received message: "' + result + '",' +
+                                ' details:\n' + message.getBinaryAttachment());
+                            // Need to explicitly ack otherwise it will not be deleted from the message router
+                            var topic = String(message.getDestination())
+                            // populates the dropdown list for the search based on topic
+                            if (consumer.queueName === "SOLACE_QUEUE") {
+                                if (topics.includes(topic)) {
+                                    console.log(topics)
+                                } else {
+                                    topics.push(topic)
+                                    var x = document.getElementById("mySelect");
+                                    var option = document.createElement("option");
+                                    option.setAttribute("value", topic.slice(1, -1));
+                                    option.text = topic;
+                                    x.add(option);
+                                }
+                            };
+                            consumer.table(message.getBinaryAttachment(), topic, consumer.tableName);
+                            message.acknowledge();
+                            consumer.temp = {
+                                'content': result,
+                                'topic': message.getDestination(),
+                                'delivery': message.getDeliveryMode()
+                            };
+                        } else {
                         if (result.length < 255) {
                             consumer.log('Received message: "' + result + '",' +
                                 ' details:\n' + message.getBinaryAttachment());
@@ -239,7 +267,7 @@ var QueueConsumer = function (queueName, table, logs) {
                                 'delivery': message.getDeliveryMode()
                             };
                         }
-
+                        }
                     });
                     // Connect the message consumer
                     consumer.messageConsumer.connect();
