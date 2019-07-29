@@ -120,12 +120,13 @@ function CreateAgency(clicked) {
   var newReg = {
     NAME: arr[0],
     HOSTURL: arr[1],
-    VPN: arr[2],
-    USERNAME: arr[3],
-    PASS: arr[4],
-    SEMPURL: arr[5],
-    SEMPNAME: arr[6],
-    SEMPPASS: arr[7]
+    remoteMsgVpnLocation: arr[2],
+    VPN: arr[3],
+    USERNAME: arr[4],
+    PASS: arr[5],
+    SEMPURL: arr[6],
+    SEMPNAME: arr[7],
+    SEMPPASS: arr[8]
   }
   BrokerBridgingConnection(newReg);
   // function call to SEMP to create the agency here
