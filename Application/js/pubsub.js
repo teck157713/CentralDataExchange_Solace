@@ -342,10 +342,12 @@ var PubSub = function (params) {
 
     pubsub.sendTempData = function () {
         if (pubsub.session !== null) {
+            // const ChangeRainValue = x => x.value = Math.round(Math.random());
             processTemp("https://api.data.gov.sg/v1/environment/air-temperature", function (resdict) {
                 pubsub.sendTempMsg("GOV/NEA/1/temp_data/raw", resdict);
             });
             processTemp("https://api.data.gov.sg/v1/environment/rainfall", function (resrain) {
+                // resrain.map(ChangeRainValue);
                 pubsub.sendTempMsg("GOV/NEA/1/rain_data/raw", resrain);
             });
         } else {
@@ -353,10 +355,12 @@ var PubSub = function (params) {
         }
     }
 
+    
     // Sends one picture with tags of topics
     pubsub.sendTempMsg = function (topName, result) {
+        returnvalue = x => (topName.indexOf('NEA/1/temp_data/raw') >= 0) ? String(parseFloat((x + parseFloat((Math.random() * 0.2)) - 0.1).toFixed(1))) : String(x);
         for (var i = 0; i < result.length; i++) {
-            var messageText = '\"id\": \"' + result[i].id + '\", \"lat\": \"' + result[i].location.latitude + '\", \"long\": \"' + result[i].location.longitude + '\", \"value\": \"' + parseFloat((result[i].value + parseFloat((Math.random() * 0.2)) - 0.1).toFixed(1)) + '\", \"timestamp\": \"' + result[i].timestamp + '\"';
+            var messageText = '\"id\": \"' + result[i].id + '\", \"lat\": \"' + result[i].location.latitude + '\", \"long\": \"' + result[i].location.longitude + '\", \"value\": \"' + returnvalue(result[i].value) + '\", \"timestamp\": \"' + result[i].timestamp + '\"';
             var message = solace.SolclientFactory.createMessage();
             setTopic(result[i].location.latitude, result[i].location.longitude);
         }
