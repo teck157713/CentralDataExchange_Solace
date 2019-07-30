@@ -28,6 +28,7 @@
     <script>
         var ChartData = [];
         var producer = null;
+        var allsubscription = [];
 
         var xVal = 0;
         var updateInterval = 1000;
@@ -39,6 +40,7 @@
         getTopicPub = x => x.publishExceptionTopic;
         setEach = x => ({ name : x, y: 0, dp: [] });
         addData = x => ChartData.push(x);
+        functadd = x => allsubscription.push(x);
 
         function SempAPI(url, type, accountCredentials) {
             return new Promise(function(resolve, reject) {
@@ -78,23 +80,11 @@
             ifMatch = ChartData => ChartData.name == TopicName;
             filterTopic = x => x == TopicName;
             createSubData = function() {
-                SempAPI(
-                    "http://localhost:8080/SEMP/v2/monitor/msgVpns/" + account.VPN + "/aclProfiles/" + "new"+ "/subscribeExceptions", "GET", account
-                ).then(res => 
-                    res.data.map(getTopicSub).filter(filterTopic).map(setEach).map(addData)
-                );
-                SempAPI(
-                    "http://localhost:8080/SEMP/v2/monitor/msgVpns/" + account.VPN + "/aclProfiles/" + "new"+ "/publishExceptions", "GET", account
-                ).then(res => 
-                    res.data.map(getTopicPub).filter(filterTopic).map(setEach).map(addData)
-                );
+                allsubscription.filter(filterTopic).map(setEach).map(addData);
             }
             ChartData.map(a=>a.name).includes(TopicName) ? 
             (ChartData.filter(ifMatch).map(addY)) :
             createSubData();
-
-            
-            
         }
         
 
@@ -135,7 +125,12 @@
                 },
                 data: ChartData.map(dataGraph)
             });
-
+            
+            // Get the subscription list of the user
+            SempAPI("http://localhost:8080/SEMP/v2/monitor/msgVpns/" + account.VPN + "/aclProfiles/" + sessionStorage.getItem("username") + "/subscribeExceptions", "GET", account)
+                .then(res => res.data.map(getTopicSub).map(functadd));
+            SempAPI("http://localhost:8080/SEMP/v2/monitor/msgVpns/" + account.VPN + "/aclProfiles/" + sessionStorage.getItem("username") + "/publishExceptions", "GET", account)
+                .then(res => res.data.map(getTopicPub).map(functadd));
 
             // Initialize factory with the most recent API defaults
             var factoryProps = new solace.SolclientFactoryProperties();

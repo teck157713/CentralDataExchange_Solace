@@ -18,6 +18,7 @@ var LTA = {
 }
 
 var NEA = {
+    NAME:       'NEA',
     HOSTURL:    'ws://mr8ksiwsp23vv.messaging.solace.cloud:20451',
     VPN:        'msgvpn-jfgwkeg1ahl',
     USERNAME:   'solace-cloud-client',
