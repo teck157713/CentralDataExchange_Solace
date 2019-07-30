@@ -119,13 +119,14 @@
          if (publisher.session !== null) {
              var aname = document.getElementById('aname').value;
              var hosturl = document.getElementById('HOSTURL').value;
+             var remoteMsgVpnLocation = document.getElementById('remoteMsgVpnLocation').value;
              var vpn = document.getElementById('vpn').value;
              var uname = document.getElementById('uname').value;
              var pwd = document.getElementById('pwd').value;
              var sempurl = document.getElementById('SEMPHOSTURL').value;
              var sempuname = document.getElementById('sempuname').value;
              var semppwd = document.getElementById('semppwd').value;
-             var messageText = aname + "," + hosturl + "," + vpn + "," + uname + "," + pwd + "," + sempurl + "," + sempuname + "," + semppwd;
+             var messageText = aname + "," + hosturl + "," + remoteMsgVpnLocation + "," + vpn + "," + uname + "," + pwd + "," + sempurl + "," + sempuname + "," + semppwd;
              var message = solace.SolclientFactory.createMessage();
              publisher.log('Sending message "' + messageText + '" to queue "' + publisher.queueName + '"...');
              message.setDestination(solace.SolclientFactory.createDurableQueueDestination(publisher.queueName));
@@ -138,6 +139,7 @@
                  var newReg = {
                      NAME: aname,
                      HOSTURL: hosturl,
+                     remoteMsgVpnLocation: remoteMsgVpnLocation,
                      VPN: vpn,
                      USERNAME: uname,
                      PASS: pwd,
