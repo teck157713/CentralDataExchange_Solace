@@ -38,3 +38,11 @@ var newReg = {
     SEMPNAME:   'msgvpn-zpfs1b9w8wz-admin',
     SEMPPASS:   'jd1hu487v6he5hotnr1hanl2ab'
 }
+
+var AzureAPI = {
+    subscriptionKey:    '3ba325cc4e724a70b6a73b0395f262bb',
+}
+
+var GoogleMapAPI = {
+    subscriptionKey:    'AIzaSyDzHU1Oi7smE91XPeiY43wsRXdPG9RqzV8',
+}
