@@ -3,9 +3,6 @@ function processImage(sourceImageUrl, location, callback) {
   // *** Update or verify the following values. ***
   // **********************************************
 
-  // Replace <Subscription Key> with your valid subscription key.
-  var subscriptionKey = "3ba325cc4e724a70b6a73b0395f262bb";
-
   // You must use the same Azure region in your REST API method as you used to
   // get your subscription keys. For example, if you got your subscription keys
   // from the West US region, replace "southeastasia" in the URL
@@ -35,7 +32,7 @@ function processImage(sourceImageUrl, location, callback) {
       beforeSend: function(xhrObj){
           xhrObj.setRequestHeader("Content-Type","application/json");
           xhrObj.setRequestHeader(
-              "Ocp-Apim-Subscription-Key", subscriptionKey);
+              "Ocp-Apim-Subscription-Key", AzureAPI.subscriptionKey);
       },
 
       type: "POST",
