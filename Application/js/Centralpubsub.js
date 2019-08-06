@@ -199,6 +199,7 @@ var PubSub = function (params) {
               pubsub.session.send(message);
               updateDataFlow(statictopicName);
               pubsub.log('Message #' + sequenceNr + ' sent to queue "' + statictopicName + '", correlation key = ' + JSON.stringify(correlationKey));
+              console.log('RESEND');
           } catch (error) {
               pubsub.log(error.toString());
           }
