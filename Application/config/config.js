@@ -38,7 +38,7 @@ var newReg = {
     SEMPNAME:   'msgvpn-zpfs1b9w8wz-admin',
     SEMPPASS:   'jd1hu487v6he5hotnr1hanl2ab'
 }
-
+// Microsoft Computer Vision API, Change if necessary
 var AzureAPI = {
     subscriptionKey:    '3ba325cc4e724a70b6a73b0395f262bb',
 }
