@@ -42,6 +42,7 @@
         addData = x => ChartData.push(x);
         functadd = x => allsubscription.push(x);
 
+        //SempAPI: called to gain administrative access to Solace Cloud account to execute command.
         function SempAPI(url, type, accountCredentials) {
             return new Promise(function(resolve, reject) {
                 // Make the REST API call.
@@ -75,7 +76,9 @@
             });
 
         };
-        
+        //updateDataFlow: For every message that is received from queue consumption in pubsubmap.js
+        // , this function is executed to update the data for graph display. It is collecting the 
+        // amount of message flow for each respective topic per second. 
         var updateDataFlow = function(TopicName) {
             ifMatch = ChartData => ChartData.name == TopicName;
             filterTopic = x => x == TopicName;
