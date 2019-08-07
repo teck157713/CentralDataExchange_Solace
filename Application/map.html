@@ -114,7 +114,9 @@
     var FilterInput = "";
     var myChart;
 
+    // Initialises the map demonstration page on load
     function initMap() {
+      // Intialise new Google Map
       map = new google.maps.Map(document.getElementById('map'), {
         center: {
           lat: 1.35,
@@ -123,6 +125,7 @@
         zoom: 11.5,
       });
 
+      // Display a real-time clock and update every second accordingly. Located in top-right corner of the map demonstration.
       setInterval(function(){
         var today = new Date();
         var h = today.getHours();
@@ -138,11 +141,13 @@
         }
       }, 1000);
 
+      // Display the date on screen
       document.getElementById('date').innerHTML = String(new Date()).slice(0, 15);
 
       // CustomMarker is a library to customize image analysis messages on the map
       CustomMarker.prototype = new google.maps.OverlayView();
 
+      // When an Event message has been triggered, this custom marker will be drawn and display on map
       CustomMarker.prototype.draw = function () {
         var self = this;
         var res = "";
@@ -173,16 +178,18 @@
           div.style.left = point.x + 'px';
           div.style.top = point.y + 'px';
         }
+        // set to time out its event icon within 60 seconds
         this.res = setTimeout(function () {
           CustomMarker.prototype.remove(div);
         }, 60000);
       };
+      // function to remove customerMarker on map
       CustomMarker.prototype.remove = function (spec) {
         try {
           spec.parentNode.removeChild(spec);
         } catch (err) {}
       };
-
+      // function to intiate drop animation on custom marker
       CustomMarker.prototype.animateDrop = function () {
         dynamics.stop(this.pinWrap);
         dynamics.css(this.pinWrap, {
@@ -221,6 +228,7 @@
         });
       }
 
+      // Button click to start animation on CustomMarker
       $('#drop').on('click', function (e) {
         markers1.animateDrop();
       });
@@ -277,7 +285,7 @@
         subscriberImage.subscribe();
       });
 
-      // Initialising subscription functionality for the specified hospital marker
+      // Initialising subscription functionality for the specified hospital / traffic patrol marker
       subscriberMarker = new PubSub({
         logname: 'subscribelog',
         tableName: 'table1',
@@ -386,11 +394,13 @@
       this.setValues(opts);
     }
 
+    // Display info on the panel based on the marker that is selected on the map
     function infoWindowUpdate(marker){
         var html = infoWindow.getContent();
         var $html = $('<div />', {html: html});
         if ($html.find('#title').html() == marker.getTitle()){
           document.getElementById('panel2').innerHTML = '<div>'+'<div id="title">'+ marker.getTitle() +'</div>' + marker.getPosition() + '<br></div>';
+          // Changes the event subscription area of the marker if the marker starts to move out of its rectangular bound
           if (((rectangle.getBounds().getNorthEast().lat() <= marker.getPosition().lat() && rectangle.getBounds().getSouthWest().lat() >= marker.getPosition().lat()) && (rectangle.getBounds().getSouthWest().lng() <= marker.getPosition().lng() && rectangle.getBounds().getNorthEast().lng() >= marker.getPosition().lng())) != true){
             addMarkerEvent(marker);
           }
@@ -398,11 +408,13 @@
         }
     }
 
+    // Initialise the markers on the map. The location of the hospital is static
     function InitializeHospital(){
       // Initialising static hospital markers
       var hospitalLst = [['Alexandra Hospital', 1.2866, 103.8013],['Changi General Hospital', 1.3404, 103.9495],['Khoo Teck Puat Hopsital', 1.424635, 103.8382]
         ,['National University Hospital', 1.2937, 103.7832],['Ng Teng Fong General Hospital', 1.3337, 103.7454],['Sengkang General Hospital', 1.3955, 103.8934]
         ,['Singapore General Hospital', 1.2796, 103.8359],['Tan Tock Seng Hospital', 1.3213, 103.8458],['Kandang Kerbau Women\'s & Children\'s Hospital', 1.306332, 103.8415]];
+      // add each hospital data as a marker onto the map
       for (var i in hospitalLst) {
         var hospitalMarker = new google.maps.Marker({
           position: new google.maps.LatLng(hospitalLst[i][1], hospitalLst[i][2]),
@@ -435,10 +447,9 @@
         });
       }
     }
-
+    // Initialise and display the average temperature chart on the left side of the panel once temperature data are received.
     function InitialiseTempChart(){
       myChart = echarts.init(document.getElementById('tempchart'), 'dark'); 
-      // dark, macarons, infographic, green, blue, roma, shine, sakura, macarons2, helianthus, default
       myChart.setOption({
           title : {
               text: 'Average Temperature',
@@ -497,6 +508,7 @@
           ]
       });
     }
+    // Initialise function once google map is loaded
     google.maps.event.addDomListener(window, 'load', initMap);
   </script>
   <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
