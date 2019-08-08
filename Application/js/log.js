@@ -188,7 +188,7 @@ var QueueConsumer = function (queueName, table, logs) {
                     consumer.messageConsumer.on(solace.MessageConsumerEventName.MESSAGE, function (message) {
                         var result = message.getBinaryAttachment();
                         // assuming if message is a message if less than 255, else image
-                        if (consumer.queueName === "SOLACE_REGISTER"){
+                        if (consumer.queueName === "SOLACE_REGISTER") {
                             consumer.log('Received message: "' + result + '",' +
                                 ' details:\n' + message.getBinaryAttachment());
                             // Need to explicitly ack otherwise it will not be deleted from the message router
@@ -214,59 +214,59 @@ var QueueConsumer = function (queueName, table, logs) {
                                 'delivery': message.getDeliveryMode()
                             };
                         } else {
-                        if (result.length < 255) {
-                            consumer.log('Received message: "' + result + '",' +
-                                ' details:\n' + message.getBinaryAttachment());
-                            // Need to explicitly ack otherwise it will not be deleted from the message router
-                            var topic = String(message.getDestination())
-                            // populates the dropdown list for the search based on topic
-                            if (consumer.queueName === "SOLACE_QUEUE") {
-                                if (topics.includes(topic)) {
-                                    console.log(topics)
-                                } else {
-                                    topics.push(topic)
-                                    var x = document.getElementById("mySelect");
-                                    var option = document.createElement("option");
-                                    option.setAttribute("value", topic.slice(1, -1));
-                                    option.text = topic;
-                                    x.add(option);
-                                }
-                            };
-                            consumer.table(message.getBinaryAttachment(), topic, consumer.tableName);
-                            message.acknowledge();
-                            consumer.temp = {
-                                'content': result,
-                                'topic': message.getDestination(),
-                                'delivery': message.getDeliveryMode()
-                            };
-                        } else {
-                            //convert and show image
-                            var imgbyte = result.split(",");
-                            var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
-                            consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
-                            var topic = String(message.getDestination())
-                            // populates the dropdown list for the search based on topic
-                            if (consumer.queueName === "SOLACE_QUEUE") {
-                                if (topics.includes(topic)) {
-                                    console.log(topics)
-                                } else {
-                                    topics.push(topic)
-                                    var x = document.getElementById("mySelect");
-                                    var option = document.createElement("option");
-                                    option.setAttribute("value", topic.slice(1, -1));
-                                    option.text = topic;
-                                    x.add(option);
-                                }
-                            };
-                            consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />', topic, consumer.tableName);
-                            message.acknowledge();
-                            consumer.temp = {
-                                'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />',
-                                'content': result,
-                                'topic': message.getDestination(),
-                                'delivery': message.getDeliveryMode()
-                            };
-                        }
+                            if (result.length < 255) {
+                                consumer.log('Received message: "' + result + '",' +
+                                    ' details:\n' + message.getBinaryAttachment());
+                                // Need to explicitly ack otherwise it will not be deleted from the message router
+                                var topic = String(message.getDestination())
+                                // populates the dropdown list for the search based on topic
+                                if (consumer.queueName === "SOLACE_QUEUE") {
+                                    if (topics.includes(topic)) {
+                                        console.log(topics)
+                                    } else {
+                                        topics.push(topic)
+                                        var x = document.getElementById("mySelect");
+                                        var option = document.createElement("option");
+                                        option.setAttribute("value", topic.slice(1, -1));
+                                        option.text = topic;
+                                        x.add(option);
+                                    }
+                                };
+                                consumer.table(message.getBinaryAttachment(), topic, consumer.tableName);
+                                message.acknowledge();
+                                consumer.temp = {
+                                    'content': result,
+                                    'topic': message.getDestination(),
+                                    'delivery': message.getDeliveryMode()
+                                };
+                            } else {
+                                //convert and show image
+                                var imgbyte = result.split(",");
+                                var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(imgbyte)));
+                                consumer.log('Received Image: <br /><img id=\"ItemView\" src=\"data:image/png;base64,' + base64String + '\" />');
+                                var topic = String(message.getDestination())
+                                // populates the dropdown list for the search based on topic
+                                if (consumer.queueName === "SOLACE_QUEUE") {
+                                    if (topics.includes(topic)) {
+                                        console.log(topics)
+                                    } else {
+                                        topics.push(topic)
+                                        var x = document.getElementById("mySelect");
+                                        var option = document.createElement("option");
+                                        option.setAttribute("value", topic.slice(1, -1));
+                                        option.text = topic;
+                                        x.add(option);
+                                    }
+                                };
+                                consumer.table('<br /><img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + base64String + '\" />', topic, consumer.tableName);
+                                message.acknowledge();
+                                consumer.temp = {
+                                    'image': '<img id=\"ItemView\" style="display:block;" width="auto  " height="100px" src=\"data:image/png;base64,' + result.split(',')[0] + '\" />',
+                                    'content': result,
+                                    'topic': message.getDestination(),
+                                    'delivery': message.getDeliveryMode()
+                                };
+                            }
                         }
                     });
                     // Connect the message consumer
