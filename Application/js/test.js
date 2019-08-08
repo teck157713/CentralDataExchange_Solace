@@ -1,3 +1,4 @@
+// create new diagram to show data flow of the data exchange platform
 var graph = new joint.dia.Graph();
 var paper = new joint.dia.Paper({
     el: document.getElementById('paper'),
@@ -11,6 +12,7 @@ var paper = new joint.dia.Paper({
 
 var pn = joint.shapes.pn;
 
+// create a node as LTA
 var pLta = new pn.Place({
     position: { x: 100, y: 100 },
     attrs: {
@@ -28,6 +30,7 @@ var pLta = new pn.Place({
     tokens: 20
 });
 
+// duplicate LTA node to other node and set position
 var pNea = pLta.clone()
     .attr('.label/text', 'NEA')
     .position(180, 100)
@@ -126,7 +129,7 @@ function link(a, b) {
 }
 
 graph.addCell([pPublish, pSubscribe, pPublish2, pSubscribe2, pPublish3, pSubscribe3, pPublish4, pSubscribe4, pLta, pNea, pMHA, pMOH, pCentral, pSubscribe5, pAnalytics]);
-
+// link all the nodes together in a graph
 graph.addCell([
     link(pPublish, pLta),
     link(pPublish2, pNea),
