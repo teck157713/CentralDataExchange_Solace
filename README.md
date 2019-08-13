@@ -1,4 +1,4 @@
-# Demo: Consolidated Events Hub
+# Demo: Central Exchange Broker
 
 ## What is the issue?
 In large organisations there are multiple agencies who may collect and utilise different data streams. The sharing of these data streams between different agecies may be useful to an organisation in meeting various operating need of each of its agencies. In addition the project should be able to showcase the abilities of Solace, in providing a central data exchange that can be utilised by other users (“agencies”) to share, monitor and consume data.
@@ -6,7 +6,7 @@ In large organisations there are multiple agencies who may collect and utilise d
 An example use case, in the context of a smart city, is the exchange of data between different government agencies. Agencies can share the data that they collect via the central exchange in real time (eg. CCTV footage, sensor data) and can further utilise data that is shared to them by other agencies. A Machine Learning or Analytics application can also be subscribed to the events being published by agencies.
 
 ## How do we solve it?
-![Main Structure](Application\image\example.jpg)
+![Main Structure](https://github.com/teck157713/presalesprototype/blob/master/Application/image/example.jpg)
 
 We came up with a front facing JavaScript web application that utilises the Solace Javascript API and various SEMP calls to, create bridges between the central exchange broker and the agency broker.
 
