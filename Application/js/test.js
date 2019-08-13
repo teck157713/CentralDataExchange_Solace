@@ -209,11 +209,6 @@ function fireTransition(t, sec) {
 function simulate() {
 
     var transitions = [pCentral, pLta, pNea, pMHA, pMOH, pAnalytics, pCentral, pSubscribe5];
-    // transitions.forEach(function(t) {
-    //     if (Math.random() < 1) {
-    //             fireTransition(t, 1);
-    //     }
-    // });
 
     setInterval(function() {
         transitions.forEach(function(t) {
