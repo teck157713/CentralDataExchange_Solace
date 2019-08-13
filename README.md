@@ -1,4 +1,4 @@
-# Demo: Consolidated Events Hub
+# Demo: Central Exchange Broker
 
 ## What is the issue?
 In large organisations there are multiple agencies who may collect and utilise different data streams. The sharing of these data streams between different agecies may be useful to an organisation in meeting various operating need of each of its agencies. In addition the project should be able to showcase the abilities of Solace, in providing a central data exchange that can be utilised by other users (“agencies”) to share, monitor and consume data. 
