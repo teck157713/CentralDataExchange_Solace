@@ -14,9 +14,9 @@ This allow agencies to view event streams available to them from other agencies,
 
 The administrator of the central exchange broker, also has the flexibility to accept or deny requests from existing agency brokers to publish new events on to the central broker. The administrator can also use registration details provided by agencies, who wish to connect to the central brokers to establish bridges through the user interface. All this creation of new ACL topic allowance and bridge connections are executed on the backend via a SEMP API call.
 
-
 ## Resources
 For more information try these resources:
+- Read more about the project set-up guide [here](https://github.com/teck157713/presalesprototype/blob/master/Documentations/set_up.pptx)
 - Get a better understanding of [Solace technology](https://docs.solace.com/All-Docs.htm).
 - Check out the [Solace blog](https://solace.com/blog/) for other interesting discussions around Solace technology.
-- Read more about the project set-up guide [here](https://github.com/teck157713/presalesprototype/blob/master/Documentations/set_up.pptx)
+
