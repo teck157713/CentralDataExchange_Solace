@@ -12,7 +12,7 @@ We came up with a front facing JavaScript web application that utilises the Sola
 
 This allow agencies to view event streams available to them from other agencies, as well as to publish events that can be accessed by other agencies, the access control for this publishing and subscribing will be centrally managed via Access Control Lists on the Central Exchange broker.
 
-The administrator of the central exchange broker, also has the flexibility to accept or deny requests from existing agency brokers to publish new events on to the central broker. The administrator can also use registration details provided by agencies, who wish to connect to the central brokers to establish bridges through the user interface. All this creation of new ACL topic allowance and bridge connections are executed on the backend via a SEMP API call.
+The administrator of the central exchange broker, also has the flexibility to accept or deny requests from existing agency brokers to publish new events on to the central broker. The administrator can also use registration details provided by agencies, who wish to connect to the central brokers to establish bridges through the user interface. All this creation of new ACL topic allowance and bridge connections are executed on the backend via a Solace Element Management Protocol (SEMP) API call.
 
 ## Resources
 For more information try these resources:
