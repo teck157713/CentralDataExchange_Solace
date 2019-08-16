@@ -19,5 +19,6 @@ For more information try these resources:
 - Read more about the project set-up guide [here](https://github.com/teck157713/presalesprototype/blob/master/Documentations/set_up.pptx)
 - You can refer to to other documentations [here](https://github.com/teck157713/presalesprototype/blob/master/Documentations)
 - Get a better understanding of [Solace technology](https://docs.solace.com/All-Docs.htm).
+- You can also get a better understanding of the [Solace Element Management Protocol (SEMP)](https://docs.solace.com/SEMP/Using-SEMP.htm) used in this project.
 - Check out the [Solace blog](https://solace.com/blog/) for other interesting discussions around Solace technology.
 
