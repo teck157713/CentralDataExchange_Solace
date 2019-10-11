@@ -36,7 +36,7 @@ var AzureAPI = {
 var GoogleMapAPI = {
     subscriptionKey:    '',
 }
-
+//required
 var host = {
     HOSTURL:    'wss://mr1dns3dpz5wkd.messaging.solace.cloud:443',
     VPN:        'centraleventxchange',
