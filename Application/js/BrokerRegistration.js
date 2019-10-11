@@ -18,14 +18,14 @@
 // ** MAIN FUNCTION 1 **
 BrokerRegistration = function (credentials) {
     SempAPIRegistration(
-        "http://localhost:8080/SEMP/v2/config/msgVpns/" + account.VPN + "/aclProfiles", 
+        "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + host.VPN + "/aclProfiles", 
         "POST", 
         {"aclProfileName" : credentials.NAME,
         "clientConnectDefaultAction" : "allow"}, 
-        account
+        host
     )
         .then(res => SempAPIRegistration(
-            "http://localhost:8080/SEMP/v2/config/msgVpns/" + account.VPN + "/clientUsernames", 
+            "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + host.VPN + "/clientUsernames", 
             "POST", 
             {
                 "clientUsername" : credentials.NAME,
@@ -33,13 +33,13 @@ BrokerRegistration = function (credentials) {
                 "aclProfileName" : credentials.NAME,
                 "enabled" : true
             }, 
-            account
+            host
         ))
         .then(res => SempAPIRegistration(
-            "http://localhost:8080/SEMP/v2/config/msgVpns/" + account.VPN + "/aclProfiles/ALL/subscribeExceptions", 
+            "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + host.VPN + "/aclProfiles/ALL/subscribeExceptions", 
             "GET", 
             "", 
-            account,
+            host,
             credentials
         ));
 }
@@ -50,7 +50,7 @@ BrokerBridgingConnection = function (credentials) {
         "https://" + credentials.SEMPURL + "/SEMP/v2/config/msgVpns/" + credentials.VPN + "/queues", 
         "POST", 
         {
-            "queueName" : account.VPN + "_" + credentials.VPN,
+            "queueName" : host.VPN + "_" + credentials.VPN,
             "egressEnabled": true,
             "ingressEnabled": true,
             "permission" : "modify-topic"
@@ -58,90 +58,91 @@ BrokerBridgingConnection = function (credentials) {
         credentials
     )
         .then(res => SempAPIRegistration(
-            "http://localhost:8080/SEMP/v2/config/msgVpns/" + account.VPN + "/queues", 
+            "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + host.VPN + "/queues", 
             "POST", 
             {
-                "queueName" : account.VPN + "_" + credentials.VPN,
+                "queueName" : host.VPN + "_" + credentials.VPN,
                 "egressEnabled": true,
                 "ingressEnabled": true,
                 "permission" : "modify-topic",
                 "owner" : credentials.NAME
             }, 
-            account
+            host
         ))
         .then(res => SempAPIRegistration(
-            "http://localhost:8080/SEMP/v2/config/msgVpns/" + account.VPN + "/queues/" + account.VPN + "_" + credentials.VPN + "/subscriptions", 
+            "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + host.VPN + "/queues/" + host.VPN + "_" + credentials.VPN + "/subscriptions", 
             "POST", 
             {
                 "subscriptionTopic" : "*/>"
             }, 
-            account
+            host
         ))
         .then(res => SempAPIRegistration(
             "https://" + credentials.SEMPURL + "/SEMP/v2/config/msgVpns/" + credentials.VPN + "/bridges", 
             "POST", 
             {
-                "bridgeName" : "bridge_" + account.VPN + "_" + credentials.VPN,
+                "bridgeName" : "bridge_" + host.VPN + "_" + credentials.VPN,
                 "bridgeVirtualRouter" : "auto",
                 "enabled" : true,
                 "msgVpnName" : credentials.VPN,
                 "remoteAuthenticationScheme" : "basic",
-                "remoteAuthenticationBasicClientUsername" : credentials.NAME,
-                "remoteAuthenticationBasicPassword" : credentials.NAME
+                "remoteAuthenticationBasicClientUsername" : host.USERNAME,
+                "remoteAuthenticationBasicPassword" : host.PASS
             }, 
             credentials
         ))
         .then(res => SempAPIRegistration(
-            "https://" + credentials.SEMPURL + "/SEMP/v2/config/msgVpns/" + credentials.VPN + "/bridges/bridge_" + account.VPN + "_" + credentials.VPN + ",auto/remoteMsgVpns", 
+            "https://" + credentials.SEMPURL + "/SEMP/v2/config/msgVpns/" + credentials.VPN + "/bridges/bridge_" + host.VPN + "_" + credentials.VPN + ",auto/remoteMsgVpns", 
             "POST", 
             {
-                "remoteMsgVpnLocation": account.PUBLICURL,
-                "remoteMsgVpnName" : account.VPN,
+                "remoteMsgVpnLocation": host.remoteMsgVpnLocation,
+                "remoteMsgVpnName" : host.VPN,
                 "enabled" : true,
-                "queueBinding" : account.VPN + "_" + credentials.VPN
+                "queueBinding" : host.VPN + "_" + credentials.VPN
             }, 
             credentials
         ))
         .then(res => SempAPIRegistration(
-            "http://localhost:8080/SEMP/v2/config/msgVpns/" + account.VPN + "/bridges", 
+            "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + host.VPN + "/bridges", 
             "POST", 
             {
-                "bridgeName" : "bridge_" + account.VPN + "_" + credentials.VPN,
+                "bridgeName" : "bridge_" + host.VPN + "_" + credentials.VPN,
                 "bridgeVirtualRouter" : "auto",
                 "enabled" : true,
-                "msgVpnName" : account.VPN,
+                "msgVpnName" : host.VPN,
                 "remoteAuthenticationScheme" : "basic",
                 "remoteAuthenticationBasicClientUsername" : credentials.USERNAME,
                 "remoteAuthenticationBasicPassword" : credentials.PASS
             }, 
-            account
+            host
         ))
         .then(res => SempAPIRegistration(
-            "http://localhost:8080/SEMP/v2/config/msgVpns/" + account.VPN + "/bridges/bridge_" + account.VPN + "_" + credentials.VPN + ",auto/remoteMsgVpns", 
+            "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + host.VPN + "/bridges/bridge_" + host.VPN + "_" + credentials.VPN + ",auto/remoteMsgVpns", 
             "POST", 
             {
                 "remoteMsgVpnLocation": credentials.remoteMsgVpnLocation,
                 "remoteMsgVpnName" : credentials.VPN,
                 "enabled" : true,
-                "queueBinding" : account.VPN + "_" + credentials.VPN
+                "queueBinding" : host.VPN + "_" + credentials.VPN
             }, 
-            account
+            host
         ))
         .then(res => SempAPIRegistration(
-            "http://localhost:8080/SEMP/v2/config/msgVpns/" + account.VPN + "/bridges/bridge_" + account.VPN + "_" + credentials.VPN + ",auto/remoteSubscriptions", 
+            "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + host.VPN + "/bridges/bridge_" + host.VPN + "_" + credentials.VPN + ",auto/remoteSubscriptions", 
             "POST", 
             {
-                "bridgeName": "bridge_" + account.VPN + "_" + credentials.VPN,
+                "bridgeName": "bridge_" + host.VPN + "_" + credentials.VPN,
                 "bridgeVirtualRouter": "auto",
                 "deliverAlwaysEnabled": false,
                 "remoteSubscriptionTopic": "*/>"
             }, 
-            account
+            host
         ));
 }
 
 // ** API CALL FUNCTION **
 function SempAPIRegistration(url, type, data, accountCredentials, add = "") {
+  console.log(JSON.stringify(data));
   return new Promise(function(resolve, reject) {
       // Make the REST API call.
       $.ajax({
@@ -168,10 +169,10 @@ function SempAPIRegistration(url, type, data, accountCredentials, add = "") {
                 result = result.data,
                 addSubTopic = (a) => 
                     SempAPIRegistration(
-                        "http://localhost:8080/SEMP/v2/config/msgVpns/" + accountCredentials.VPN + "/aclProfiles/" + add.NAME + "/subscribeExceptions", 
+                        "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + accountCredentials.VPN + "/aclProfiles/" + add.NAME + "/subscribeExceptions", 
                         "POST", 
                         {"subscribeExceptionTopic" : a, "topicSyntax" : "smf"}, 
-                        account
+                        host
                     ),
                 result
                     .map(result => result.subscribeExceptionTopic)
