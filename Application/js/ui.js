@@ -33,9 +33,9 @@ function hiderSub(hide, show, ) {
 }
 
 function connect() {
-  var hosturl = account.HOSTURL;
-  var username = account.USERNAME;
-  var vpn = account.VPN;
+  var hosturl = host.HOSTURL;
+  var username = host.USERNAME;
+  var vpn = host.VPN;
   var connect = document.getElementById('connect');
   connect.innerHTML = 'Username: ' + username + '<br>' + 'Message URL: ' + hosturl + '<br>' + 'VPN Name: ' + vpn;
 };
@@ -128,6 +128,8 @@ function CreateAgency(clicked) {
     SEMPNAME: arr[7],
     SEMPPASS: arr[8]
   }
+  console.log(JSON.stringify(newReg));
+  BrokerRegistration(newReg);
   BrokerBridgingConnection(newReg);
   // function call to SEMP to create the agency here
   DeleteRowFunction()
