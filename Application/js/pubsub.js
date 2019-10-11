@@ -74,10 +74,10 @@ var PubSub = function (params) {
                 var vpn = newReg.VPN;
                 break;
             default:
-                var hosturl = account.HOSTURL;
-                var username = account.USERNAME;
-                var pass = account.PASS;
-                var vpn = account.VPN;
+                var hosturl = host.HOSTURL;
+                var username = host.USERNAME;
+                var pass = host.PASS;
+                var vpn = host.VPN;
                 break;
         }
 
