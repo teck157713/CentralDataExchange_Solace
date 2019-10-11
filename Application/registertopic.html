@@ -55,7 +55,7 @@
 
         var user = sessionStorage.getItem('username')
         var input = document.getElementById("topic");
-        input.setAttribute('value',"govt/"+user+"/1/")
+        input.setAttribute('value',"GOV/"+user+"/1/")
         // Below function Executes on click of submit button.
         $("#submit").click(function () {
           console.debug("Caught send button event");
@@ -123,8 +123,8 @@
         var pass_func = function  (val){
             var user = sessionStorage.getItem('username')
             var input = document.getElementById("topic");
-            input.value = "govt/"+user+"/"+val+"/";
-            input.setAttribute('value',"govt/"+user+"/"+val+"/")
+            input.value = "GOV/"+user+"/"+val+"/";
+            input.setAttribute('value',"GOV/"+user+"/"+val+"/")
         }
 
         function isNumberKey(evt){
@@ -157,7 +157,7 @@
     <div class="form-group">
       <label class="w3-text-teal" for="topic">Enter Topic to be Published:</label>
       <input type="text" class="form-control w3-input w3-border w3-light-grey w3-hover-shadow" id="topic"
-        placeholder="Enter Topic to be Published" name="topic" value="Govt/1/" required></input>
+        placeholder="Enter Topic to be Published" name="topic" value="GOV/1/" required></input>
       <div class="valid-feedback">Valid.</div>
       <div class="invalid-feedback">Please fill out this field.</div>
     </div>
