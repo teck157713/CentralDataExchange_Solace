@@ -51,10 +51,10 @@ var RegPublisher = function (queueName) {
             publisher.log('Already connected and ready to publish messages.');
             return;
         }
-        var hosturl = account.HOSTURL;
-        var username = account.USERNAME;
-        var pass = account.PASS;
-        var vpn = account.VPN;
+        var hosturl = host.HOSTURL;
+        var username = host.USERNAME;
+        var pass = host.PASS;
+        var vpn = host.VPN;
 
         publisher.log('Connecting to Solace message router using url: ' + hosturl);
         publisher.log('Client username: ' + username);
