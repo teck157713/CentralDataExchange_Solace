@@ -101,10 +101,10 @@ var QueueConsumer = function (queueName, table, logs) {
             consumer.log('Already connected and ready to consume messages.');
             return;
         }
-        var hosturl = account.HOSTURL;
-        var username = account.USERNAME;
-        var pass = account.PASS;
-        var vpn = account.VPN;
+        var hosturl = host.HOSTURL;
+        var username = host.USERNAME;
+        var pass = host.PASS;
+        var vpn = host.VPN;
 
         consumer.log('Connecting to Solace message router using url: ' + hosturl);
         consumer.log('Client username: ' + username);
