@@ -130,9 +130,9 @@
             });
             
             // Get the subscription list of the user
-            SempAPI("http://localhost:8080/SEMP/v2/monitor/msgVpns/" + account.VPN + "/aclProfiles/" + sessionStorage.getItem("username") + "/subscribeExceptions", "GET", account)
+            SempAPI("https://" + host.SEMPURL + "/SEMP/v2/monitor/msgVpns/" + host.VPN + "/aclProfiles/" + sessionStorage.getItem("username") + "/subscribeExceptions", "GET", host)
                 .then(res => res.data.map(getTopicSub).map(functadd));
-            SempAPI("http://localhost:8080/SEMP/v2/monitor/msgVpns/" + account.VPN + "/aclProfiles/" + sessionStorage.getItem("username") + "/publishExceptions", "GET", account)
+            SempAPI("https://" + host.SEMPURL + "/SEMP/v2/monitor/msgVpns/" + host.VPN + "/aclProfiles/" + sessionStorage.getItem("username") + "/publishExceptions", "GET", host)
                 .then(res => res.data.map(getTopicPub).map(functadd));
 
             // Initialize factory with the most recent API defaults
