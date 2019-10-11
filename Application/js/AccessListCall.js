@@ -35,18 +35,18 @@ function AccessListCall(username, type, value = '', filter = ''){
         // Assign the right URI based on subsequent API calls
         if (counter == 0){
             if (!filter){
-                uriSEMP = "http://localhost:8080/SEMP/v2/config/msgVpns/default/clientUsernames/" + username;
+                uriSEMP = "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + host.VPN + "/clientUsernames/" + username;
             } else {
-                uriSEMP = "http://localhost:8080/SEMP/v2/config/msgVpns/default/clientUsernames";
+                uriSEMP = "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + host.VPN + "/clientUsernames";
             }
         } else if (counter == 1) {
-            uriSEMP = "http://localhost:8080/SEMP/v2/config/msgVpns/default/aclProfiles/" + username + "/publishExceptions";
+            uriSEMP = "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + host.VPN + "/aclProfiles/" + username + "/publishExceptions";
         } else if (counter == 2){
-            uriSEMP = "http://localhost:8080/SEMP/v2/config/msgVpns/default/aclProfiles/" + username + "/subscribeExceptions";
+            uriSEMP = "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + host.VPN + "/aclProfiles/" + username + "/subscribeExceptions";
         } else if (counter == 3){
-            uriSEMP = "http://localhost:8080/SEMP/v2/config/msgVpns/default/aclProfiles";
+            uriSEMP = "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + host.VPN + "/aclProfiles";
         } else if (counter == 4){
-            uriSEMP = "http://localhost:8080/SEMP/v2/config/msgVpns/default/queues/SOLACE_ALL/subscriptions";
+            uriSEMP = "https://" + host.SEMPURL + "/SEMP/v2/config/msgVpns/" + host.VPN + "/queues/SOLACE_ALL/subscriptions";
         }
         var data = '';
         // Make the REST API call.
@@ -56,7 +56,7 @@ function AccessListCall(username, type, value = '', filter = ''){
             beforeSend: function(xhrObj){
                 xhrObj.setRequestHeader("Content-Type","application/json");
                 xhrObj.setRequestHeader(
-                    "Authorization", "Basic " + btoa("admin" + ":" + "admin"));
+                    "Authorization", "Basic " + btoa(host.SEMPNAME + ":" + host.SEMPPASS));
             },
 
             type: insertedtype,
